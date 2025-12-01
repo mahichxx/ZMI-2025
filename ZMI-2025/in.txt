@@ -1,0 +1,17 @@
+main {
+integer x;
+integer y;
+char c;
+x = 0x0A;
+y = 0b101;
+c = 'a';
+if ( x > y ) {
+cout << x;
+}
+switch ( y ) {
+case 5 ;
+cout << y;
+case 10 ;
+cout << x;
+}
+}

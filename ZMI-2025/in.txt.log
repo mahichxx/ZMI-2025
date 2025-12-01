@@ -1,0 +1,97 @@
+
+---------------Протокол-----------------
+ ------01.12.25 17:22:05-----
+  
+ ---- Параметры ---- 
+
+-in: in.txt
+-out: in.txt.out
+-log: in.txt.log
+
+
+Всего символов: 143
+
+Всего строк: 17
+
+Пропущено: 0
+
+
+------------------Таблица индетификаторов------------------
+
+ Идентификатор | тип данных | первое вхождение | содержание 
+_____Литерал_______________________________________________
+L1             | int(1)     | 13               | 10
+L2             | int(1)     | 17               | 5
+L3             | char       | 21               | 'a'
+_____Переменная____________________________________________
+x              | int(1)     | 3                | -
+y              | int(1)     | 6                | -
+c              | char       | 9                | -
+_____Оператор______________________________________________
+=              | -          | 12               | -
+=              | -          | 16               | -
+=              | -          | 20               | -
+>              | -          | 26               | -
+<              | -          | 32               | -
+<              | -          | 33               | -
+<              | -          | 46               | -
+<              | -          | 47               | -
+<              | -          | 54               | -
+<              | -          | 55               | -
+
+------------------Синтаксический анализ------------------
+
+Шаг  :Правило                       Входная лента                 Стек                
+0   : S->m{N}                       m{ti;ti;ci;i=l;i=l;i=l;w(     S$                  
+0   : SAVESTATE:          1
+0   :                               m{ti;ti;ci;i=l;i=l;i=l;w(     m{N}$               
+1   :                               {ti;ti;ci;i=l;i=l;i=l;w(i     {N}$                
+2   :                               ti;ti;ci;i=l;i=l;i=l;w(iv     N}$                 
+3   : N->ti;N                       ti;ti;ci;i=l;i=l;i=l;w(iv     N}$                 
+3   : SAVESTATE:          2
+3   :                               ti;ti;ci;i=l;i=l;i=l;w(iv     ti;N}$              
+4   :                               i;ti;ci;i=l;i=l;i=l;w(ivi     i;N}$               
+5   :                               ;ti;ci;i=l;i=l;i=l;w(ivi)     ;N}$                
+6   :                               ti;ci;i=l;i=l;i=l;w(ivi){     N}$                 
+7   : N->ti;N                       ti;ci;i=l;i=l;i=l;w(ivi){     N}$                 
+7   : SAVESTATE:          3
+7   :                               ti;ci;i=l;i=l;i=l;w(ivi){     ti;N}$              
+8   :                               i;ci;i=l;i=l;i=l;w(ivi){|     i;N}$               
+9   :                               ;ci;i=l;i=l;i=l;w(ivi){|o     ;N}$                
+10  :                               ci;i=l;i=l;i=l;w(ivi){|ov     N}$                 
+11  : N->ci;N                       ci;i=l;i=l;i=l;w(ivi){|ov     N}$                 
+11  : SAVESTATE:          4
+11  :                               ci;i=l;i=l;i=l;w(ivi){|ov     ci;N}$              
+12  :                               i;i=l;i=l;i=l;w(ivi){|ovv     i;N}$               
+13  :                               ;i=l;i=l;i=l;w(ivi){|ovvi     ;N}$                
+14  :                               i=l;i=l;i=l;w(ivi){|ovvi;     N}$                 
+15  : N->i=E;N                      i=l;i=l;i=l;w(ivi){|ovvi;     N}$                 
+15  : SAVESTATE:          5
+15  :                               i=l;i=l;i=l;w(ivi){|ovvi;     i=E;N}$             
+16  :                               =l;i=l;i=l;w(ivi){|ovvi;}     =E;N}$              
+17  :                               l;i=l;i=l;w(ivi){|ovvi;}h     E;N}$               
+18  : E->l                          l;i=l;i=l;w(ivi){|ovvi;}h     E;N}$               
+18  : SAVESTATE:          6
+18  :                               l;i=l;i=l;w(ivi){|ovvi;}h     l;N}$               
+19  :                               ;i=l;i=l;w(ivi){|ovvi;}h(     ;N}$                
+20  :                               i=l;i=l;w(ivi){|ovvi;}h(i     N}$                 
+21  : N->i=E;N                      i=l;i=l;w(ivi){|ovvi;}h(i     N}$                 
+21  : SAVESTATE:          7
+21  :                               i=l;i=l;w(ivi){|ovvi;}h(i     i=E;N}$             
+22  :                               =l;i=l;w(ivi){|ovvi;}h(i)     =E;N}$              
+23  :                               l;i=l;w(ivi){|ovvi;}h(i){     E;N}$               
+24  : E->l                          l;i=l;w(ivi){|ovvi;}h(i){     E;N}$               
+24  : SAVESTATE:          8
+24  :                               l;i=l;w(ivi){|ovvi;}h(i){     l;N}$               
+25  :                               ;i=l;w(ivi){|ovvi;}h(i){a     ;N}$                
+26  :                               i=l;w(ivi){|ovvi;}h(i){al     N}$                 
+27  : N->i=E;N                      i=l;w(ivi){|ovvi;}h(i){al     N}$                 
+27  : SAVESTATE:          9
+27  :                               i=l;w(ivi){|ovvi;}h(i){al     i=E;N}$             
+28  :                               =l;w(ivi){|ovvi;}h(i){al;     =E;N}$              
+29  :                               l;w(ivi){|ovvi;}h(i){al;o     E;N}$               
+30  : E->l                          l;w(ivi){|ovvi;}h(i){al;o     E;N}$               
+30  : SAVESTATE:          10
+30  :                               l;w(ivi){|ovvi;}h(i){al;o     l;N}$               
+31  :                               ;w(ivi){|ovvi;}h(i){al;ov     ;N}$                
+32  :                               w(ivi){|ovvi;}h(i){al;ovv     N}$                 
