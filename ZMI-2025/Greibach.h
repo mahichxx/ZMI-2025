@@ -4,11 +4,9 @@
 #include <iostream>
 
 #define GRB_ERROR_SERIES 600
-
-// !!! УМЕНЬШИЛИ ЛИМИТЫ ЧТОБЫ НЕ БЫЛО STACK OVERFLOW !!!
-#define GRB_MAX_CHAINS 24   // Было 64 -> Стало 24 (у нас макс 22 варианта в N)
-#define GRB_MAX_LEN 16      // Было 64 -> Стало 16 (самая длинная цепочка ~8 символов)
-#define GRB_MAX_RULES 16    // Было 32 -> Стало 16 (у нас всего 9 правил)
+#define GRB_MAX_CHAINS 32   
+#define GRB_MAX_LEN 32      
+#define GRB_MAX_RULES 32    
 
 typedef short GRBALPHABET;
 
@@ -27,9 +25,10 @@ namespace GRB
 		struct Chain
 		{
 			short size;
-			GRBALPHABET nt[GRB_MAX_LEN]; // Теперь это занимает мало места
+			GRBALPHABET nt[GRB_MAX_LEN];
 
 			Chain() { size = 0; }
+			// Заглушка, чтобы не ломать старый код (но мы его не юзаем)
 			Chain(short psize, GRBALPHABET s, ...);
 
 			char* getCChain(char* b);
@@ -47,6 +46,10 @@ namespace GRB
 		Rule() { nn = 0x00; size = 0; }
 		Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...);
 
+		// !!! НОВЫЙ МЕТОД: БЕЗ МНОГОТОЧИЯ !!!
+		void AddChain(short psize, GRBALPHABET* signals);
+
+		// Старый метод (заглушка)
 		void AddChain(short psize, GRBALPHABET s, ...);
 
 		char* getCRule(char* b, short nchain);
