@@ -82,4 +82,6 @@ namespace IT			// таблица идентификаторов
 	void Delete(IdTable& idtable);	// удалить таблицу лексем (освободить память)
 
 	void showITable(IdTable& table, ostream* log);	// вывод таблицы лексем
+
+
 };

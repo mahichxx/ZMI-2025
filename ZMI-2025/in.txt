@@ -29,21 +29,22 @@ main {
     ;
     result = calculator(x, y);
 
-    s = getMessage();
-    cout << s;
-    cout << result;
+    s = getmessage();
+    cout < s;
+    cout < result;
 
     switch(result) {
         case 15:
-            cout << "Correct";
+            cout < "Correct";
         case 0:
-            cout << "Zero";
+            cout < "Zero";
         default:
-            cout << "Unknown";
+            cout < "Unknown";
     }
 
     ;
     result = result * 2;
     result = result / 3;
-    cout << result;
+    cout < result;
+
 }

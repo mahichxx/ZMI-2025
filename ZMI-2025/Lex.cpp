@@ -23,7 +23,7 @@ namespace Lex {
 		int sum = 0;
 		int p = 0;
 		for (int k = length - 1; k >= 2; k--) {
-			if (word[k] == '1') sum += pow(2, p);
+			if (word[k] == '1') sum += (int)pow(2, p);
 			p++;
 		}
 		return sum;
@@ -38,7 +38,7 @@ namespace Lex {
 			if (word[k] >= '0' && word[k] <= '9') digit = word[k] - '0';
 			else if (word[k] >= 'A' && word[k] <= 'F') digit = word[k] - 'A' + 10;
 			else if (word[k] >= 'a' && word[k] <= 'f') digit = word[k] - 'a' + 10;
-			sum += digit * pow(16, p);
+			sum += digit * (int)pow(16, p);
 			p++;
 		}
 		return sum;

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "MFST.h"
+#include <iostream>
+#include <iomanip>
 
 namespace MFST {
 #pragma region CONSTRUCTORS
@@ -186,6 +188,7 @@ namespace MFST {
 				}
 
 			*log.stream << "------------------------------------------------------------------------------------------\n";
+			// !!! ВОТ ТУТ МЫ ВЫВОДИМ ПОДРОБНУЮ ДИАГНОСТИКУ !!!
 			cout << getDiagnosis(0, buf) << endl;
 			cout << getDiagnosis(1, buf) << endl;
 			cout << getDiagnosis(2, buf) << endl;
@@ -231,6 +234,7 @@ namespace MFST {
 		return buf;
 	}
 
+	// !!! ОБНОВЛЕННАЯ ФУНКЦИЯ ДИАГНОСТИКИ !!!
 	char* Mfst::getDiagnosis(short n, char* buf) {
 		char* rc = new char[200] {};
 		int errid = 0;
@@ -238,10 +242,16 @@ namespace MFST {
 		if (n < MFST_DIAGN_NUMBER && (lpos = diagnosis[n].lenta_position) >= 0) {
 			errid = greibach.getRule(diagnosis[n].nrule).iderror;
 			Error::ERROR err = Error::geterror(errid);
-			sprintf_s(buf, MFST_DIAGN_MAXSIZE, "%d: строка %d,	%s", err.id, lex.table[lpos].sn, err.message);
+
+			// Получаем символ, на котором споткнулись
+			char badChar = lex.table[lpos].lexema;
+
+			// Формируем расширенное сообщение
+			sprintf_s(buf, MFST_DIAGN_MAXSIZE,
+				"Ошибка %d: строка %d. Ожидалась конструкция #%d, но встречен символ '%c'",
+				err.id, lex.table[lpos].sn, errid, badChar);
 			rc = buf;
 		}
-
 		return rc;
 	}
 
