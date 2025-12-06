@@ -15,120 +15,147 @@ strtoint PROTO :DWORD
 
 .stack 4096
 .const
-	L9	db 'Resuit is', 0
-	L18	sbyte 10
-	L20	sbyte 5
-	L22	sbyte 255
-	L25	sbyte 65
-	L30	sbyte 15
-	L32	db 'Correct', 0
-	L34	sbyte 0
-	L36	db 'Zero', 0
-	L39	db 'Unknown', 0
-	L43	sbyte 2
-	L46	sbyte 3
+	L9	db 'StatusOK', 0
+	L17	sbyte 10
+	L19	sbyte 5
+	L21	sbyte -20
+	L23	db 'TestOneSimpleMath', 0
+	L28	db 'TestTwoLeftLiteral', 0
+	L30	sbyte 100
+	L34	db 'TestThreeChainCalc', 0
+	L41	db 'TestFourComplexParens', 0
+	L45	sbyte 2
+	L59	db 'TestFiveMixedLogic', 0
+	L67	sbyte 3
+	L70	db 'TestSixSwitchLogic', 0
+	L72	db 'YisFive', 0
+	L76	db 'SumIs', 0
+	L79	db 'YisTen', 0
+	L84	db 'TestSevenHexAndBin', 0
+	L86	sbyte 255
+	L89	sbyte 7
 .data
 	switch_val sdword 0
 	res	sbyte 0
-	msg	dd 0
+	s	dd 0
 	x	sbyte 0
 	y	sbyte 0
-	hexVal	sbyte 0
-	binVal	sbyte 0
-	symbol	sbyte 0
-	s	dd 0
-	result	sbyte 0
+	z	sbyte 0
+	hard	sbyte 0
+	negative	sbyte 0
+	info	dd 0
 .code
 main PROC
-	mov al, L18
+	mov al, L17
 	movsx eax, al
 	push eax
 	pop eax
 	mov x, al
-	mov al, L20
+	mov al, L19
 	movsx eax, al
 	push eax
 	pop eax
 	mov y, al
-	mov al, L22
+	mov al, L21
 	movsx eax, al
 	push eax
 	pop eax
-	mov hexVal, al
-	mov al, L20
-	movsx eax, al
-	push eax
+	mov negative, al
+	push offset L23
 	pop eax
-	mov binVal, al
-	mov al, L25
-	movsx eax, al
-	push eax
-	pop eax
-	mov symbol, al
+	invoke outnum, eax
+	invoke newline
 	mov al, x
 	movsx eax, al
 	push eax
 	mov al, y
 	movsx eax, al
 	push eax
+	pop ebx
 	pop eax
-	mov result, al
+	add eax, ebx
+	push eax
 	pop eax
-	mov s, eax
-	push s
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	mov al, result
+	mov z, al
+	mov al, z
 	movsx eax, al
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	mov al, result
+	push offset L28
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, L30
 	movsx eax, al
 	push eax
-	; --- SWITCH START ID:1 ---
-	pop eax
-	mov switch_val, eax
-	mov eax, switch_val
-	cmp eax, 15
-	je switch_1_case_15
-	mov eax, switch_val
-	cmp eax, 0
-	je switch_1_case_0
-	jmp switch_1_default
-switch_1_case_15:
-	push offset L32
-	pop eax
-	mov s, eax
-	push s
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	jmp switch_end_1
-switch_1_case_0:
-	push offset L36
-	pop eax
-	mov s, eax
-	push s
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	jmp switch_end_1
-switch_1_default:
-	push offset L39
-	pop eax
-	mov s, eax
-	push s
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	jmp switch_end_1
-	mov al, result
+	mov al, x
 	movsx eax, al
 	push eax
-	mov al, L43
+	pop ebx
+	pop eax
+	sub eax, ebx
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L34
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, L17
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, L19
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L41
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, L45
 	movsx eax, al
 	push eax
 	pop ebx
@@ -136,11 +163,71 @@ switch_1_default:
 	imul eax, ebx
 	push eax
 	pop eax
-	mov result, al
-	mov al, result
+	mov hard, al
+	mov al, hard
 	movsx eax, al
 	push eax
-	mov al, L46
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, L19
+	movsx eax, al
+	push eax
+	mov al, L45
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	sub eax, ebx
+	push eax
+	pop ebx
+	pop eax
+	cdq
+	idiv ebx
+	push eax
+	pop eax
+	mov hard, al
+	mov al, hard
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, x
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	mov al, L45
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	imul eax, ebx
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, L45
 	movsx eax, al
 	push eax
 	pop ebx
@@ -149,8 +236,149 @@ switch_1_default:
 	idiv ebx
 	push eax
 	pop eax
-	mov result, al
-	mov al, result
+	mov hard, al
+	mov al, hard
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L59
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, L17
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, L45
+	movsx eax, al
+	push eax
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, L67
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	imul eax, ebx
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L70
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, y
+	movsx eax, al
+	push eax
+	; --- SWITCH START ID:1 ---
+	pop eax
+	mov switch_val, eax
+	mov eax, switch_val
+	cmp eax, 5
+	je switch_1_case_5
+	mov eax, switch_val
+	cmp eax, 10
+	je switch_1_case_10
+	jmp switch_1_default
+switch_1_case_5:
+	push offset L72
+	pop eax
+	mov info, eax
+	push info
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, x
+	movsx eax, al
+	push eax
+	mov al, y
+	movsx eax, al
+	push eax
+	pop eax
+	mov z, al
+	push offset L76
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	jmp switch_end_1
+switch_1_case_10:
+	push offset L79
+	pop eax
+	mov info, eax
+	push info
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	jmp switch_end_1
+switch_1_default:
+	pop eax
+	mov info, eax
+	push info
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	jmp switch_end_1
+	push offset L84
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, L86
+	movsx eax, al
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	mov al, L89
+	movsx eax, al
+	push eax
+	pop eax
+	mov z, al
+	mov al, z
 	movsx eax, al
 	push eax
 	pop eax

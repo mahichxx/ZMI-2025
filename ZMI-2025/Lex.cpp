@@ -74,7 +74,7 @@ namespace Lex {
 		bool newindf = false;
 		bool errorssem = false;
 
-		// --- ИСПРАВЛЕНИЕ: БЕЗОПАСНЫЕ БУФЕРЫ ---
+		// --- БЕЗОПАСНЫЕ БУФЕРЫ ---
 		unsigned char* RegionPrefix = new unsigned char[TI_STR_MAXSIZE];
 		memset(RegionPrefix, 0, TI_STR_MAXSIZE);
 
@@ -282,6 +282,46 @@ namespace Lex {
 			if (FST::execute(fstLiteralInt)) {
 				int value = atoi((char*)word[i]);
 				if (value > 127 || value < -128) Log::WriteError(log, Error::geterrorin(203, line, position));
+
+				// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				// ИСПРАВЛЕНИЕ: Распознавание отрицательных чисел (-20)
+				// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				bool isNegative = false;
+
+				// Если есть предыдущий токен, и это МИНУС
+				if (lextable.size > 0) {
+					LT::Entry prev = lextable.table[lextable.size - 1];
+					if (prev.lexema == LEX_OPERATOR && prev.op == LT::OMINUS) {
+
+						// Проверяем контекст: Унарный это минус или бинарный?
+						// Унарный (т.е. отрицательное число) бывает:
+						// 1. В самом начале выражения/файла (size==1)
+						// 2. После знака =, (, ,, return
+						bool isUnary = false;
+						if (lextable.size == 1) isUnary = true;
+						else {
+							unsigned char prePrevLex = lextable.table[lextable.size - 2].lexema;
+							if (prePrevLex == LEX_EQUAL || prePrevLex == LEX_LEFTTHESIS ||
+								prePrevLex == LEX_COMMA || prePrevLex == LEX_RETURN) {
+								isUnary = true;
+							}
+						}
+
+						if (isUnary) {
+							// Это отрицательное число!
+							isNegative = true;
+							// Удаляем токен "минус" из таблицы, так как мы сливаем его с числом
+							lextable.size--;
+							idtable.size--;
+							indexID--; // Откатываем счетчик ID, так как оператор удален
+						}
+					}
+				}
+
+				if (isNegative) value = -value;
+				// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 				for (int k = 0; k < idtable.size; k++) {
 					if (idtable.table[k].iddatatype == IT::INT && idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L) {
 						LT::Entry entryLT = LT::writeEntry(entryLT, LEX_LITERAL, k, line);
@@ -294,10 +334,8 @@ namespace Lex {
 				LT::Add(lextable, entryLT);
 				entryIT.iddatatype = IT::INT;
 				entryIT.idtype = IT::L;
-				if (lextable.size > 1 && lextable.table[lextable.size - 2].lexema == LEX_EQUAL && word[i - 1][0] == '-')
-					entryIT.value.vint = -value;
-				else
-					entryIT.value.vint = value;
+
+				entryIT.value.vint = value;
 				entryIT.idxfirstLE = indexLex;
 
 				// Безопасная генерация имени

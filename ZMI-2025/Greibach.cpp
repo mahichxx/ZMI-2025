@@ -68,7 +68,7 @@ namespace GRB {
     Rule Greibach::getRule(short n) { return n < size ? rules[n] : Rule(); }
 
 
-    // --- ÃÐÀÌÌÀÒÈÊÀ (CORRECTED COUNTS) ---
+    // --- ÃÐÀÌÌÀÒÈÊÀ (Ñ ÏÎÄÄÅÐÆÊÎÉ ÑËÎÆÍÎÉ ÀÐÈÔÌÅÒÈÊÈ) ---
     Greibach getGreibach()
     {
         Greibach g;
@@ -78,7 +78,6 @@ namespace GRB {
 
         // 1. Rule S (Start)
         g.rules[0].nn = NS('S'); g.rules[0].iderror = GRB_ERROR_SERIES + 0;
-        // main { N (N ñúåäàåò ñêîáêó)
         g.rules[0].AddChain(3, TS('m'), TS('{'), NS('N'));
 
         g.rules[0].AddChain(7, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
@@ -87,19 +86,15 @@ namespace GRB {
         g.rules[0].AddChain(8, TS('s'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(7, TS('c'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(8, TS('c'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
-        // Ôóíêöèÿ main: main { N (N ñúåäàåò ñêîáêó) S
         g.rules[0].AddChain(4, TS('m'), TS('{'), NS('N'), NS('S'));
 
-        // 2. Rule T (Body of function)
+        // 2. Rule T (Body)
         g.rules[1].nn = NS('T'); g.rules[1].iderror = GRB_ERROR_SERIES + 0;
-        // { N (N ñúåäàåò ñêîáêó)
         g.rules[1].AddChain(2, TS('{'), NS('N'));
 
         // 3. Rule N (Statements)
         g.rules[2].nn = NS('N'); g.rules[2].iderror = GRB_ERROR_SERIES + 1;
-
-        // N çàêàí÷èâàåòñÿ, êîãäà âèäèò '}' è ÑÚÅÄÀÅÒ Å¨
-        g.rules[2].AddChain(1, TS('}'));
+        g.rules[2].AddChain(1, TS('}')); // Êîíåö áëîêà
 
         g.rules[2].AddChain(4, TS('t'), TS('i'), TS(';'), NS('N'));
         g.rules[2].AddChain(4, TS('s'), TS('i'), TS(';'), NS('N'));
@@ -110,41 +105,41 @@ namespace GRB {
         g.rules[2].AddChain(5, TS('o'), TS('v'), NS('E'), TS(';'), NS('N'));
         g.rules[2].AddChain(4, TS('r'), NS('E'), TS(';'), NS('N'));
         g.rules[2].AddChain(3, TS('r'), TS(';'), NS('N'));
-
-        // switch
-        // K çàêîí÷èòñÿ íà ñêîáêå ñâè÷à, à N ïðîäîëæèò ðàáîòó
         g.rules[2].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'), NS('N'));
-
         g.rules[2].AddChain(4, TS('p'), NS('E'), TS(';'), NS('N'));
         g.rules[2].AddChain(2, TS(';'), NS('N'));
 
-        // 4. Rule K (Switch Cases) - ÈÑÏÐÀÂËÅÍÛ ÖÈÔÐÛ
+        // 4. Rule K (Switch Cases)
         g.rules[3].nn = NS('K'); g.rules[3].iderror = GRB_ERROR_SERIES + 6;
-        g.rules[3].AddChain(1, TS('}')); // Êîíåö switch
-
-        // case LIT : { N K (N ñúåäàåò ñêîáêó áëîêà case, ïîòîì K)
-        // ÁÛËÎ 7, ÑÒÀËÎ 6! (a, l, :, {, N, K)
+        g.rules[3].AddChain(1, TS('}'));
         g.rules[3].AddChain(6, TS('a'), TS('l'), TS(':'), TS('{'), NS('N'), NS('K'));
-
-        // default : { N K
-        // ÁÛËÎ 6, ÑÒÀËÎ 5! (d, :, {, N, K)
         g.rules[3].AddChain(5, TS('d'), TS(':'), TS('{'), NS('N'), NS('K'));
 
-        // 5. Rule E (Expression)
+        // 5. Rule E (Expression) - ÈÑÏÐÀÂËÅÍÎ È ÄÎÏÎËÍÅÍÎ
         g.rules[4].nn = NS('E'); g.rules[4].iderror = GRB_ERROR_SERIES + 2;
-        g.rules[4].AddChain(3, TS('i'), TS('v'), TS('i'));
-        g.rules[4].AddChain(3, TS('i'), TS('v'), TS('l'));
-        g.rules[4].AddChain(3, TS('l'), TS('v'), TS('i'));
-        g.rules[4].AddChain(3, TS('l'), TS('v'), TS('l'));
+
+        // Ñëîæíàÿ àðèôìåòèêà ñî ñêîáêàìè: (E) + E
+        g.rules[4].AddChain(5, TS('('), NS('E'), TS(')'), TS('v'), NS('E'));
+
+        // Âûçîâû ôóíêöèé
         g.rules[4].AddChain(4, TS('i'), TS('('), NS('W'), TS(')'));
         g.rules[4].AddChain(3, TS('i'), TS('('), TS(')'));
+
+        // Ïðîñòî ñêîáêè: (E)
         g.rules[4].AddChain(3, TS('('), NS('E'), TS(')'));
-        g.rules[4].AddChain(1, TS('i'));
-        g.rules[4].AddChain(1, TS('l'));
-        g.rules[4].AddChain(1, TS('F'));
+
+        // Ðåêóðñèÿ ñïðàâà: ID + Expr
         g.rules[4].AddChain(3, TS('i'), TS('v'), NS('E'));
 
-        // 6. Rule F (Params)
+        // Ðåêóðñèÿ ñïðàâà äëÿ ÷èñåë: 2 + Expr (ÝÒÎÃÎ ÍÅ ÁÛËÎ)
+        g.rules[4].AddChain(3, TS('l'), TS('v'), NS('E'));
+
+        // Áàçîâûå ñëó÷àè
+        g.rules[4].AddChain(1, TS('i'));
+        g.rules[4].AddChain(1, TS('l'));
+        g.rules[4].AddChain(1, TS('F')); // Äëÿ ïîëíîòû (ïàðàìåòðû)
+
+        // 6. Rule F (Params definition)
         g.rules[6].nn = NS('F'); g.rules[6].iderror = GRB_ERROR_SERIES + 3;
         g.rules[6].AddChain(4, TS('t'), TS('i'), TS(','), NS('F'));
         g.rules[6].AddChain(4, TS('s'), TS('i'), TS(','), NS('F'));
@@ -153,7 +148,7 @@ namespace GRB {
         g.rules[6].AddChain(2, TS('s'), TS('i'));
         g.rules[6].AddChain(2, TS('c'), TS('i'));
 
-        // 8. Rule W (Args)
+        // 8. Rule W (Args call)
         g.rules[7].nn = NS('W'); g.rules[7].iderror = GRB_ERROR_SERIES + 4;
         g.rules[7].AddChain(3, TS('i'), TS(','), NS('W'));
         g.rules[7].AddChain(3, TS('l'), TS(','), NS('W'));

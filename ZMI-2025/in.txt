@@ -1,54 +1,79 @@
-integer function calculator(integer a, integer b) {
+integer function summary(integer a, integer b) {
     integer res;
     res = a + b;
     return res;
 }
 
-string function getmessage() {
-    string msg;
-    msg = "Resuit is";
-    return msg;
+string function getstatus() {
+    string s;
+    s = "StatusOK";
+    return s;
 }
 
 main {
     integer x;
     integer y;
-    integer hexVal;
-    integer binVal;
-    char symbol;
-    string s;
-    integer result;
+    integer z;
+    integer hard;
+    integer negative;
+    string info;
 
     x = 10;
     y = 5;
-    
-    hexVal = 0xFF;      
-    binVal = 0b101;     
-    symbol = 'A';       
-    
-    result = calculator(x, y);
+    negative = -20;
 
-    s = getmessage();
-    cout < s;
-    cout < result;
+    cout < "TestOneSimpleMath";
+    z = x + y;
+    cout < z;
 
-    switch(result) {
-        case 15: {
-            s = "Correct";  
-            cout < s;
+    cout < "TestTwoLeftLiteral";
+    z = 100 - x;
+    cout < z;
+
+    cout < "TestThreeChainCalc";
+    z = x + y + 10 + 5; 
+    cout < z;
+
+    cout < "TestFourComplexParens";
+    hard = (x + y) * 2;
+    cout < hard;
+    
+    hard = (x + y) / (5 - 2);
+    cout < hard;
+
+    hard = ((x + x) + (y * 2)) / 2;
+    cout < hard;
+
+    cout < "TestFiveMixedLogic";
+    z = (x + 10) + y;
+    cout < z;
+
+    z = 2 + (x * 3);
+    cout < z;
+
+    cout < "TestSixSwitchLogic";
+    switch(y) {
+        case 5: {
+            info = "YisFive";
+            cout < info;
+            
+            z = summary(x, y);
+            cout < "SumIs";
+            cout < z;
         }
-        case 0: {
-            s = "Zero";
-            cout < s;
+        case 10: {
+            info = "YisTen";
+            cout < info;
         }
         default: {
-            s = "Unknown";
-            cout < s;
+            info = getstatus();
+            cout < info;
         }
     }
 
-    result = result * 2;
-    result = result / 3;
-    cout < result;
-
+    cout < "TestSevenHexAndBin";
+    z = 0xFF;
+    cout < z;
+    z = 0b111;
+    cout < z;
 }
