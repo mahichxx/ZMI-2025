@@ -1,10 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "Log.h"
-#include "LT.h" // <--- ÂÀÆÍÎ!
-#include "IT.h" // <--- ÂÀÆÍÎ!
+
+// Ïðåäâàðèòåëüíîå îáúÿâëåíèå (Forward declaration)
+namespace LT { struct LexTable; }
+namespace IT { struct IdTable; }
 
 namespace Sem
 {
-	bool SemAnaliz(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log);
+	// ÂÀÆÍÎ: Çäåñü ÎÁßÇÀÒÅËÜÍÎ äîëæíû áûòü çíà÷êè '&' (àìïåðñàíäû)
+	bool SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log);
 }

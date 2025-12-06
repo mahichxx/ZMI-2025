@@ -23,24 +23,28 @@
 25 i=l;
 26 i=l;
 27 i=l;
-29 ;
-30 i=i(i,i);
-32 i=i();
+29 i=i(i,i);
+31 i=i();
+32 ovi;
 33 ovi;
-34 ovi;
-36 h(i){
-37 al:
-38 ovl;
-39 al:
-40 ovl;
-41 d:
-42 ovl;
+35 h(i){
+36 al:{
+37 i=l;
+38 ovi;
+39 }
+40 al:{
+41 i=l;
+42 ovi;
 43 }
-45 ;
-46 i=ivl;
-47 i=ivl;
-48 ovi;
-50 }
+44 d:{
+45 i=l;
+46 ovi;
+47 }
+48 }
+50 i=ivl;
+51 i=ivl;
+52 ovi;
+54 }
 
 
 -----Таблица лексем после преобразования в ПОЛИЗ (Сырая)
@@ -69,24 +73,28 @@
 25 i=l;
 26 i=l;
 27 i=l;
-29 ;
-30 i=ii@;
-32 i=@;
+29 i=ii@;
+31 i=@;
+32 oiv;
 33 oiv;
-34 oiv;
-36 h(i){
-37 al:
-38 olv;
-39 al:
-40 olv;
-41 d:
-42 olv;
+35 h(i){
+36 al:{
+37 i=l;
+38 oiv;
+39 }
+40 al:{
+41 i=l;
+42 oiv;
 43 }
-45 ;
-46 i=ilv;
-47 i=ilv;
-48 oiv;
-50 }
+44 d:{
+45 i=l;
+46 oiv;
+47 }
+48 }
+50 i=ilv;
+51 i=ilv;
+52 oiv;
+54 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
@@ -112,18 +120,21 @@
 25           | hexVal = 255 ;
 26           | binVal = 5 ;
 27           | symbol = 'A' ;
-29           | ;30           | result = x y CALL2 ;
-32           | s = CALL0 ;
-33           | cout s < ;
-34           | cout result < ;
-36           | result 
-37           | 15 
-38           | cout "Correct" < ;
-39           | 0 
-40           | cout "Zero" < ;
-41           | 42           | cout "Unknown" < ;
-43           | 45           | ;46           | result = result 2 * ;
-47           | result = result 3 / ;
-48           | cout result < ;
-50           | 
+29           | result = x y CALL2 ;
+31           | s = CALL0 ;
+32           | cout s < ;
+33           | cout result < ;
+35           | result 
+36           | 15 
+37           | s = "Correct" ;
+38           | cout s < ;
+39           | 40           | 0 
+41           | s = "Zero" ;
+42           | cout s < ;
+43           | 44           | 45           | s = "Unknown" ;
+46           | cout s < ;
+47           | 48           | 50           | result = result 2 * ;
+51           | result = result 3 / ;
+52           | cout result < ;
+54           | 
 ------------------------------------------------------------------------------

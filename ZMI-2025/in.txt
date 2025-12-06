@@ -26,7 +26,6 @@ main {
     binVal = 0b101;     
     symbol = 'A';       
     
-    ;
     result = calculator(x, y);
 
     s = getmessage();
@@ -34,15 +33,20 @@ main {
     cout < result;
 
     switch(result) {
-        case 15:
-            cout < "Correct";
-        case 0:
-            cout < "Zero";
-        default:
-            cout < "Unknown";
+        case 15: {
+            s = "Correct";  
+            cout < s;
+        }
+        case 0: {
+            s = "Zero";
+            cout < s;
+        }
+        default: {
+            s = "Unknown";
+            cout < s;
+        }
     }
 
-    ;
     result = result * 2;
     result = result / 3;
     cout < result;

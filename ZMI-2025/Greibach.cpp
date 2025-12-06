@@ -25,17 +25,14 @@ namespace GRB {
 
     // --- Rule ---
     Rule::Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...) {
-        nn = pnn; iderror = piderror; size = 0; 
+        nn = pnn; iderror = piderror; size = 0;
     }
 
-    // !!! ИСПРАВЛЕНО: Вернули старую сигнатуру с многоточием !!!
     void Rule::AddChain(short psize, GRBALPHABET s, ...)
     {
         if (size >= GRB_MAX_CHAINS) return;
         chains[size].size = psize;
         chains[size].nt[0] = s;
-
-        // Используем va_list для чтения аргументов (это безопасно для int)
         va_list args;
         va_start(args, s);
         for (short i = 1; i < psize; i++) {
@@ -71,32 +68,39 @@ namespace GRB {
     Rule Greibach::getRule(short n) { return n < size ? rules[n] : Rule(); }
 
 
-    // --- ГРАММАТИКА ---
-    Greibach getGreibach() 
+    // --- ГРАММАТИКА (CORRECTED COUNTS) ---
+    Greibach getGreibach()
     {
         Greibach g;
         g.startN = NS('S');
         g.stbottomT = TS('$');
-        g.size = 8; 
+        g.size = 8;
 
         // 1. Rule S (Start)
         g.rules[0].nn = NS('S'); g.rules[0].iderror = GRB_ERROR_SERIES + 0;
-        g.rules[0].AddChain(4, TS('m'), TS('{'), NS('N')); 
+        // main { N (N съедает скобку)
+        g.rules[0].AddChain(3, TS('m'), TS('{'), NS('N'));
+
         g.rules[0].AddChain(7, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(8, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(7, TS('s'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(8, TS('s'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(7, TS('c'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
         g.rules[0].AddChain(8, TS('c'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(5, TS('m'), TS('{'), NS('N'), NS('S')); 
+        // Функция main: main { N (N съедает скобку) S
+        g.rules[0].AddChain(4, TS('m'), TS('{'), NS('N'), NS('S'));
 
-        // 2. Rule T (Body)
+        // 2. Rule T (Body of function)
         g.rules[1].nn = NS('T'); g.rules[1].iderror = GRB_ERROR_SERIES + 0;
-        g.rules[1].AddChain(2, TS('{'), NS('N')); 
+        // { N (N съедает скобку)
+        g.rules[1].AddChain(2, TS('{'), NS('N'));
 
         // 3. Rule N (Statements)
         g.rules[2].nn = NS('N'); g.rules[2].iderror = GRB_ERROR_SERIES + 1;
-        g.rules[2].AddChain(1, TS('}')); 
+
+        // N заканчивается, когда видит '}' и СЪЕДАЕТ ЕЁ
+        g.rules[2].AddChain(1, TS('}'));
+
         g.rules[2].AddChain(4, TS('t'), TS('i'), TS(';'), NS('N'));
         g.rules[2].AddChain(4, TS('s'), TS('i'), TS(';'), NS('N'));
         g.rules[2].AddChain(4, TS('c'), TS('i'), TS(';'), NS('N'));
@@ -106,16 +110,25 @@ namespace GRB {
         g.rules[2].AddChain(5, TS('o'), TS('v'), NS('E'), TS(';'), NS('N'));
         g.rules[2].AddChain(4, TS('r'), NS('E'), TS(';'), NS('N'));
         g.rules[2].AddChain(3, TS('r'), TS(';'), NS('N'));
-        g.rules[2].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'), NS('N'));
-        g.rules[2].AddChain(4, TS('p'), NS('E'), TS(';'), NS('N'));
-        g.rules[2].AddChain(2, TS(';'), NS('N')); 
 
-        // 4. Rule K (Switch Cases)
+        // switch
+        // K закончится на скобке свича, а N продолжит работу
+        g.rules[2].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'), NS('N'));
+
+        g.rules[2].AddChain(4, TS('p'), NS('E'), TS(';'), NS('N'));
+        g.rules[2].AddChain(2, TS(';'), NS('N'));
+
+        // 4. Rule K (Switch Cases) - ИСПРАВЛЕНЫ ЦИФРЫ
         g.rules[3].nn = NS('K'); g.rules[3].iderror = GRB_ERROR_SERIES + 6;
-        g.rules[3].AddChain(1, TS('}')); 
-        g.rules[3].AddChain(6, TS('a'), TS('l'), TS(':'), NS('M'), NS('K')); 
-        g.rules[3].AddChain(5, TS('d'), TS(':'), NS('M'), NS('K')); 
-        g.rules[3].AddChain(2, TS('}'), NS('N')); 
+        g.rules[3].AddChain(1, TS('}')); // Конец switch
+
+        // case LIT : { N K (N съедает скобку блока case, потом K)
+        // БЫЛО 7, СТАЛО 6! (a, l, :, {, N, K)
+        g.rules[3].AddChain(6, TS('a'), TS('l'), TS(':'), TS('{'), NS('N'), NS('K'));
+
+        // default : { N K
+        // БЫЛО 6, СТАЛО 5! (d, :, {, N, K)
+        g.rules[3].AddChain(5, TS('d'), TS(':'), TS('{'), NS('N'), NS('K'));
 
         // 5. Rule E (Expression)
         g.rules[4].nn = NS('E'); g.rules[4].iderror = GRB_ERROR_SERIES + 2;
@@ -128,26 +141,10 @@ namespace GRB {
         g.rules[4].AddChain(3, TS('('), NS('E'), TS(')'));
         g.rules[4].AddChain(1, TS('i'));
         g.rules[4].AddChain(1, TS('l'));
-        g.rules[4].AddChain(1, TS('T'));
         g.rules[4].AddChain(1, TS('F'));
         g.rules[4].AddChain(3, TS('i'), TS('v'), NS('E'));
 
-        // 6. Rule M (Single Statement)
-        g.rules[5].nn = NS('M'); g.rules[5].iderror = GRB_ERROR_SERIES + 1;
-        g.rules[5].AddChain(4, TS('t'), TS('i'), TS(';'));
-        g.rules[5].AddChain(4, TS('s'), TS('i'), TS(';'));
-        g.rules[5].AddChain(4, TS('c'), TS('i'), TS(';'));
-        g.rules[5].AddChain(5, TS('i'), TS('='), NS('E'), TS(';'));
-        g.rules[5].AddChain(6, TS('i'), TS('('), NS('W'), TS(')'), TS(';'));
-        g.rules[5].AddChain(5, TS('i'), TS('('), TS(')'), TS(';'));
-        g.rules[5].AddChain(5, TS('o'), TS('v'), NS('E'), TS(';')); 
-        g.rules[5].AddChain(4, TS('r'), NS('E'), TS(';'));
-        g.rules[5].AddChain(3, TS('r'), TS(';'));
-        g.rules[5].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'));
-        g.rules[5].AddChain(4, TS('p'), NS('E'), TS(';'));
-        g.rules[5].AddChain(1, TS(';')); 
-
-        // 7. Rule F (Params)
+        // 6. Rule F (Params)
         g.rules[6].nn = NS('F'); g.rules[6].iderror = GRB_ERROR_SERIES + 3;
         g.rules[6].AddChain(4, TS('t'), TS('i'), TS(','), NS('F'));
         g.rules[6].AddChain(4, TS('s'), TS('i'), TS(','), NS('F'));
