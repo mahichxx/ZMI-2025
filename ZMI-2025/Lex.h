@@ -1,18 +1,17 @@
 #pragma once
 #include "stdafx.h"
-#define maxsize 10000
-#define maxword 10000
-using  namespace std;
+#include "Log.h"
+#include "In.h"
+#include "LT.h"  // <--- ВАЖНО: Подключаем Таблицу Лексем
+#include "IT.h"  // <--- ВАЖНО: Подключаем Таблицу Идентификаторов
+
 namespace Lex {
 
-	struct LEX //in lex.h
+	struct LEX
 	{
-		IT::IdTable idtable;;
 		LT::LexTable lextable;
+		IT::IdTable idtable;
 	};
 
 	LEX lexAnaliz(Log::LOG log, In::IN in);
-	bool checkBrace(unsigned char** word, int k);
-	int IntinInt16(unsigned char* word);
-	int getIndexInLT(LT::LexTable& lextable, int itTableIndex);
 }

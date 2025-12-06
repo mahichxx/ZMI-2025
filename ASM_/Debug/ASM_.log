@@ -1,0 +1,11 @@
+﻿  Assembling ..\ASM\Asm.asm...
+..\ASM\Asm.asm(204): warning A4000: cannot modify READONLY segment
+..\ASM\Asm.asm(80): error A2006: undefined symbol : a
+..\ASM\Asm.asm(83): error A2006: undefined symbol : b
+..\ASM\Asm.asm(94): error A2006: undefined symbol : a
+..\ASM\Asm.asm(97): error A2006: undefined symbol : b
+..\ASM\Asm.asm(174): error A2006: undefined symbol : calculator
+..\ASM\Asm.asm(179): error A2006: undefined symbol : getmessage
+..\ASM\Asm.asm(210): error A2006: undefined symbol : skip_case_0
+..\ASM\Asm.asm(224): error A2006: undefined symbol : skip_case_1
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: выход из команды "ml.exe /c /nologo /Zi /Fo"Debug\Asm.obj" /W3 /errorReport:prompt  /Ta..\ASM\Asm.asm" с кодом "1".

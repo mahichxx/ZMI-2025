@@ -1,13 +1,21 @@
 #include "stdafx.h"
 #include "Greibach.h"
-#include <vector> 
+#include <cstdarg>
 
 namespace GRB {
 
-    // Этот конструктор больше НЕ ИСПОЛЬЗУЕТСЯ для инициализации данных
-    // Мы используем его только как заглушку, чтобы старый код компилировался
-    Rule::Chain::Chain(short psize, GRBALPHABET s, ...) {
-        size = 0; // Игнорируем аргументы, всё равно они передаются криво
+    // --- Chain ---
+    Rule::Chain::Chain(short psize, GRBALPHABET s, ...)
+    {
+        size = psize;
+        if (size > GRB_MAX_LEN) size = GRB_MAX_LEN;
+        nt[0] = s;
+        va_list args;
+        va_start(args, s);
+        for (short i = 1; i < size; i++) {
+            nt[i] = (GRBALPHABET)va_arg(args, int);
+        }
+        va_end(args);
     }
 
     char* Rule::Chain::getCChain(char* b) {
@@ -17,25 +25,24 @@ namespace GRB {
 
     // --- Rule ---
     Rule::Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...) {
-        nn = pnn; iderror = piderror; size = 0;
+        nn = pnn; iderror = piderror; size = 0; 
     }
 
-    // !!! НОВЫЙ БЕЗОПАСНЫЙ МЕТОД !!!
-    // Добавляет цепочку, принимая массив символов, а не variadic arguments
-    void Rule::AddChain(short psize, GRBALPHABET* signals)
+    // !!! ИСПРАВЛЕНО: Вернули старую сигнатуру с многоточием !!!
+    void Rule::AddChain(short psize, GRBALPHABET s, ...)
     {
         if (size >= GRB_MAX_CHAINS) return;
         chains[size].size = psize;
-        for (short i = 0; i < psize; i++) {
-            chains[size].nt[i] = signals[i];
-        }
-        size++;
-    }
+        chains[size].nt[0] = s;
 
-    // Старый метод (для совместимости, но лучше не использовать)
-    void Rule::AddChain(short psize, GRBALPHABET s, ...)
-    {
-        // Не используем, так как он вызывает баги
+        // Используем va_list для чтения аргументов (это безопасно для int)
+        va_list args;
+        va_start(args, s);
+        for (short i = 1; i < psize; i++) {
+            chains[size].nt[i] = (GRBALPHABET)va_arg(args, int);
+        }
+        va_end(args);
+        size++;
     }
 
     char* Rule::getCRule(char* b, short nchain) {
@@ -64,126 +71,97 @@ namespace GRB {
     Rule Greibach::getRule(short n) { return n < size ? rules[n] : Rule(); }
 
 
-    // --- ГРАММАТИКА (БЕЗОПАСНАЯ СБОРКА) ---
-    Greibach getGreibach()
+    // --- ГРАММАТИКА ---
+    Greibach getGreibach() 
     {
         Greibach g;
         g.startN = NS('S');
         g.stbottomT = TS('$');
-        g.size = 8;
+        g.size = 8; 
 
-        // Вспомогательный макрос для создания массива (чтобы код был короче)
-#define CHAIN(...) { __VA_ARGS__ }
-
-// 1. Rule S
+        // 1. Rule S (Start)
         g.rules[0].nn = NS('S'); g.rules[0].iderror = GRB_ERROR_SERIES + 0;
+        g.rules[0].AddChain(4, TS('m'), TS('{'), NS('N')); 
+        g.rules[0].AddChain(7, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(8, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(7, TS('s'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(8, TS('s'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(7, TS('c'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(8, TS('c'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
+        g.rules[0].AddChain(5, TS('m'), TS('{'), NS('N'), NS('S')); 
 
-        GRBALPHABET c1[] = CHAIN(TS('m'), TS('{'), NS('N'));
-        g.rules[0].AddChain(3, c1);
-
-        GRBALPHABET c2[] = CHAIN(TS('t'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(7, c2);
-
-        GRBALPHABET c3[] = CHAIN(TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(8, c3);
-
-        GRBALPHABET c4[] = CHAIN(TS('s'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(7, c4);
-
-        GRBALPHABET c5[] = CHAIN(TS('s'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(8, c5);
-
-        GRBALPHABET c6[] = CHAIN(TS('c'), TS('f'), TS('i'), TS('('), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(7, c6);
-
-        GRBALPHABET c7[] = CHAIN(TS('c'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), NS('T'), NS('S'));
-        g.rules[0].AddChain(8, c7);
-
-        GRBALPHABET c8[] = CHAIN(TS('m'), TS('{'), NS('N'), NS('S'));
-        g.rules[0].AddChain(4, c8);
-
-        // 2. Rule T
+        // 2. Rule T (Body)
         g.rules[1].nn = NS('T'); g.rules[1].iderror = GRB_ERROR_SERIES + 0;
-        GRBALPHABET t1[] = CHAIN(TS('{'), NS('N'));
-        g.rules[1].AddChain(2, t1);
+        g.rules[1].AddChain(2, TS('{'), NS('N')); 
 
-        // 3. Rule N
+        // 3. Rule N (Statements)
         g.rules[2].nn = NS('N'); g.rules[2].iderror = GRB_ERROR_SERIES + 1;
-        GRBALPHABET n1[] = CHAIN(TS('}')); g.rules[2].AddChain(1, n1);
+        g.rules[2].AddChain(1, TS('}')); 
+        g.rules[2].AddChain(4, TS('t'), TS('i'), TS(';'), NS('N'));
+        g.rules[2].AddChain(4, TS('s'), TS('i'), TS(';'), NS('N'));
+        g.rules[2].AddChain(4, TS('c'), TS('i'), TS(';'), NS('N'));
+        g.rules[2].AddChain(5, TS('i'), TS('='), NS('E'), TS(';'), NS('N'));
+        g.rules[2].AddChain(6, TS('i'), TS('('), NS('W'), TS(')'), TS(';'), NS('N'));
+        g.rules[2].AddChain(5, TS('i'), TS('('), TS(')'), TS(';'), NS('N'));
+        g.rules[2].AddChain(5, TS('o'), TS('v'), NS('E'), TS(';'), NS('N'));
+        g.rules[2].AddChain(4, TS('r'), NS('E'), TS(';'), NS('N'));
+        g.rules[2].AddChain(3, TS('r'), TS(';'), NS('N'));
+        g.rules[2].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'), NS('N'));
+        g.rules[2].AddChain(4, TS('p'), NS('E'), TS(';'), NS('N'));
+        g.rules[2].AddChain(2, TS(';'), NS('N')); 
 
-        GRBALPHABET n2[] = CHAIN(TS('t'), TS('i'), TS(';'), NS('N')); g.rules[2].AddChain(4, n2);
-        GRBALPHABET n3[] = CHAIN(TS('s'), TS('i'), TS(';'), NS('N')); g.rules[2].AddChain(4, n3);
-        GRBALPHABET n4[] = CHAIN(TS('c'), TS('i'), TS(';'), NS('N')); g.rules[2].AddChain(4, n4);
-
-        GRBALPHABET n5[] = CHAIN(TS('i'), TS('='), NS('E'), TS(';'), NS('N')); g.rules[2].AddChain(5, n5);
-
-        GRBALPHABET n6[] = CHAIN(TS('i'), TS('('), NS('W'), TS(')'), TS(';'), NS('N')); g.rules[2].AddChain(6, n6);
-        GRBALPHABET n7[] = CHAIN(TS('i'), TS('('), TS(')'), TS(';'), NS('N')); g.rules[2].AddChain(5, n7);
-
-        GRBALPHABET n8[] = CHAIN(TS('o'), TS('v'), NS('E'), TS(';'), NS('N')); g.rules[2].AddChain(5, n8);
-
-        GRBALPHABET n9[] = CHAIN(TS('r'), NS('E'), TS(';'), NS('N')); g.rules[2].AddChain(4, n9);
-        GRBALPHABET n10[] = CHAIN(TS('r'), TS(';'), NS('N')); g.rules[2].AddChain(3, n10);
-
-        GRBALPHABET n11[] = CHAIN(TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'), NS('N')); g.rules[2].AddChain(7, n11);
-
-        GRBALPHABET n12[] = CHAIN(TS('p'), NS('E'), TS(';'), NS('N')); g.rules[2].AddChain(4, n12);
-
-        GRBALPHABET n13[] = CHAIN(TS(';'), NS('N')); g.rules[2].AddChain(2, n13);
-
-        // 4. Rule K
+        // 4. Rule K (Switch Cases)
         g.rules[3].nn = NS('K'); g.rules[3].iderror = GRB_ERROR_SERIES + 6;
-        GRBALPHABET k1[] = CHAIN(TS('}')); g.rules[3].AddChain(1, k1);
+        g.rules[3].AddChain(1, TS('}')); 
+        g.rules[3].AddChain(6, TS('a'), TS('l'), TS(':'), NS('M'), NS('K')); 
+        g.rules[3].AddChain(5, TS('d'), TS(':'), NS('M'), NS('K')); 
+        g.rules[3].AddChain(2, TS('}'), NS('N')); 
 
-        GRBALPHABET k2[] = CHAIN(TS('a'), TS('l'), TS(':'), NS('M'), NS('K')); g.rules[3].AddChain(6, k2);
-        GRBALPHABET k3[] = CHAIN(TS('d'), TS(':'), NS('M'), NS('K')); g.rules[3].AddChain(5, k3);
-        GRBALPHABET k4[] = CHAIN(TS('}'), NS('N')); g.rules[3].AddChain(2, k4);
-
-        // 5. Rule E
+        // 5. Rule E (Expression)
         g.rules[4].nn = NS('E'); g.rules[4].iderror = GRB_ERROR_SERIES + 2;
-        GRBALPHABET e1[] = CHAIN(TS('i'), TS('v'), TS('i')); g.rules[4].AddChain(3, e1);
-        GRBALPHABET e2[] = CHAIN(TS('i'), TS('v'), TS('l')); g.rules[4].AddChain(3, e2);
-        GRBALPHABET e3[] = CHAIN(TS('l'), TS('v'), TS('i')); g.rules[4].AddChain(3, e3);
-        GRBALPHABET e4[] = CHAIN(TS('l'), TS('v'), TS('l')); g.rules[4].AddChain(3, e4);
-        GRBALPHABET e5[] = CHAIN(TS('i'), TS('('), NS('W'), TS(')')); g.rules[4].AddChain(4, e5);
-        GRBALPHABET e6[] = CHAIN(TS('i'), TS('('), TS(')')); g.rules[4].AddChain(3, e6);
-        GRBALPHABET e7[] = CHAIN(TS('('), NS('E'), TS(')')); g.rules[4].AddChain(3, e7);
-        GRBALPHABET e8[] = CHAIN(TS('i')); g.rules[4].AddChain(1, e8);
-        GRBALPHABET e9[] = CHAIN(TS('l')); g.rules[4].AddChain(1, e9);
-        GRBALPHABET e10[] = CHAIN(TS('T')); g.rules[4].AddChain(1, e10);
-        GRBALPHABET e11[] = CHAIN(TS('F')); g.rules[4].AddChain(1, e11);
-        GRBALPHABET e12[] = CHAIN(TS('i'), TS('v'), NS('E')); g.rules[4].AddChain(3, e12);
+        g.rules[4].AddChain(3, TS('i'), TS('v'), TS('i'));
+        g.rules[4].AddChain(3, TS('i'), TS('v'), TS('l'));
+        g.rules[4].AddChain(3, TS('l'), TS('v'), TS('i'));
+        g.rules[4].AddChain(3, TS('l'), TS('v'), TS('l'));
+        g.rules[4].AddChain(4, TS('i'), TS('('), NS('W'), TS(')'));
+        g.rules[4].AddChain(3, TS('i'), TS('('), TS(')'));
+        g.rules[4].AddChain(3, TS('('), NS('E'), TS(')'));
+        g.rules[4].AddChain(1, TS('i'));
+        g.rules[4].AddChain(1, TS('l'));
+        g.rules[4].AddChain(1, TS('T'));
+        g.rules[4].AddChain(1, TS('F'));
+        g.rules[4].AddChain(3, TS('i'), TS('v'), NS('E'));
 
-        // 6. Rule M
+        // 6. Rule M (Single Statement)
         g.rules[5].nn = NS('M'); g.rules[5].iderror = GRB_ERROR_SERIES + 1;
-        GRBALPHABET m1[] = CHAIN(TS('t'), TS('i'), TS(';')); g.rules[5].AddChain(3, m1);
-        GRBALPHABET m2[] = CHAIN(TS('s'), TS('i'), TS(';')); g.rules[5].AddChain(3, m2);
-        GRBALPHABET m3[] = CHAIN(TS('c'), TS('i'), TS(';')); g.rules[5].AddChain(3, m3);
-        GRBALPHABET m4[] = CHAIN(TS('i'), TS('='), NS('E'), TS(';')); g.rules[5].AddChain(4, m4);
-        GRBALPHABET m5[] = CHAIN(TS('i'), TS('('), NS('W'), TS(')'), TS(';')); g.rules[5].AddChain(5, m5);
-        GRBALPHABET m6[] = CHAIN(TS('i'), TS('('), TS(')'), TS(';')); g.rules[5].AddChain(4, m6);
-        GRBALPHABET m7[] = CHAIN(TS('o'), TS('v'), NS('E'), TS(';')); g.rules[5].AddChain(4, m7);
-        GRBALPHABET m8[] = CHAIN(TS('r'), NS('E'), TS(';')); g.rules[5].AddChain(3, m8);
-        GRBALPHABET m9[] = CHAIN(TS('r'), TS(';')); g.rules[5].AddChain(2, m9);
-        GRBALPHABET m100[] = CHAIN(TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K')); g.rules[5].AddChain(6, m100);
-        GRBALPHABET m110[] = CHAIN(TS('p'), NS('E'), TS(';')); g.rules[5].AddChain(3, m110);
-        GRBALPHABET m120[] = CHAIN(TS(';')); g.rules[5].AddChain(1, m120);
+        g.rules[5].AddChain(4, TS('t'), TS('i'), TS(';'));
+        g.rules[5].AddChain(4, TS('s'), TS('i'), TS(';'));
+        g.rules[5].AddChain(4, TS('c'), TS('i'), TS(';'));
+        g.rules[5].AddChain(5, TS('i'), TS('='), NS('E'), TS(';'));
+        g.rules[5].AddChain(6, TS('i'), TS('('), NS('W'), TS(')'), TS(';'));
+        g.rules[5].AddChain(5, TS('i'), TS('('), TS(')'), TS(';'));
+        g.rules[5].AddChain(5, TS('o'), TS('v'), NS('E'), TS(';')); 
+        g.rules[5].AddChain(4, TS('r'), NS('E'), TS(';'));
+        g.rules[5].AddChain(3, TS('r'), TS(';'));
+        g.rules[5].AddChain(7, TS('h'), TS('('), NS('E'), TS(')'), TS('{'), NS('K'));
+        g.rules[5].AddChain(4, TS('p'), NS('E'), TS(';'));
+        g.rules[5].AddChain(1, TS(';')); 
 
-        // 7. Rule F
+        // 7. Rule F (Params)
         g.rules[6].nn = NS('F'); g.rules[6].iderror = GRB_ERROR_SERIES + 3;
-        GRBALPHABET f1[] = CHAIN(TS('t'), TS('i'), TS(','), NS('F')); g.rules[6].AddChain(4, f1);
-        GRBALPHABET f2[] = CHAIN(TS('s'), TS('i'), TS(','), NS('F')); g.rules[6].AddChain(4, f2);
-        GRBALPHABET f3[] = CHAIN(TS('c'), TS('i'), TS(','), NS('F')); g.rules[6].AddChain(4, f3);
-        GRBALPHABET f4[] = CHAIN(TS('t'), TS('i')); g.rules[6].AddChain(2, f4);
-        GRBALPHABET f5[] = CHAIN(TS('s'), TS('i')); g.rules[6].AddChain(2, f5);
-        GRBALPHABET f6[] = CHAIN(TS('c'), TS('i')); g.rules[6].AddChain(2, f6);
+        g.rules[6].AddChain(4, TS('t'), TS('i'), TS(','), NS('F'));
+        g.rules[6].AddChain(4, TS('s'), TS('i'), TS(','), NS('F'));
+        g.rules[6].AddChain(4, TS('c'), TS('i'), TS(','), NS('F'));
+        g.rules[6].AddChain(2, TS('t'), TS('i'));
+        g.rules[6].AddChain(2, TS('s'), TS('i'));
+        g.rules[6].AddChain(2, TS('c'), TS('i'));
 
-        // 8. Rule W
+        // 8. Rule W (Args)
         g.rules[7].nn = NS('W'); g.rules[7].iderror = GRB_ERROR_SERIES + 4;
-        GRBALPHABET w1[] = CHAIN(TS('i'), TS(','), NS('W')); g.rules[7].AddChain(3, w1);
-        GRBALPHABET w2[] = CHAIN(TS('l'), TS(','), NS('W')); g.rules[7].AddChain(3, w2);
-        GRBALPHABET w3[] = CHAIN(TS('i')); g.rules[7].AddChain(1, w3);
-        GRBALPHABET w4[] = CHAIN(TS('l')); g.rules[7].AddChain(1, w4);
+        g.rules[7].AddChain(3, TS('i'), TS(','), NS('W'));
+        g.rules[7].AddChain(3, TS('l'), TS(','), NS('W'));
+        g.rules[7].AddChain(1, TS('i'));
+        g.rules[7].AddChain(1, TS('l'));
 
         return g;
     }

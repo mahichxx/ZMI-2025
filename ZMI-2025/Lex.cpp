@@ -18,6 +18,9 @@
 
 namespace Lex {
 
+	// !!! ИСПРАВЛЕНИЕ: Предварительное объявление функции !!!
+	bool checkBrace(unsigned char** word, int k);
+
 	int BinToInt(unsigned char* word) {
 		int length = _mbslen(word);
 		int sum = 0;
@@ -83,6 +86,66 @@ namespace Lex {
 		for (i = 0; word[i][0] != NULL; indexLex++, i++)
 		{
 			bool findSameID = false;
+
+			// ============================================================
+			// Обработка сложных операторов (<<, ==, !=)
+			// ============================================================
+			bool isComplexOp = false;
+			LT::operations opType = LT::operations::OEQ;
+			int priority = 2;
+
+			unsigned char first = word[i][0];
+			unsigned char second = (word[i + 1][0] != NULL) ? word[i + 1][0] : 0;
+
+			if (word[i][1] == 0 && word[i + 1][0] != NULL && word[i + 1][1] == 0) {
+				if (first == '<' && second == '<') {
+					isComplexOp = true;
+					opType = LT::operations::OLESS;
+					priority = 1;
+				}
+				else if (first == '=' && second == '=') {
+					isComplexOp = true;
+					opType = LT::operations::OEQ;
+					priority = 1;
+				}
+				else if (first == '!' && second == '=') {
+					isComplexOp = true;
+					opType = LT::operations::ONE;
+					priority = 1;
+				}
+				else if (first == '>' && second == '=') {
+					isComplexOp = true;
+					opType = LT::operations::OGE;
+					priority = 1;
+				}
+				else if (first == '<' && second == '=') {
+					isComplexOp = true;
+					opType = LT::operations::OLE;
+					priority = 1;
+				}
+			}
+
+			if (isComplexOp) {
+				LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
+				entryLT.op = opType;
+				entryLT.priority = priority;
+
+				unsigned char complexName[3];
+				complexName[0] = first;
+				complexName[1] = second;
+				complexName[2] = '\0';
+				_mbscpy(entryIT.id, complexName);
+
+				entryIT.idxfirstLE = indexLex;
+				entryIT.idtype = IT::OP;
+				IT::Add(idtable, entryIT);
+				LT::Add(lextable, entryLT);
+
+				entryIT = bufentry;
+				i++;
+				continue;
+			}
+			// ============================================================
 
 			// --- ТИПЫ ДАННЫХ ---
 			FST::FST fstTypeInteger(word[i], FST_INTEGER);
@@ -411,40 +474,19 @@ namespace Lex {
 				IT::Add(idtable, entryIT);
 				entryIT = bufentry;
 				unsigned char first = word[i][0];
-				unsigned char second = word[i][1];
-				if (first == '<' && second == '<') {
-					entryLT.priority = 1;
-					entryLT.op = LT::operations::OLESS;
+
+				switch (first)
+				{
+				case '>': entryLT.priority = 1; entryLT.op = LT::operations::OMORE; break;
+				case '<': entryLT.priority = 1; entryLT.op = LT::operations::OLESS; break;
+				case '+': entryLT.priority = 2; entryLT.op = LT::operations::OPLUS; break;
+				case '-': entryLT.priority = 2; entryLT.op = LT::operations::OMINUS; break;
+				case '/': entryLT.priority = 3; entryLT.op = LT::operations::ODIV; break;
+				case '*': entryLT.priority = 3; entryLT.op = LT::operations::OMUL; break;
+				case '%': entryLT.priority = 3; entryLT.op = LT::operations::OMOD; break;
+				case '=': entryLT.lexema = LEX_EQUAL; break;
 				}
-				else if (first == '=' && second == '=') {
-					entryLT.priority = 1;
-					entryLT.op = LT::operations::OEQ;
-				}
-				else if (first == '!' && second == '=') {
-					entryLT.priority = 1;
-					entryLT.op = LT::operations::ONE;
-				}
-				else if (first == '>' && second == '=') {
-					entryLT.priority = 1;
-					entryLT.op = LT::operations::OGE;
-				}
-				else if (first == '<' && second == '=') {
-					entryLT.priority = 1;
-					entryLT.op = LT::operations::OLE;
-				}
-				else {
-					switch (first)
-					{
-					case '>': entryLT.priority = 1; entryLT.op = LT::operations::OMORE; break;
-					case '<': entryLT.priority = 1; entryLT.op = LT::operations::OLESS; break;
-					case '+': entryLT.priority = 2; entryLT.op = LT::operations::OPLUS; break;
-					case '-': entryLT.priority = 2; entryLT.op = LT::operations::OMINUS; break;
-					case '/': entryLT.priority = 3; entryLT.op = LT::operations::ODIV; break;
-					case '*': entryLT.priority = 3; entryLT.op = LT::operations::OMUL; break;
-					case '%': entryLT.priority = 3; entryLT.op = LT::operations::OMOD; break;
-					case '=': entryLT.lexema = LEX_EQUAL; break;
-					}
-				}
+
 				LT::Add(lextable, entryLT);
 				continue;
 			}
@@ -502,7 +544,6 @@ namespace Lex {
 				continue;
 			}
 
-			// !!! ВОТ ЗДЕСЬ ДОБАВЛЕНА ПРОВЕРКА ДВОЕТОЧИЯ !!!
 			FST::FST fstTwoPoint(word[i], FST_TWOPOINT);
 			if (FST::execute(fstTwoPoint)) {
 				LT::Entry entryLT = writeEntry(entryLT, LEX_TWOPOINT, LT_TI_NULLIDX, line);
