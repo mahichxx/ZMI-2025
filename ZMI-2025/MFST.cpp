@@ -235,8 +235,11 @@ namespace MFST {
 	}
 
 	// !!! ОБНОВЛЕННАЯ ФУНКЦИЯ ДИАГНОСТИКИ !!!
+	// !!! ИСПРАВЛЕННАЯ ФУНКЦИЯ ДИАГНОСТИКИ (БЕЗ УТЕЧЕК) !!!
 	char* Mfst::getDiagnosis(short n, char* buf) {
-		char* rc = new char[200] {};
+		// Очищаем буфер перед записью
+		buf[0] = '\0';
+
 		int errid = 0;
 		int lpos = -1;
 		if (n < MFST_DIAGN_NUMBER && (lpos = diagnosis[n].lenta_position) >= 0) {
@@ -246,13 +249,12 @@ namespace MFST {
 			// Получаем символ, на котором споткнулись
 			char badChar = lex.table[lpos].lexema;
 
-			// Формируем расширенное сообщение
+			// Формируем расширенное сообщение прямо в buf
 			sprintf_s(buf, MFST_DIAGN_MAXSIZE,
 				"Ошибка %d: строка %d. Ожидалась конструкция #%d, но встречен символ '%c'",
 				err.id, lex.table[lpos].sn, errid, badChar);
-			rc = buf;
 		}
-		return rc;
+		return buf;
 	}
 
 	void Mfst::printrules() {

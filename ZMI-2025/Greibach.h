@@ -1,7 +1,7 @@
 #pragma once
 #include "Error.h"
-#include "Log.h"
 #include <iostream>
+#include <cstring> // Для strcpy/strcat
 
 #define GRB_ERROR_SERIES 600
 #define GRB_MAX_CHAINS 32   
@@ -10,6 +10,7 @@
 
 typedef short GRBALPHABET;
 
+// Макросы оставим, они удобные
 #define NS(n) GRB::Rule::Chain::N(n)
 #define TS(n) GRB::Rule::Chain::T(n)
 #define ISNS(n) GRB::Rule::Chain::isN(n)
@@ -20,59 +21,54 @@ namespace GRB
 	{
 		GRBALPHABET nn;
 		int iderror;
-		short size;
+		short size; // Количество цепочек
 
 		struct Chain
 		{
-			short size;
+			short size; // Длина цепочки
 			GRBALPHABET nt[GRB_MAX_LEN];
 
 			Chain() { size = 0; }
-			// Заглушка, чтобы не ломать старый код (но мы его не юзаем)
-			Chain(short psize, GRBALPHABET s, ...);
 
-			char* getCChain(char* b);
+			// Конструктор через va_list оставим, если он используется внутри AddChain
+			// Но лучше сделать явную инициализацию
+
 			static GRBALPHABET T(char t) { return GRBALPHABET(t); }
 			static GRBALPHABET N(char n) { return -GRBALPHABET(n); }
 			static bool isT(GRBALPHABET s) { return s > 0; }
 			static bool isN(GRBALPHABET s) { return !isT(s); }
 			static char alphabet_to_char(GRBALPHABET s) { return isT(s) ? char(s) : char(-s); }
 
-			~Chain() {};
+			char* getCChain(char* b);
 		};
 
 		Chain chains[GRB_MAX_CHAINS];
 
-		Rule() { nn = 0x00; size = 0; }
-		Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...);
+		Rule() { nn = 0x00; size = 0; iderror = -1; }
 
-		// !!! НОВЫЙ МЕТОД: БЕЗ МНОГОТОЧИЯ !!!
-		void AddChain(short psize, GRBALPHABET* signals);
+		// Этот конструктор опасен, уберем его использование в getGreibach
+		// Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...);
 
-		// Старый метод (заглушка)
+		// Используем этот метод для добавления цепочек
 		void AddChain(short psize, GRBALPHABET s, ...);
 
 		char* getCRule(char* b, short nchain);
 		short getNextChain(GRBALPHABET t, Rule::Chain& pchain, short j);
-
-		~Rule() {};
 	};
 
 	struct Greibach
 	{
-		short size;
+		short size; // Количество правил
 		GRBALPHABET startN;
 		GRBALPHABET stbottomT;
 
 		Rule rules[GRB_MAX_RULES];
 
 		Greibach() { size = 0; startN = 0; stbottomT = 0; }
-		Greibach(GRBALPHABET pstartN, GRBALPHABET pstbottom, short psize, Rule r, ...);
 
 		short getRule(GRBALPHABET pnn, Rule& prule);
 		Rule getRule(short n);
-
-		~Greibach() {};
 	};
+
 	Greibach getGreibach();
 };

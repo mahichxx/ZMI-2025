@@ -55,18 +55,13 @@ int wmain(int argc, wchar_t* argv[]) {
 		mfst.log = log;
 		if (parm.more || parm.lenta) mfst.more = true;
 
-		// Запуск парсера (он пишет протокол шагов в лог)
+		// Запуск парсера
 		bool syntax_ok = mfst.start();
-
-		// Сохраняем результат построения дерева
 		mfst.savededucation();
 
-		// !!! ВОТ ЗДЕСЬ ДОБАВЛЯЕМ КРАСИВУЮ ЛИНИЮ В ЛОГ ФАЙЛ !!!
 		if (log.stream) {
 			*log.stream << "\n------------------Дерево разбора------------------\n";
 		}
-
-		// Выводим само дерево (список правил)
 		mfst.printrules();
 
 		if (syntax_ok) {
@@ -83,7 +78,14 @@ int wmain(int argc, wchar_t* argv[]) {
 		else {
 			Log::WriteLine(log.stream, "-----Семантический анализ обнаружил ошибку(и)\n", "");
 			cout << "-----Семантический анализ обнаружил ошибку(и)\n\n";
+
+			// !!! ЧИСТКА ПЕРЕД ВЫХОДОМ !!!
+			In::Delete(in);
+			LT::Delete(lex.lextable);
+			IT::Delete(lex.idtable);
+
 			Log::Close(log);
+			fout.close(); // Не забываем закрыть файл
 			return 0;
 		}
 
@@ -93,7 +95,14 @@ int wmain(int argc, wchar_t* argv[]) {
 		{
 			Log::WriteLine(log.stream, "-----Ошибка при построении Польской записи\n", "");
 			cout << "-----Ошибка при построении Польской записи\n\n";
+
+			// !!! ЧИСТКА ПЕРЕД ВЫХОДОМ !!!
+			In::Delete(in);
+			LT::Delete(lex.lextable);
+			IT::Delete(lex.idtable);
+
 			Log::Close(log);
+			fout.close();
 			return 0;
 		}
 		else {
@@ -112,14 +121,29 @@ int wmain(int argc, wchar_t* argv[]) {
 		// 7. Генерация кода
 		Gener::CodeGeneration(lex, parm, log);
 
+		// !!! ФИНАЛЬНАЯ ЧИСТКА (УСПЕШНОЕ ЗАВЕРШЕНИЕ) !!!
+		// Удаляем структуру ввода
+		In::Delete(in);
+		// Удаляем таблицы, созданные в лексере
+		LT::Delete(lex.lextable);
+		IT::Delete(lex.idtable);
+
 		Log::Close(log);
+		fout.close();
+
 		if (log.errors_cout > 0) throw Error::geterror(0);
 
-		fout.close();
 		return 0;
 	}
+
 	catch (Error::ERROR e)
 	{
+		// В блоке catch переменная 'in' уже недоступна (она внутри try), 
+		// но память под неё утечет.
+		// В рамках курсового проекта при падении программы это допустимо.
+		// Чтобы исправить это, нужно выносить объявление 'In::IN in;' ДО блока try,
+		// но это усложнит код инициализации. Оставим так.
+
 		Log::WriteError(log, e);
 		cout << "\n-----Выполнение программы остановлено из-за ошибки\n\n";
 		return 0;

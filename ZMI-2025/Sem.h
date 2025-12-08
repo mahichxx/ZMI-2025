@@ -1,13 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "Log.h"
-
-// Предварительное объявление (Forward declaration)
-namespace LT { struct LexTable; }
-namespace IT { struct IdTable; }
+#include "Lex.h" // ВАЖНО: Подключаем Lex.h, чтобы видеть определения таблиц
 
 namespace Sem
 {
-	// ВАЖНО: Здесь ОБЯЗАТЕЛЬНО должны быть значки '&' (амперсанды)
 	bool SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log);
 }

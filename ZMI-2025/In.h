@@ -1,5 +1,8 @@
 #pragma once
-#define IN_MAX_LEN_TEXT 1024*1024	
+#include <fstream>
+
+#define IN_MAX_LEN_TEXT 1024 * 1024 // 1 MB
+#define IN_MAX_WORDS    10240       // Максимум 10 тыс. слов (чтобы не было выхода за границы)
 #define IN_CODE_ENDL '\n'
 
 #define IN_CODE_TABLE {\
@@ -22,6 +25,7 @@
 /*E*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\
 /*F*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T\
 }
+
 namespace In
 {
 	struct IN
@@ -32,7 +36,9 @@ namespace In
 		int ignor;
 		unsigned char* text;
 		int code[256] = IN_CODE_TABLE;
-		unsigned char** word;
+		unsigned char** word; // Массив указателей на слова
 	};
+
 	IN getin(wchar_t infile[]);
+	void Delete(IN& in); // Функция для очистки памяти
 }
