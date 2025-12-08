@@ -1,200 +1,240 @@
 
 ----------------- Поток лексем ---------------------
 01 tfi(ti,ti){
-02 ti;
-03 i=ivi;
-04 ri;
-05 }
-07 sfi(){
-08 si;
-09 i=l;
-10 ri;
-11 }
-13 m{
-14 ti;
-15 ti;
-16 ti;
-17 ti;
-18 ti;
-19 si;
-21 i=l;
-22 i=l;
-23 i=l;
-25 ovl;
-26 i=ivi;
-27 ovi;
-29 ovl;
-30 i=lvi;
-31 ovi;
-33 ovl;
-34 i=ivivlvl;
-35 ovi;
-37 ovl;
-38 i=(ivi)vl;
-39 ovi;
-41 i=(ivi)v(lvl);
-42 ovi;
-44 i=((ivi)v(ivl))vl;
+02 rl;
+03 }
+05 sfi(){
+06 si;
+07 i=l;
+08 ri;
+09 }
+11 tfi(si){
+12 rl;
+13 }
+15 tfi(si,si){
+16 rl;
+17 }
+19 m{
+20 ti;
+21 ti;
+22 ti;
+23 ti;
+24 ti;
+25 si;
+27 i=l;
+28 i=l;
+29 i=l;
+31 ovl;
+32 i=ivi;
+33 ovi;
+35 ovl;
+36 i=lvi;
+37 ovi;
+39 ovl;
+40 i=ivivlvl;
+41 ovi;
+43 ovl;
+44 i=(ivi)vl;
 45 ovi;
-47 ovl;
-48 i=(ivl)vi;
-49 ovi;
-51 i=lv(ivl);
-52 ovi;
-54 ovl;
-55 h(i){
-56 al:{
-57 i=l;
+47 i=(ivi)v(lvl);
+48 ovi;
+50 i=((ivi)v(ivl))vl;
+51 ovi;
+53 ovl;
+54 i=(ivl)vi;
+55 ovi;
+57 i=lv(ivl);
 58 ovi;
-60 i=i(i,i);
-61 ovl;
-62 ovi;
-63 }
-64 al:{
-65 i=l;
-66 ovi;
-67 }
-68 d:{
-69 i=i();
-70 ovi;
-71 }
-72 }
-74 ovl;
-75 i=l;
+60 ovl;
+61 h(i){
+62 al:{
+63 i=l;
+64 ovi;
+66 i=i(i,i);
+67 ovl;
+68 ovi;
+69 }
+70 al:{
+71 i=l;
+72 ovi;
+73 }
+74 d:{
+75 i=i();
 76 ovi;
-77 i=l;
-78 ovi;
-79 }
+77 }
+78 }
+80 ovl;
+82 ti;
+83 si;
+84 i=l;
+86 i=i(i);
+88 ovl;
+89 ovi;
+91 si;
+92 si;
+93 i=l;
+94 i=l;
+96 ti;
+97 i=i(i,i);
+99 ovl;
+100 ovi;
+102 }
 
 
 -----Таблица лексем после преобразования в ПОЛИЗ (Сырая)
 
 ----------------- Поток лексем ---------------------
 01 tfi(ti,ti){
-02 ti;
-03 i=iiv;
-04 ri;
-05 }
-07 sfi(){
-08 si;
-09 i=l;
-10 ri;
-11 }
-13 m{
-14 ti;
-15 ti;
-16 ti;
-17 ti;
-18 ti;
-19 si;
-21 i=l;
-22 i=l;
-23 i=l;
-25 olv;
-26 i=iiv;
-27 oiv;
-29 olv;
-30 i=liv;
-31 oiv;
-33 olv;
-34 i=iivlvlv;
-35 oiv;
-37 olv;
-38 i=iivlv;
-39 oiv;
-41 i=iivllvv;
-42 oiv;
-44 i=iivilvvlv;
+02 rl;
+03 }
+05 sfi(){
+06 si;
+07 i=l;
+08 ri;
+09 }
+11 tfi(si){
+12 rl;
+13 }
+15 tfi(si,si){
+16 rl;
+17 }
+19 m{
+20 ti;
+21 ti;
+22 ti;
+23 ti;
+24 ti;
+25 si;
+27 i=l;
+28 i=l;
+29 i=l;
+31 olv;
+32 i=iiv;
+33 oiv;
+35 olv;
+36 i=liv;
+37 oiv;
+39 olv;
+40 i=iivlvlv;
+41 oiv;
+43 olv;
+44 i=iivlv;
 45 oiv;
-47 olv;
-48 i=ilviv;
-49 oiv;
-51 i=lilvv;
-52 oiv;
-54 olv;
-55 h(i){
-56 al:{
-57 i=l;
+47 i=iivllvv;
+48 oiv;
+50 i=iivilvvlv;
+51 oiv;
+53 olv;
+54 i=ilviv;
+55 oiv;
+57 i=lilvv;
 58 oiv;
-60 i=ii@;
-61 olv;
-62 oiv;
-63 }
-64 al:{
-65 i=l;
-66 oiv;
-67 }
-68 d:{
-69 i=@;
-70 oiv;
-71 }
-72 }
-74 olv;
-75 i=l;
+60 olv;
+61 h(i){
+62 al:{
+63 i=l;
+64 oiv;
+66 i=ii@;
+67 olv;
+68 oiv;
+69 }
+70 al:{
+71 i=l;
+72 oiv;
+73 }
+74 d:{
+75 i=@;
 76 oiv;
-77 i=l;
-78 oiv;
-79 }
+77 }
+78 }
+80 olv;
+82 ti;
+83 si;
+84 i=l;
+86 i=i@;
+88 olv;
+89 oiv;
+91 si;
+92 si;
+93 i=l;
+94 i=l;
+96 ti;
+97 i=ii@;
+99 olv;
+100 oiv;
+102 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
 Номер строки | Выражение в ПОЛИЗ
 ------------------------------------------------------------------------------
 01           | summary a b 
-02           | res ;
-03           | res = a b + ;
-04           | return res ;
-05           | 07           | getstatus 
-08           | s ;
-09           | s = "StatusOK" ;
-10           | return s ;
-11           | 13           | 14           | x ;
-15           | y ;
-16           | z ;
-17           | hard ;
-18           | negative ;
-19           | info ;
-21           | x = 10 ;
-22           | y = 5 ;
-23           | negative = -20 ;
-25           | cout "TestOneSimpleMath" < ;
-26           | z = x y + ;
-27           | cout z < ;
-29           | cout "TestTwoLeftLiteral" < ;
-30           | z = 100 x - ;
-31           | cout z < ;
-33           | cout "TestThreeChainCalc" < ;
-34           | z = x y + 10 + 5 + ;
-35           | cout z < ;
-37           | cout "TestFourComplexParens" < ;
-38           | hard = x y + 2 * ;
-39           | cout hard < ;
-41           | hard = x y + 5 2 - / ;
-42           | cout hard < ;
-44           | hard = x x + y 2 * + 2 / ;
+02           | return 15 ;
+03           | 05           | getstatus 
+06           | s ;
+07           | s = "StatusOK" ;
+08           | return s ;
+09           | 11           | strtoint s 
+12           | return 0 ;
+13           | 15           | stcmp s1 s2 
+16           | return 0 ;
+17           | 19           | 20           | x ;
+21           | y ;
+22           | z ;
+23           | hard ;
+24           | negative ;
+25           | info ;
+27           | x = 10 ;
+28           | y = 5 ;
+29           | negative = -20 ;
+31           | cout "TestOneSimpleMath" < ;
+32           | z = x y + ;
+33           | cout z < ;
+35           | cout "TestTwoLeftLiteral" < ;
+36           | z = 100 x - ;
+37           | cout z < ;
+39           | cout "TestThreeChainCalc" < ;
+40           | z = x y + 10 + 5 + ;
+41           | cout z < ;
+43           | cout "TestFourComplexParens" < ;
+44           | hard = x y + 2 * ;
 45           | cout hard < ;
-47           | cout "TestFiveMixedLogic" < ;
-48           | z = x 10 + y + ;
-49           | cout z < ;
-51           | z = 2 x 3 * + ;
-52           | cout z < ;
-54           | cout "TestSixSwitchLogic" < ;
-55           | y 
-56           | 5 
-57           | info = "YisFive" ;
-58           | cout info < ;
-60           | z = x y CALL2 ;
-61           | cout "SumIs" < ;
-62           | cout z < ;
-63           | 64           | 10 
-65           | info = "YisTen" ;
-66           | cout info < ;
-67           | 68           | 69           | info = CALL0 ;
-70           | cout info < ;
-71           | 72           | 74           | cout "TestSevenHexAndBin" < ;
-75           | z = 255 ;
-76           | cout z < ;
-77           | z = 7 ;
-78           | cout z < ;
-79           | 
+47           | hard = x y + 5 2 - / ;
+48           | cout hard < ;
+50           | hard = x x + y 2 * + 2 / ;
+51           | cout hard < ;
+53           | cout "TestFiveMixedLogic" < ;
+54           | z = x 10 + y + ;
+55           | cout z < ;
+57           | z = 2 x 3 * + ;
+58           | cout z < ;
+60           | cout "TestSixSwitchLogic" < ;
+61           | y 
+62           | 5 
+63           | info = "YisFive" ;
+64           | cout info < ;
+66           | z = x y CALL2 ;
+67           | cout "SumIs" < ;
+68           | cout z < ;
+69           | 70           | 10 
+71           | info = "YisTen" ;
+72           | cout info < ;
+73           | 74           | 75           | info = CALL0 ;
+76           | cout info < ;
+77           | 78           | 80           | cout "TestLibCheck" < ;
+82           | res ;
+83           | strNum ;
+84           | strNum = "123" ;
+86           | res = strNum CALL1 ;
+88           | cout "AtoiResult" < ;
+89           | cout res < ;
+91           | str1 ;
+92           | str2 ;
+93           | str1 = "hello" ;
+94           | str2 = "hello" ;
+96           | cmpRes ;
+97           | cmpRes = str1 str2 CALL2 ;
+99           | cout "CompareResult" < ;
+100           | cout cmpRes < ;
+102           | 
 ------------------------------------------------------------------------------

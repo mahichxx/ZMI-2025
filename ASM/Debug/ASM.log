@@ -1,2 +1,4 @@
 ﻿  Assembling ..\ZMI-2025\ASM\Asm.asm...
+..\ZMI-2025\ASM\Asm.asm(65): warning A6004: procedure argument or local not referenced : a
+..\ZMI-2025\ASM\Asm.asm(65): warning A6004: procedure argument or local not referenced : b
   ASM.vcxproj -> D:\Программирование\3_сем\КПО\ZMI-2025\Debug\ASM.exe

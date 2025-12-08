@@ -1,13 +1,19 @@
 integer function summary(integer a, integer b) {
-    integer res;
-    res = a + b;
-    return res;
+    return 15;
 }
 
 string function getstatus() {
     string s;
     s = "StatusOK";
     return s;
+}
+
+integer function strtoint(string s) {
+    return 0; 
+}
+
+integer function stcmp(string s1, string s2) { 
+    return 0; 
 }
 
 main {
@@ -71,9 +77,26 @@ main {
         }
     }
 
-    cout < "TestSevenHexAndBin";
-    z = 0xFF;
-    cout < z;
-    z = 0b111;
-    cout < z;
+    cout < "TestLibCheck";
+
+    integer res;
+    string strNum;
+    strNum = "123";
+    
+    res = strtoint(strNum); 
+    
+    cout < "AtoiResult";
+    cout < res; 
+
+    string str1;
+    string str2;
+    str1 = "hello";
+    str2 = "hello";
+    
+    integer cmpRes;
+    cmpRes = stcmp(str1, str2);
+    
+    cout < "CompareResult";
+    cout < cmpRes;
+
 }

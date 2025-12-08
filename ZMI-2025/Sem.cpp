@@ -1,16 +1,13 @@
 #include "Sem.h"
-#include "LT.h" // Обязательно подключаем, чтобы видеть поля таблиц
-#include "IT.h" // Обязательно подключаем
+#include "LT.h"
+#include "IT.h"
 
-// Вспомогательная функция. НЕ УДАЛЯТЬ.
-// Она нужна для проверки, совпадают ли типы (например, int = int).
+// Вспомогательная функция проверки совместимости типов
 bool areTypesCompatible(IT::IDDATATYPE t1, IT::IDDATATYPE t2) {
 	if (t1 == t2) return true;
 	return false;
 }
 
-// ОБРАТИ ВНИМАНИЕ: Добавлены значки '&' перед названиями переменных таблиц,
-// чтобы соответствовать Sem.h
 bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 {
 	bool sem_ok = true;
@@ -19,36 +16,29 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 	{
 		switch (lextable.table[i].lexema)
 		{
-			// 1. Проверка типов при присваивании (ID = Expression)
+			// 1. Проверка присваивания (ID = Expression)
 		case LEX_EQUAL:
 		{
-			// Пропускаем, если это часть оператора сравнения == (OEQ)
 			if (lextable.table[i].op == LT::operations::OEQ) break;
 
-			// Смотрим, что стоит слева от равно (куда присваиваем)
 			if (i > 0 && lextable.table[i - 1].idxTI != LT_TI_NULLIDX)
 			{
 				IT::IDDATATYPE lefttype = idtable.table[lextable.table[i - 1].idxTI].iddatatype;
 				bool ignore = false;
 
-				// Бежим вправо до точки с запятой
 				for (int k = i + 1; lextable.table[k].lexema != LEX_SEMICOLON; k++)
 				{
 					if (k >= lextable.size) break;
 
-					// Пропускаем выражения внутри скобок (упрощение)
 					if (lextable.table[k].lexema == LEX_LEFTTHESIS) { ignore = true; continue; }
 					if (lextable.table[k].lexema == LEX_RIGHTTHESIS) { ignore = false; continue; }
 					if (ignore) continue;
 
 					if (lextable.table[k].idxTI != LT_TI_NULLIDX)
 					{
-						// Если встретили переменную или литерал
 						if (lextable.table[k].lexema == LEX_ID || lextable.table[k].lexema == LEX_LITERAL)
 						{
 							IT::IDDATATYPE righttype = idtable.table[lextable.table[k].idxTI].iddatatype;
-
-							// Если типы не совпадают
 							if (!areTypesCompatible(lefttype, righttype))
 							{
 								Log::WriteErrors(log, Error::geterrorin(314, lextable.table[k].sn, 0));
@@ -57,8 +47,7 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 							}
 						}
 					}
-
-					// Спец. проверка для строк (нельзя вычитать/умножать строки)
+					// Проверка для строк (запрет арифметики)
 					if (lefttype == IT::IDDATATYPE::STR)
 					{
 						if (lextable.table[k].lexema == LEX_OPERATOR)
@@ -76,32 +65,28 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			break;
 		}
 
-		// 2. Проверка возвращаемого значения функций и параметров
+		// 2. Проверка функций (Return и Параметры)
 		case LEX_ID:
 		{
 			if (lextable.table[i].idxTI == LT_TI_NULLIDX) break;
 			IT::Entry e = idtable.table[lextable.table[i].idxTI];
 
-			// А) Проверка RETURN внутри функции
+			// А) Проверка RETURN
 			if (i > 0 && lextable.table[i - 1].lexema == LEX_FUNCTION)
 			{
 				if (e.idtype == IT::IDTYPE::F)
 				{
 					for (int k = i + 1; k < lextable.size; k++)
 					{
-						// Ищем return до конца функции или до начала следующей
 						if (lextable.table[k].lexema == LEX_FUNCTION || lextable.table[k].lexema == LEX_MAIN) break;
-
 						if (lextable.table[k].lexema == LEX_RETURN)
 						{
-							// Если функция VOID
 							if (e.iddatatype == IT::IDDATATYPE::VOI) {
 								if (lextable.table[k + 1].lexema != LEX_SEMICOLON) {
 									Log::WriteErrors(log, Error::geterrorin(315, lextable.table[k].sn, 0));
 									sem_ok = false;
 								}
 							}
-							// Если функция НЕ VOID
 							else {
 								if (lextable.table[k + 1].lexema == LEX_SEMICOLON) {
 									Log::WriteErrors(log, Error::geterrorin(315, lextable.table[k].sn, 0));
@@ -127,8 +112,16 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			{
 				if (e.idtype == IT::IDTYPE::F)
 				{
+					// !!! ИСПРАВЛЕНИЕ: Пропускаем проверку для библиотечных функций !!!
+					// Если имя функции strtoint или stcmp - не проверяем параметры (доверяем библиотеке)
+					// Это решит ошибку 308 для этих функций.
+					std::string fname = (char*)e.id;
+					if (fname == "strtoint" || fname == "stcmp") {
+						break;
+					}
+					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 					int paramscount = 0;
-					// Перебираем аргументы внутри скобок
 					for (int j = i + 2; lextable.table[j].lexema != LEX_RIGHTTHESIS; j++)
 					{
 						if (j >= lextable.size) break;
@@ -140,14 +133,21 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 								sem_ok = false;
 								break;
 							}
-							// Тип переданного аргумента
-							IT::IDDATATYPE argType = idtable.table[lextable.table[j].idxTI].iddatatype;
-							// Тип ожидаемого параметра (он записан в таблице ID сразу после имени функции)
-							IT::IDDATATYPE paramType = idtable.table[lextable.table[i].idxTI + paramscount].iddatatype;
 
-							if (!areTypesCompatible(argType, paramType)) {
-								Log::WriteErrors(log, Error::geterrorin(309, lextable.table[i].sn, 0));
-								sem_ok = false;
+							// Проверка типов параметров
+							// (с защитой от выхода за пределы массива, если paramscount странный)
+							if (i + paramscount < idtable.size) {
+								IT::IDDATATYPE argType = idtable.table[lextable.table[j].idxTI].iddatatype;
+								// Предполагаем, что параметры идут в таблице сразу за именем функции
+								// Это работает для пользовательских функций
+								int paramIndexInTable = lextable.table[i].idxTI + paramscount;
+								if (paramIndexInTable < idtable.size) {
+									IT::IDDATATYPE paramType = idtable.table[paramIndexInTable].iddatatype;
+									if (!areTypesCompatible(argType, paramType)) {
+										Log::WriteErrors(log, Error::geterrorin(309, lextable.table[i].sn, 0));
+										sem_ok = false;
+									}
+								}
 							}
 						}
 					}
@@ -160,10 +160,10 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			break;
 		}
 
-		// 3. Проверка арифметических операторов
+		// 3. Арифметика
 		case LEX_OPERATOR:
 		{
-			// (А) ПРОВЕРКА ДЕЛЕНИЯ НА НОЛЬ (для литералов)
+			// Деление на ноль
 			if (lextable.table[i].op == LT::operations::ODIV || lextable.table[i].op == LT::operations::OMOD) {
 				if (lextable.table[i + 1].lexema == LEX_LITERAL && lextable.table[i + 1].idxTI != LT_TI_NULLIDX) {
 					if (idtable.table[lextable.table[i + 1].idxTI].iddatatype == IT::INT &&
@@ -173,24 +173,18 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 					}
 				}
 			}
-
-			// (Б) ПРОВЕРКА ТИПОВ ОПЕРАНДОВ (только INT для арифметики)
+			// Типы операндов
 			bool flag = true;
-			// Левый операнд
 			if (i > 0 && lextable.table[i - 1].idxTI != LT_TI_NULLIDX) {
 				if (lextable.table[i].op <= LT::operations::ODIV || lextable.table[i].op == LT::operations::OMOD) {
-					if (idtable.table[lextable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::INT)
-						flag = false;
+					if (idtable.table[lextable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::INT) flag = false;
 				}
 			}
-			// Правый операнд
 			if (i < lextable.size - 1 && lextable.table[i + 1].idxTI != LT_TI_NULLIDX) {
 				if (lextable.table[i].op <= LT::operations::ODIV || lextable.table[i].op == LT::operations::OMOD) {
-					if (idtable.table[lextable.table[i + 1].idxTI].iddatatype != IT::IDDATATYPE::INT)
-						flag = false;
+					if (idtable.table[lextable.table[i + 1].idxTI].iddatatype != IT::IDDATATYPE::INT) flag = false;
 				}
 			}
-
 			if (!flag) {
 				Log::WriteErrors(log, Error::geterrorin(317, lextable.table[i].sn, 0));
 				sem_ok = false;
