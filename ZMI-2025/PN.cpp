@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "PN.h"
-#include "LT.h" // Подключаем, чтобы видеть константы LEX_*
+#include "LT.h"
 #include <stack>
 #include <queue>
-#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -11,211 +11,221 @@ namespace Polish {
 
 	int GetPriority(LT::operations op) {
 		switch (op) {
-		case LT::operations::OEQ:
-		case LT::operations::ONE:
-		case LT::operations::OMORE:
-		case LT::operations::OLESS:
-		case LT::operations::OGE:
-		case LT::operations::OLE:
-			return 1;
-		case LT::operations::OPLUS:
-		case LT::operations::OMINUS:
-			return 2;
-		case LT::operations::OMUL:
-		case LT::operations::ODIV:
-		case LT::operations::OMOD:
-			return 3;
-		default:
-			return 0;
+		case LT::operations::OEQ: return 1;
+		case LT::operations::ONE: return 1;
+		case LT::operations::OMORE: return 1;
+		case LT::operations::OLESS: return 1;
+		case LT::operations::OGE: return 1;
+		case LT::operations::OLE: return 1;
+		case LT::operations::OPLUS: return 2;
+		case LT::operations::OMINUS: return 2;
+		case LT::operations::OMUL: return 3;
+		case LT::operations::ODIV: return 3;
+		case LT::operations::OMOD: return 3;
+		default: return 0;
 		}
 	}
 
 	bool PolishNotation(int i, Lex::LEX& lex, char terminator)
 	{
 		std::stack<LT::Entry> stack;
-		std::queue<LT::Entry> queue;
+		// Используем вектор для финальной записи, чтобы было проще управлять индексами
+		std::vector<LT::Entry> outBuffer;
 
-		LT::Entry placeholder_symbol;
-		placeholder_symbol.idxTI = LT_TI_NULLIDX;
-		placeholder_symbol.lexema = '#';
-		placeholder_symbol.sn = lex.lextable.table[i].sn;
+		// Стек для аргументов функций.
+		// Каждый уровень стека - это вектор очередей (одна очередь = один аргумент)
+		std::stack<std::vector<std::vector<LT::Entry>>> funcArgsStack;
+		// Стек индексов функций (чтобы знать, какой ID вызывать)
+		std::stack<int> funcIdStack;
 
-		LT::Entry function_symbol;
-		function_symbol.idxTI = LT_TI_NULLIDX;
-		function_symbol.lexema = '@'; // Спец. символ для вызова
-		function_symbol.sn = lex.lextable.table[i].sn;
+		int lexemStartPos = i;
+		int processedCount = 0;
 
-		int idx_func = LT_TI_NULLIDX;
-		int lexem_counter = 0;
-		int parm_counter = 0;
-		int lexem_position = i;
-		bool findFunc = false;
-
-		// Цикл по лексемам
-		for (; i < lex.lextable.size; i++, lexem_counter++)
+		for (; i < lex.lextable.size; i++, processedCount++)
 		{
-			// Проверка на выход по терминатору
-			if (lex.lextable.table[i].lexema == terminator) {
-				// Если терминатор ')', нужно убедиться, что это не закрывающая скобка внутри выражения
+			LT::Entry entry = lex.lextable.table[i];
+
+			// Обработка терминатора (; или })
+			if (entry.lexema == terminator) {
+				// Если это закрывающая скобка, проверяем, не вложенная ли она
 				if (terminator == LEX_RIGHTTHESIS && !stack.empty() && stack.top().lexema == LEX_LEFTTHESIS) {
-					// Это просто скобка внутри (a+b), идем дальше
+					// Это скобка приоритета (a+b), обрабатываем ниже
 				}
 				else {
-					break; // Нашли конец выражения
+					break; // Конец выражения
 				}
 			}
 
-			// Проверка на запятую (если мы внутри аргументов функции)
-			// Запятая - это разделитель, она выталкивает операторы до скобки
-			if (lex.lextable.table[i].lexema == LEX_COMMA) {
-				while (!stack.empty() && stack.top().lexema != LEX_LEFTTHESIS) {
-					queue.push(stack.top());
-					stack.pop();
-				}
-				if (findFunc) parm_counter++;
-				continue;
-			}
+			// --- ЛОГИКА ФУНКЦИЙ ---
+			// Если мы внутри функции, мы не пишем в outBuffer сразу, а копим в funcArgsStack
+			bool inFunction = !funcArgsStack.empty();
 
-			switch (lex.lextable.table[i].lexema)
+			switch (entry.lexema)
 			{
 			case LEX_ID:
 			case LEX_LITERAL:
-				// Проверка на вызов функции: ID + (
-				if (lex.lextable.table[i].lexema == LEX_ID &&
-					i + 1 < lex.lextable.size &&
-					lex.lextable.table[i + 1].lexema == LEX_LEFTTHESIS)
-				{
-					idx_func = lex.lextable.table[i].idxTI;
-					findFunc = true;
-					parm_counter = 0; // Сбрасываем счетчик (будет минимум 1, если не пустые скобки)
-					// Имя функции пропускаем, оно станет @ в конце
+				// Проверка: начало вызова функции ID + (
+				if (entry.lexema == LEX_ID && i + 1 < lex.lextable.size && lex.lextable.table[i + 1].lexema == LEX_LEFTTHESIS) {
+					// Начинаем новую функцию
+					funcIdStack.push(entry.idxTI); // Запоминаем ID
+
+					// Создаем новый слой аргументов (вектор аргументов)
+					funcArgsStack.push(std::vector<std::vector<LT::Entry>>());
+					// Создаем первый аргумент (пустой вектор лексем)
+					funcArgsStack.top().push_back(std::vector<LT::Entry>());
 				}
-				else
-				{
-					queue.push(lex.lextable.table[i]);
+				else {
+					// Обычный операнд
+					if (inFunction) funcArgsStack.top().back().push_back(entry);
+					else outBuffer.push_back(entry);
 				}
 				continue;
 
 			case LEX_LEFTTHESIS:
-				stack.push(lex.lextable.table[i]);
-				// Если это скобка сразу после имени функции
-				if (findFunc && idx_func != LT_TI_NULLIDX &&
-					i > 0 && lex.lextable.table[i - 1].lexema == LEX_ID) {
-
-					// Если внутри скобок не пусто, значит есть параметры
-					if (lex.lextable.table[i + 1].lexema != LEX_RIGHTTHESIS) {
-						parm_counter = 1;
-					}
-					else {
-						parm_counter = 0;
-					}
-				}
+				stack.push(entry);
 				continue;
 
 			case LEX_RIGHTTHESIS:
-				while (!stack.empty() && stack.top().lexema != LEX_LEFTTHESIS)
-				{
-					queue.push(stack.top());
-					stack.pop();
+				while (!stack.empty() && stack.top().lexema != LEX_LEFTTHESIS) {
+					LT::Entry top = stack.top(); stack.pop();
+					if (inFunction) funcArgsStack.top().back().push_back(top);
+					else outBuffer.push_back(top);
 				}
-				if (!stack.empty()) stack.pop(); // Удаляем '('
+				if (!stack.empty()) stack.pop(); // Выкидываем '('
 
-				// Если закрылась скобка вызова функции (простая эвристика)
-				if (findFunc && idx_func != LT_TI_NULLIDX)
-				{
-					// Мы не можем точно знать, закрылась ли скобка ФУНКЦИИ или вложенного выражения
-					// без рекурсии или счетчика скобок. 
-					// Но для курсового предположим, что вызовы не вложены глубоко.
-					// Если стек пуст или там нет других скобок - считаем, что вызов кончился.
+				// Если закрылась скобка ФУНКЦИИ (проверяем по наличию ID в стеке)
+				// Условие: стек скобок пуст (для текущего уровня) и есть активная функция
+				// Но здесь сложнее: funcIdStack хранит ID.
+				// Простая эвристика: если мы только что закрыли скобку, которая открывала функцию.
+				// Мы знаем это, так как funcArgsStack не пуст.
+				// Если стек операторов пуст или там нет '(', значит закрылась функция.
 
-					// Создаем оператор вызова @
-					LT::Entry callOp = function_symbol;
-					callOp.idxTI = idx_func;
-					// В priority можно записать кол-во параметров, чтобы генератор знал
-					callOp.priority = parm_counter;
+				// Дополнительная проверка: если funcArgsStack не пуст, и мы закрыли скобку, соответствующую вызову
+				// В данном простом парсере считаем: если inFunction и стек чист от '(', значит это конец аргументов.
+				if (!funcIdStack.empty() && (stack.empty() || stack.top().lexema != LEX_LEFTTHESIS)) {
 
-					queue.push(callOp);
+					// 1. Забираем аргументы
+					auto args = funcArgsStack.top();
+					funcArgsStack.pop();
+					int idIdx = funcIdStack.top();
+					funcIdStack.pop();
 
-					findFunc = false;
-					idx_func = LT_TI_NULLIDX;
+					// 2. Вываливаем аргументы в ОБРАТНОМ ПОРЯДКЕ
+					// Если аргумент пустой (функция без параметров), args[0] будет пуст
+					int argCount = 0;
+					for (int k = args.size() - 1; k >= 0; k--) {
+						if (args[k].empty()) continue; // Пустой аргумент (например func())
+						argCount++;
+
+						// Куда вываливать? В предыдущую функцию или в main?
+						bool stillInFunc = !funcArgsStack.empty();
+						for (const auto& token : args[k]) {
+							if (stillInFunc) funcArgsStack.top().back().push_back(token);
+							else outBuffer.push_back(token);
+						}
+					}
+
+					// 3. Добавляем оператор @
+					LT::Entry callOp;
+					callOp.lexema = '@';
+					callOp.sn = entry.sn;
+					callOp.idxTI = idIdx;
+					callOp.priority = argCount; // Сохраняем кол-во аргументов (опционально)
+
+					if (!funcArgsStack.empty()) funcArgsStack.top().back().push_back(callOp);
+					else outBuffer.push_back(callOp);
+				}
+				continue;
+
+			case LEX_COMMA:
+				// Запятая - разделитель аргументов
+				while (!stack.empty() && stack.top().lexema != LEX_LEFTTHESIS) {
+					LT::Entry top = stack.top(); stack.pop();
+					if (inFunction) funcArgsStack.top().back().push_back(top);
+					else outBuffer.push_back(top);
+				}
+				// Начинаем новый аргумент
+				if (inFunction) {
+					funcArgsStack.top().push_back(std::vector<LT::Entry>());
 				}
 				continue;
 
 			case LEX_OPERATOR:
-			case LEX_LOGOPERATOR: // < > <= >=
-			case LEX_EQUAL:       // == !=
-				while (!stack.empty() &&
-					stack.top().lexema != LEX_LEFTTHESIS &&
-					GetPriority(lex.lextable.table[i].op) <= GetPriority(stack.top().op))
-				{
-					queue.push(stack.top());
-					stack.pop();
+			case LEX_LOGOPERATOR:
+			case LEX_EQUAL:
+				while (!stack.empty() && stack.top().lexema != LEX_LEFTTHESIS &&
+					GetPriority(entry.op) <= GetPriority(stack.top().op)) {
+					LT::Entry top = stack.top(); stack.pop();
+					if (inFunction) funcArgsStack.top().back().push_back(top);
+					else outBuffer.push_back(top);
 				}
-				stack.push(lex.lextable.table[i]);
+				stack.push(entry);
 				continue;
 			}
 		}
 
-		// Выталкиваем остатки
-		while (!stack.empty())
-		{
-			if (stack.top().lexema == LEX_LEFTTHESIS || stack.top().lexema == LEX_RIGHTTHESIS)
-				return false;
-			queue.push(stack.top());
-			stack.pop();
+		// Выталкиваем остатки стека
+		while (!stack.empty()) {
+			LT::Entry top = stack.top(); stack.pop();
+			outBuffer.push_back(top);
 		}
 
-		// Заменяем лексемы в таблице на ПОЛИЗ
-		while (lexem_counter > 0)
-		{
-			if (!queue.empty())
-			{
-				lex.lextable.table[lexem_position++] = queue.front();
-				queue.pop();
-			}
-			else
-			{
-				lex.lextable.table[lexem_position++] = placeholder_symbol;
-			}
-			lexem_counter--;
+		// Записываем результат обратно в таблицу лексем
+		int pos = lexemStartPos;
+		for (const auto& token : outBuffer) {
+			lex.lextable.table[pos++] = token;
+		}
+		// Заполняем хвост заглушками
+		LT::Entry placeholder;
+		placeholder.idxTI = LT_TI_NULLIDX; placeholder.lexema = '#';
+		while (pos < lexemStartPos + processedCount) {
+			lex.lextable.table[pos++] = placeholder;
 		}
 
 		return true;
 	}
 
-	bool StartPolish(Lex::LEX& lex)
-	{
-		bool flag = true;
-		for (int i = 0; i < lex.lextable.size; i++)
-		{
-			// 1. Присваивание (ID = ...)
-			if (lex.lextable.table[i].lexema == LEX_EQUAL)
-			{
-				// == это оператор сравнения, а = это присваивание. У тебя в лексере они различаются?
-				// В Lex.cpp: '=' -> LEX_EQUAL. А '==' -> LEX_OPERATOR (OEQ).
-				// Значит тут мы ловим именно присваивание.
-				if (!PolishNotation(i + 1, lex, LEX_SEMICOLON)) return false;
+	bool StartPolish(Lex::LEX& lex) {
+		for (int i = 0; i < lex.lextable.size; i++) {
+
+			// Присваивание
+			if (lex.lextable.table[i].lexema == LEX_EQUAL) {
+				PolishNotation(i + 1, lex, LEX_SEMICOLON);
 			}
-			// 2. Return
-			else if (lex.lextable.table[i].lexema == LEX_RETURN) {
-				if (!PolishNotation(i + 1, lex, LEX_SEMICOLON)) return false;
+
+			// Return / Cout
+			else if (lex.lextable.table[i].lexema == LEX_RETURN || lex.lextable.table[i].lexema == LEX_COUT) {
+				PolishNotation(i + 1, lex, LEX_SEMICOLON);
 			}
-			// 3. Cout
-			else if (lex.lextable.table[i].lexema == LEX_COUT) {
-				// cout << expr; 
-				// Твой лексер не создает << как отдельный токен, он, кажется, пропускает его или делает оператором?
-				// В Lex.cpp: '<<' -> LEX_OPERATOR (OLESS) priority 1? Нет, << это сдвиг или вывод.
-				// В твоем коде Lex.cpp написано: 
-				// if (first == '<' && second == '<') ... isComplexOp = true; opType = LT::operations::OLESS;
-				// То есть << распознается как оператор "меньше" (OLESS)? Это странно для cout.
-				// Но если мы просто анализируем выражение после cout:
-				if (!PolishNotation(i + 1, lex, LEX_SEMICOLON)) return false;
-			}
-			// 4. Switch
+
+			// Switch
 			else if (lex.lextable.table[i].lexema == LEX_SWITCH) {
+				if (i + 1 < lex.lextable.size && lex.lextable.table[i + 1].lexema == LEX_LEFTTHESIS)
+					PolishNotation(i + 2, lex, LEX_RIGHTTHESIS);
+			}
+
+			// Вызов процедуры: ID(...)
+			else if (lex.lextable.table[i].lexema == LEX_ID) {
+				// Это должно быть начало выражения.
+				// Проверяем, что это вызов функции: за ID идет '('
 				if (i + 1 < lex.lextable.size && lex.lextable.table[i + 1].lexema == LEX_LEFTTHESIS) {
-					// switch ( expr )
-					if (!PolishNotation(i + 2, lex, LEX_RIGHTTHESIS)) return false;
+
+					// Важно не спутать с ID в выражении (x = id(..)).
+					// Если перед ID стоит '=', 'return', 'cout', '(', ',' - это выражение, мы его обработаем в других ветках.
+					// Вызов процедуры возможен только если перед ID стоит ';' или '{' или это начало файла.
+
+					bool isProcedureCall = false;
+					if (i == 0) isProcedureCall = true;
+					else {
+						char prev = lex.lextable.table[i - 1].lexema;
+						if (prev == LEX_SEMICOLON || prev == LEX_LEFTBRACE || prev == LEX_BRACELET) {
+							isProcedureCall = true;
+						}
+					}
+
+					if (isProcedureCall) {
+						PolishNotation(i, lex, LEX_SEMICOLON);
+					}
 				}
 			}
 		}

@@ -4,8 +4,9 @@ includelib msvcrtd.lib
 includelib ucrtd.lib
 includelib vcruntimed.lib
 includelib legacy_stdio_definitions.lib
-includelib kernel32.lib
 includelib "D:\Программирование\3_сем\КПО\ZMI-2025\Debug\InLib.lib"
+includelib kernel32.lib
+includelib InLib.lib
 
 ExitProcess PROTO :DWORD
 outnum PROTO :SDWORD
@@ -17,254 +18,230 @@ strtoint PROTO :DWORD
 .stack 4096
 
 .const
-	L3	sbyte 15
-	L7	db 'StatusOK', 0
-	L9	sbyte 0
-	L20	sbyte 10
-	L22	sbyte 5
-	L24	sbyte -20
-	L26	db 'TestOneSimpleMath', 0
-	L31	db 'TestTwoLeftLiteral', 0
-	L33	sbyte 100
-	L37	db 'TestThreeChainCalc', 0
-	L44	db 'TestFourComplexParens', 0
-	L48	sbyte 2
-	L62	db 'TestFiveMixedLogic', 0
-	L70	sbyte 3
-	L73	db 'TestSixSwitchLogic', 0
-	L75	db 'YisFive', 0
-	L79	db 'SumIs', 0
-	L82	db 'YisTen', 0
-	L87	db 'TestLibCheck', 0
-	L91	db '123', 0
-	L94	db 'AtoiResult', 0
-	L99	db 'hello', 0
-	L104	db 'CompareResult', 0
+	L2	sbyte 0
+	L12	sbyte 1
+	L20	db '--- Logic Comparison in Switch ---', 0
+	L23	db 'Result: v1 GREATER than v2', 0
+	L26	db 'Result: v1 EQUAL v2', 0
+	L28	db 'Result: v1 LESS than v2', 0
+	L36	db '=== ULTRA HARDCORE TEST START ===', 0
+	L38	db '1. Literals and Types', 0
+	L40	sbyte 127
+	L42	db 'Hex 0x7F (Max 1-byte):', 0
+	L45	sbyte 3
+	L47	db 'Bin 0b11 (3):', 0
+	L50	sbyte 65
+	L52	db 'Char Literal A (65):', 0
+	L55	db '2. One Byte Overflow', 0
+	L59	db '127 + 1 = -128 (Overflow Check):', 0
+	L62	db '3. String Library', 0
+	L64	db '100', 0
+	L67	db 'StrToInd 100 + 25:', 0
+	L70	sbyte 25
+	L72	db 'pass', 0
+	L75	db 'Strcmp pass vs pass (0 is equal):', 0
+	L78	db '4. Comparisons via Switch', 0
+	L79	sbyte 10
+	L80	sbyte 5
+	L82	db '5. Recursion Sum(5) = 5+4+3+2+1', 0
+	L85	db 'Expect 15:', 0
+	L88	db '=== ULTRA HARDCORE TEST END ===', 0
 .data
 	switch_val sdword 0
-	s	dd 0
-	x	sbyte 0
-	y	sbyte 0
-	z	sbyte 0
-	hard	sbyte 0
-	negative	sbyte 0
-	info	dd 0
 	res	sbyte 0
-	strNum	dd 0
-	str1	dd 0
-	str2	dd 0
-	cmpRes	sbyte 0
+	next	sbyte 0
+	diff	sbyte 0
+	hexVal	sbyte 0
+	binVal	sbyte 0
+	intVal	sbyte 0
+	strVal	dd 0
+	charVal	sbyte 0
+	logicRes	sbyte 0
 .code
-summary PROC, a :DWORD, b :DWORD
-	mov al, L3
+recCheck PROC, n :DWORD
+
+	; --- SWITCH 41 ---
+	mov eax, n
+	mov switch_val, eax
+	cmp eax, 0
+	je switch_41_case_0
+	jmp switch_41_default
+switch_41_case_0:
+	mov al, L2
+	movsx eax, al
+	push eax
+	pop eax
+	ret
+	jmp switch_end_41
+switch_41_default:
+	mov eax, n
+	push eax
+	mov al, L12
+	movsx eax, al
+	push eax
+	pop ebx
+	pop eax
+	sub eax, ebx
+	push eax
+	pop eax
+	mov next, al
+	mov eax, n
+	push eax
+	mov al, next
+	movsx eax, al
+	push eax
+	call recCheck
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	pop eax
+	mov res, al
+	mov al, res
+	movsx eax, al
+	push eax
+	pop eax
+	ret
+	jmp switch_end_41
+switch_end_41:
+	mov al, L2
 	movsx eax, al
 	push eax
 	pop eax
 	ret
 	ret
-summary ENDP
-getstatus PROC
-	push offset L7
+recCheck ENDP
+logTest PROC, v1 :DWORD, v2 :DWORD
+	push offset L20
 	pop eax
-	mov s, eax
-	push s
+	invoke outstr, eax
+	invoke newline
+
+	; --- SWITCH 99 ---
+	mov eax, v1
+	mov switch_val, eax
+	cmp eax, 1
+	je switch_99_case_1
+	cmp eax, 0
+	je switch_99_case_0
+	jmp switch_99_default
+switch_99_case_1:
+	push offset L23
 	pop eax
-	ret
-	ret
-getstatus ENDP
-main PROC
-	mov al, L20
-	movsx eax, al
-	push eax
-	pop eax
-	mov x, al
-	mov al, L22
-	movsx eax, al
-	push eax
-	pop eax
-	mov y, al
-	mov al, L24
-	movsx eax, al
-	push eax
-	pop eax
-	mov negative, al
+	invoke outstr, eax
+	invoke newline
+	jmp switch_end_99
+switch_99_case_0:
+
+	; --- SWITCH 119 ---
+	mov eax, v1
+	mov switch_val, eax
+	cmp eax, 1
+	je switch_119_case_1
+	jmp switch_119_default
+switch_119_case_1:
 	push offset L26
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, x
-	movsx eax, al
-	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
-	push eax
-	pop eax
-	mov z, al
-	mov al, z
-	movsx eax, al
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L31
+	jmp switch_end_119
+switch_119_default:
+	push offset L28
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, L33
-	movsx eax, al
-	push eax
-	mov al, x
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	sub eax, ebx
-	push eax
-	pop eax
-	mov z, al
-	mov al, z
+	jmp switch_end_119
+switch_end_119:
+	jmp switch_end_99
+switch_99_default:
+	jmp switch_end_99
+switch_end_99:
+	mov al, L2
 	movsx eax, al
 	push eax
 	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L37
+	ret
+	ret
+logTest ENDP
+main PROC
+	mov al, charVal
+	movsx eax, al
+	push eax
+	push offset L36
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, x
-	movsx eax, al
-	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
-	push eax
-	mov al, L20
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
-	push eax
-	mov al, L22
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
-	push eax
-	pop eax
-	mov z, al
-	mov al, z
-	movsx eax, al
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L44
+	push offset L38
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, x
+	mov al, L40
 	movsx eax, al
 	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	pop ebx
 	pop eax
-	add eax, ebx
-	push eax
-	mov al, L48
-	movsx eax, al
-	push eax
-	pop ebx
+	mov hexVal, al
+	push offset L42
 	pop eax
-	imul eax, ebx
-	push eax
-	pop eax
-	mov hard, al
-	mov al, hard
+	invoke outstr, eax
+	invoke newline
+	mov al, hexVal
 	movsx eax, al
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	mov al, x
+	mov al, L45
 	movsx eax, al
 	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	pop ebx
 	pop eax
-	add eax, ebx
-	push eax
-	mov al, L22
-	movsx eax, al
-	push eax
-	mov al, L48
-	movsx eax, al
-	push eax
-	pop ebx
+	mov binVal, al
+	push offset L47
 	pop eax
-	sub eax, ebx
-	push eax
-	pop ebx
-	pop eax
-	cdq
-	idiv ebx
-	push eax
-	pop eax
-	mov hard, al
-	mov al, hard
+	invoke outstr, eax
+	invoke newline
+	mov al, binVal
 	movsx eax, al
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	mov al, x
+	mov al, L50
 	movsx eax, al
 	push eax
-	mov al, x
+	pop eax
+	mov charVal, al
+	push offset L52
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	mov al, charVal
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L55
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	mov al, hexVal
+	movsx eax, al
+	push eax
+	mov al, L12
 	movsx eax, al
 	push eax
 	pop ebx
 	pop eax
 	add eax, ebx
 	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	mov al, L48
-	movsx eax, al
-	push eax
-	pop ebx
 	pop eax
-	imul eax, ebx
-	push eax
-	pop ebx
+	mov intVal, al
+	push offset L59
 	pop eax
-	add eax, ebx
-	push eax
-	mov al, L48
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	cdq
-	idiv ebx
-	push eax
-	pop eax
-	mov hard, al
-	mov al, hard
+	invoke outstr, eax
+	invoke newline
+	mov al, intVal
 	movsx eax, al
 	push eax
 	pop eax
@@ -274,35 +251,19 @@ main PROC
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, x
-	movsx eax, al
-	push eax
-	mov al, L20
-	movsx eax, al
-	push eax
-	pop ebx
+	push offset L64
 	pop eax
-	add eax, ebx
-	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
+	mov strVal, eax
+	push strVal
+	call strtoint
 	push eax
 	pop eax
-	mov z, al
-	mov al, z
-	movsx eax, al
-	push eax
+	mov intVal, al
+	push offset L67
 	pop eax
-	invoke outnum, eax
+	invoke outstr, eax
 	invoke newline
-	mov al, L48
-	movsx eax, al
-	push eax
-	mov al, x
+	mov al, intVal
 	movsx eax, al
 	push eax
 	mov al, L70
@@ -310,126 +271,82 @@ main PROC
 	push eax
 	pop ebx
 	pop eax
-	imul eax, ebx
-	push eax
-	pop ebx
-	pop eax
 	add eax, ebx
 	push eax
 	pop eax
-	mov z, al
-	mov al, z
-	movsx eax, al
-	push eax
-	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L73
+	push offset L72
 	pop eax
-	invoke outstr, eax
-	invoke newline
-
-	; --- SWITCH 231 ---
-	mov al, y
-	movsx eax, al
-	mov switch_val, eax
-	cmp eax, 5
-	je switch_231_case_5
-	cmp eax, 10
-	je switch_231_case_10
-	jmp switch_231_default
-switch_231_case_5:
-	push offset L75
-	pop eax
-	mov info, eax
-	push info
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	mov al, x
-	movsx eax, al
-	push eax
-	mov al, y
-	movsx eax, al
-	push eax
-	call summary
-	push eax
-	pop eax
-	mov z, al
-	push offset L79
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	mov al, z
-	movsx eax, al
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	jmp switch_end_231
-switch_231_case_10:
-	push offset L82
-	pop eax
-	mov info, eax
-	push info
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	jmp switch_end_231
-switch_231_default:
-	call getstatus
-	push eax
-	pop eax
-	mov info, eax
-	push info
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	jmp switch_end_231
-switch_end_231:
-	push offset L87
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push offset L91
-	pop eax
-	mov strNum, eax
-	push strNum
-	call strtoint
-	push eax
-	pop eax
-	mov res, al
-	push offset L94
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	mov al, res
-	movsx eax, al
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L99
-	pop eax
-	mov str1, eax
-	push offset L99
-	pop eax
-	mov str2, eax
-	push str1
-	push str2
+	mov strVal, eax
+	push offset L72
+	push strVal
 	call stcmp
 	push eax
 	pop eax
-	mov cmpRes, al
-	push offset L104
+	mov logicRes, al
+	push offset L75
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	mov al, cmpRes
+	mov al, logicRes
 	movsx eax, al
 	push eax
 	pop eax
 	invoke outnum, eax
+	invoke newline
+	push offset L78
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	mov al, L80
+	movsx eax, al
+	push eax
+	mov al, L79
+	movsx eax, al
+	push eax
+	call logTest
+	push eax
+	mov al, L79
+	movsx eax, al
+	push eax
+	mov al, L80
+	movsx eax, al
+	push eax
+	call logTest
+	push eax
+	mov al, L80
+	movsx eax, al
+	push eax
+	mov al, L80
+	movsx eax, al
+	push eax
+	call logTest
+	push eax
+	push offset L82
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	mov al, L80
+	movsx eax, al
+	push eax
+	call recCheck
+	push eax
+	pop eax
+	mov intVal, al
+	push offset L85
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	mov al, intVal
+	movsx eax, al
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L88
+	pop eax
+	invoke outstr, eax
 	invoke newline
 	invoke ExitProcess, 0
 main ENDP

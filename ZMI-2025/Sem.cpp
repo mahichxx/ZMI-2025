@@ -209,7 +209,43 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			}
 			break;
 		}
+		// 4. Проверка наличия default в switch
+		case LEX_SWITCH:
+		{
+			// Ищем открывающую скобку '{' после switch
+			int j = i + 1;
+			while (j < lextable.size && lextable.table[j].lexema != LEX_LEFTBRACE) {
+				j++;
+			}
+
+			if (j >= lextable.size) break; // Если скобки нет, это поймает синтаксический анализатор
+
+			// Сканируем тело switch
+			bool hasDefault = false;
+			int balance = 1; // Уровень вложенности (мы стоим на '{')
+			j++; // Заходим внутрь
+
+			while (j < lextable.size && balance > 0)
+			{
+				if (lextable.table[j].lexema == LEX_LEFTBRACE) balance++;
+				else if (lextable.table[j].lexema == LEX_BRACELET) balance--;
+
+				// Если встретили default И мы находимся на уровне нашего свитча (не вложенного)
+				if (lextable.table[j].lexema == LEX_DEFAULT && balance == 1) {
+					hasDefault = true;
+				}
+				j++;
+			}
+
+			// Если пробежали весь switch и не нашли default
+			if (!hasDefault) {
+				Log::WriteErrors(log, Error::geterrorin(319, lextable.table[i].sn, 0));
+				sem_ok = false;
+			}
+			break;
 		}
+		}
+
 	}
 	return sem_ok;
 }

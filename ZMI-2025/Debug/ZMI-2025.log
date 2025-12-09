@@ -1,17 +1,4 @@
 ﻿  Error.cpp
-  FST.cpp
-  Generation.cpp
-  Greibach.cpp
-  In.cpp
-  IT.cpp
-  Lex.cpp
-  Log.cpp
-  LT.cpp
-  MFST.cpp
-D:\Программирование\3_сем\КПО\ZMI-2025\ZMI-2025\MFST.cpp(276,66): warning C4267: =: преобразование из "size_t" в "short"; возможна потеря данных
-  Parm.cpp
-  PN.cpp
   Sem.cpp
-  ZMI-2025.cpp
   Создание кода...
   ZMI-2025.vcxproj -> D:\Программирование\3_сем\КПО\ZMI-2025\Debug\ZMI-2025.exe

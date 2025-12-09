@@ -128,7 +128,7 @@ namespace MFST {
 		MFSTSTSTACK st;
 		my_stack_MfstState storestate;
 		Mfst();
-		Mfst(LT::LexTable& plex, GRB::Greibach pgreibach);
+		Mfst(LT::LexTable plex, const GRB::Greibach pgreibach);
 		char* getCSt(char* buf);
 		char* getCLenta(char* buf, short pos, short n = 25);
 		char* getDiagnosis(short n, char* buf);

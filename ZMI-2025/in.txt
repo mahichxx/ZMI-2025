@@ -1,102 +1,90 @@
-integer function summary(integer a, integer b) {
-    return 15;
+integer function strtoint(string s) { return 0; }
+integer function stcmp(string s1, string s2) { return 0; }
+
+integer function recCheck(integer n) {
+    integer res;
+    integer next;
+    switch(n) {
+        case 0: { return 0; }
+        default: {
+            next = n - 1;
+            res = n + recCheck(next);
+            return res;
+        }
+    }
+    return 0;
 }
 
-string function getstatus() {
-    string s;
-    s = "StatusOK";
-    return s;
-}
-
-integer function strtoint(string s) {
-    return 0; 
-}
-
-integer function stcmp(string s1, string s2) { 
-    return 0; 
+integer function logTest(integer v1, integer v2) {
+    integer diff;
+    
+    cout < "--- Логическое сравнение в Switch ---";
+    
+    switch(v1 > v2) {
+        case 1: {
+            cout < "Результат: v1 больше чем v2";
+        }
+        case 0: {
+            switch(v1 == v2) {
+                case 1: { cout < "Результат: v1 равный v2"; }
+                default: { cout < "Результат: v1 меньше, чем v2"; }
+            }
+        
+        }
+        default: {}
+    }
+    return 0;
 }
 
 main {
-    integer x;
-    integer y;
-    integer z;
-    integer hard;
-    integer negative;
-    string info;
-
-    x = 10;
-    y = 5;
-    negative = -20;
-
-    cout < "TestOneSimpleMath";
-    z = x + y;
-    cout < z;
-
-    cout < "TestTwoLeftLiteral";
-    z = 100 - x;
-    cout < z;
-
-    cout < "TestThreeChainCalc";
-    z = x + y + 10 + 5; 
-    cout < z;
-
-    cout < "TestFourComplexParens";
-    hard = (x + y) * 2;
-    cout < hard;
+    integer hexVal;
+    integer binVal;
+    integer intVal;
+    string strVal;
+    char charVal;
+    integer logicRes;
     
-    hard = (x + y) / (5 - 2);
-    cout < hard;
+    cout < "=== УЛЬТРА ХАРДКОРНЫЙ ТЕСТОВЫЙ СТАРТ ===";
 
-    hard = ((x + x) + (y * 2)) / 2;
-    cout < hard;
-
-    cout < "TestFiveMixedLogic";
-    z = (x + 10) + y;
-    cout < z;
-
-    z = 2 + (x * 3);
-    cout < z;
-
-    cout < "TestSixSwitchLogic";
-    switch(y) {
-        case 5: {
-            info = "YisFive";
-            cout < info;
-            
-            z = summary(x, y);
-            cout < "SumIs";
-            cout < z;
-        }
-        case 10: {
-            info = "YisTen";
-            cout < info;
-        }
-        default: {
-            info = getstatus();
-            cout < info;
-        }
-    }
-
-    cout < "TestLibCheck";
-
-    integer res;
-    string strNum;
-    strNum = "123";
+    cout < "1. Литералы и типы";
     
-    res = strtoint(strNum); 
-    
-    cout < "AtoiResult";
-    cout < res; 
+    hexVal = 0x7F; 
+    cout < "Hex 0x7F (Max 1-byte):";
+    cout < hexVal;
 
-    string str1;
-    string str2;
-    str1 = "hello";
-    str2 = "hello";
-    
-    integer cmpRes;
-    cmpRes = stcmp(str1, str2);
-    
-    cout < "CompareResult";
-    cout < cmpRes;
+    binVal = 0b11;
+    cout < "Bin 0b11 (3):";
+    cout < binVal;
 
+    charVal = 'A';
+    cout < "Char Literal A (65):";
+    cout < charVal;
+
+    cout < "2. Переполнение на один байт";
+    intVal = hexVal + 1;
+    cout < "127 + 1 = -128 (Overflow Check):";
+    cout < intVal;
+
+    cout < "3. Библиотека строк";
+    strVal = "100";
+    intVal = strtoint(strVal);
+    cout < "StrToInd 100 + 25:";
+    cout < intVal + 25;
+
+    strVal = "pass";
+    logicRes = stcmp(strVal, "pass");
+    cout < "Strcmp pass vs pass (0 is equal):";
+    cout < logicRes;
+
+    cout < "4. Сравнения с помощью переключателя";
+    logTest(10, 5);
+    logTest(5, 10);
+    logTest(5, 5);
+
+    cout < "5. Рекурсия Sum(5) = 5+4+3+2+1";
+    intVal = recCheck(5);
+    cout < "Expect 15:";
+    cout < intVal;
+
+    cout < "=== КОНЕЦ УЛЬТРА ХАРДКОРНОГО ТЕСТА ===";
 }

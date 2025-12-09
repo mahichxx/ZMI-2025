@@ -39,8 +39,8 @@ namespace MFST {
 	}
 
 	Mfst::Mfst() { lenta = 0; lenta_size = lenta_position = 0; }
-	Mfst::Mfst(LT::LexTable& plex, GRB::Greibach pgreibach) {
-		greibach = pgreibach;
+	Mfst::Mfst(LT::LexTable plex, GRB::Greibach pgreibach) {
+		greibach = pgreibach; // Копирование все равно произойдет, но уже внутри, из надежного источника
 		lex = plex;
 		lenta = new short[lenta_size = lex.size];
 		for (int k = 0; k < lenta_size; k++)

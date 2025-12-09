@@ -13,7 +13,7 @@ using namespace std;
 
 namespace Gener
 {
-    const string LIB_PATH = "\"D:\\Программирование\\3_сем\\КПО\\ZMI-2025\\Debug\\InLib.lib\"";
+    const string LIB_PATH = "InLib.lib";
 
     const string ASM_HEAD =
         ".586\n"
@@ -22,6 +22,7 @@ namespace Gener
         "includelib ucrtd.lib\n"
         "includelib vcruntimed.lib\n"
         "includelib legacy_stdio_definitions.lib\n"
+        "includelib \"D:\\Программирование\\3_сем\\КПО\\ZMI-2025\\Debug\\InLib.lib\"\n"
         "includelib kernel32.lib\n"
         "includelib " + LIB_PATH + "\n"
         "\n"
@@ -54,6 +55,7 @@ namespace Gener
         {
             LT::Entry& lex = tables.lextable.table[i];
 
+            // --- SWITCH ---
             if (lex.lexema == LEX_SWITCH) {
                 int uid = i;
                 int balance = 0, closeBraceIdx = -1, openBraceIdx = -1, k = i + 1;
@@ -76,11 +78,9 @@ namespace Gener
                     if (idIndex != -1) {
                         ofile << "\n\t; --- SWITCH " << uid << " ---" << endl;
                         IT::Entry& var = tables.idtable.table[idIndex];
-                        if (var.idtype == IT::P || var.idtype == IT::V) {
-                            if (var.iddatatype == IT::INT || var.iddatatype == IT::BOOL || var.iddatatype == IT::CHR) {
-                                ofile << "\tmov al, " << var.id << endl << "\tmovsx eax, al" << endl;
-                            }
-                            else ofile << "\tmov eax, " << var.id << endl;
+                        if (var.idtype == IT::P) ofile << "\tmov eax, " << var.id << endl;
+                        else {
+                            ofile << "\tmov al, " << var.id << endl << "\tmovsx eax, al" << endl;
                         }
                         ofile << "\tmov switch_val, eax" << endl;
                         int innerBalance = 0;
@@ -98,6 +98,7 @@ namespace Gener
                 }
                 i = openBraceIdx; continue;
             }
+
             if (lex.lexema == LEX_CASE) {
                 if (!activeSwitches.empty()) {
                     int litIdx = tables.lextable.table[i + 1].idxTI;
@@ -121,29 +122,29 @@ namespace Gener
 
             if (lex.lexema == LEX_COUT) { isCout = true; continue; }
 
+            // Присваивание
             if (lex.lexema == LEX_ID && (i + 1 < tables.lextable.size) && tables.lextable.table[i + 1].lexema == LEX_EQUAL) {
                 targetIdIndex = lex.idxTI; i++; continue;
             }
 
+            // --- ЛИТЕРАЛЫ ---
             if (lex.lexema == LEX_LITERAL) {
                 IT::Entry& lit = tables.idtable.table[lex.idxTI];
                 lastType = lit.iddatatype;
                 if (lit.iddatatype == IT::STR) ofile << "\tpush offset L" << lex.idxTI << endl;
-                else { ofile << "\tmov al, L" << lex.idxTI << "\n\tmovsx eax, al\n\tpush eax" << endl; }
+                else {
+                    ofile << "\tmov al, L" << lex.idxTI << endl << "\tmovsx eax, al" << endl << "\tpush eax" << endl;
+                }
             }
 
+            // --- ИДЕНТИФИКАТОРЫ ---
             else if (lex.lexema == LEX_ID) {
-                if (i > 0) {
-                    unsigned char prev = tables.lextable.table[i - 1].lexema;
-                    if (prev == LEX_INTEGER || prev == LEX_STRING || prev == LEX_CHAR) continue;
-                }
-                IT::Entry& id = tables.idtable.table[lex.idxTI];
+                if (i > 0 && (tables.lextable.table[i - 1].lexema == LEX_INTEGER || tables.lextable.table[i - 1].lexema == LEX_STRING)) continue;
 
-                // ВАРИАНТ 1: ПОЛИЗ (@) - просто пропускаем ID функции
+                IT::Entry& id = tables.idtable.table[lex.idxTI];
                 if (id.idtype == IT::F) continue;
 
-                // ВАРИАНТ 2: ИНФИКС (резервный, если ПОЛИЗ не сработал)
-                // Если видим func(, то генерируем вызов
+                // Проверка на вызов функции
                 bool isCall = false;
                 if (id.idtype == IT::F || IsLibraryFunc((char*)id.id)) {
                     if (i + 1 < tables.lextable.size && tables.lextable.table[i + 1].lexema == LEX_LEFTTHESIS) isCall = true;
@@ -164,11 +165,14 @@ namespace Gener
                         IT::Entry& argIt = tables.idtable.table[ti];
                         if (argIt.idtype == IT::L) {
                             if (argIt.iddatatype == IT::STR) ofile << "\tpush offset L" << ti << endl;
-                            else ofile << "\tmov al, L" << ti << "\n\tmovsx eax, al\n\tpush eax" << endl;
+                            else { ofile << "\tmov al, L" << ti << "\n\tmovsx eax, al\n\tpush eax" << endl; }
                         }
                         else {
                             if (argIt.iddatatype == IT::STR) ofile << "\tpush " << argIt.id << endl;
-                            else ofile << "\tmov al, " << argIt.id << "\n\tmovsx eax, al\n\tpush eax" << endl;
+                            else {
+                                if (argIt.idtype == IT::P) ofile << "\tmov eax, " << argIt.id << endl << "\tpush eax" << endl;
+                                else ofile << "\tmov al, " << argIt.id << "\n\tmovsx eax, al\n\tpush eax" << endl;
+                            }
                         }
                     }
                     ofile << "\tcall " << id.id << endl;
@@ -180,15 +184,25 @@ namespace Gener
                     continue;
                 }
 
+                // Использование переменной
                 if (id.idtype == IT::V || id.idtype == IT::P) {
-                    lastType = id.iddatatype;
+                    lastType = id.iddatatype; // !!! ОБНОВЛЕНИЕ ТИПА !!!
                     if (id.iddatatype == IT::STR) ofile << "\tpush " << id.id << endl;
-                    else ofile << "\tmov al, " << id.id << "\n\tmovsx eax, al\n\tpush eax" << endl;
+                    else {
+                        if (id.idtype == IT::P) ofile << "\tmov eax, " << id.id << endl << "\tpush eax" << endl;
+                        else ofile << "\tmov al, " << id.id << "\n\tmovsx eax, al\n\tpush eax" << endl;
+                    }
                 }
             }
 
+            // --- ОПЕРАТОРЫ ---
             else if (lex.lexema == LEX_OPERATOR) {
-                if (isCout) continue;
+
+                // !!! ФИКС: Пропускаем стрелочку вывода, но оставляем арифметику
+                if (isCout && lex.op == LT::OLESS) {
+                    continue;
+                }
+
                 ofile << "\tpop ebx\n\tpop eax" << endl;
                 if (lex.op == LT::OPLUS) ofile << "\tadd eax, ebx" << endl;
                 else if (lex.op == LT::OMINUS) ofile << "\tsub eax, ebx" << endl;
@@ -204,32 +218,24 @@ namespace Gener
                 ofile << "\tpush eax" << endl; lastType = IT::INT;
             }
 
-            // --- ПОЛИЗ ВЫЗОВ (@) ---
+            // --- @ ---
             else if (lex.lexema == '@') {
-                int funcLexIdx = i - 1;
-                // Ищем ID функции, пропуская аргументы (в ПОЛИЗЕ они перед @)
-                // Но проблема в том, что аргументы могут быть сложными выражениями...
-                // В твоей реализации ПОЛИЗА имя функции хранится в idxTI самого оператора @!
-                // Смотрим PN.cpp: callOp.idxTI = idx_func;
-
                 int funcIDIndex = lex.idxTI;
                 if (funcIDIndex != LT_TI_NULLIDX) {
                     IT::Entry& func = tables.idtable.table[funcIDIndex];
                     ofile << "\tcall " << func.id << endl;
                     ofile << "\tpush eax" << endl;
-
                     lastType = func.iddatatype;
-                    if (strcmp((char*)func.id, "getstatus") == 0 || strcmp((char*)func.id, "getmessage") == 0) lastType = IT::STR;
-                    if (strcmp((char*)func.id, "strtoint") == 0 || strcmp((char*)func.id, "stcmp") == 0) lastType = IT::INT;
                 }
             }
 
             else if (lex.lexema == LEX_RETURN) isReturn = true;
+
             else if (lex.lexema == LEX_SEMICOLON) {
                 if (targetIdIndex != -1) {
                     ofile << "\tpop eax" << endl;
                     IT::Entry& tgt = tables.idtable.table[targetIdIndex];
-                    if (tgt.iddatatype == IT::STR) ofile << "\tmov " << tgt.id << ", eax" << endl;
+                    if (tgt.idtype == IT::P || tgt.iddatatype == IT::STR) ofile << "\tmov " << tgt.id << ", eax" << endl;
                     else ofile << "\tmov " << tgt.id << ", al" << endl;
                     targetIdIndex = -1;
                 }
@@ -253,6 +259,7 @@ namespace Gener
         ofstream ofile(asmPath);
         if (!ofile.is_open()) return;
         ofile << ASM_HEAD << endl << ASM_CONST;
+
         for (int i = 0; i < tables.idtable.size; i++) {
             IT::Entry& e = tables.idtable.table[i];
             if (e.idtype == IT::L) {
@@ -262,11 +269,18 @@ namespace Gener
                 else if (e.iddatatype == IT::STR) ofile << "db '" << (e.value.vstr.str ? (char*)e.value.vstr.str : "") << "', 0" << endl;
             }
         }
+
         ofile << ASM_DATA << "\tswitch_val sdword 0" << endl;
+
         for (int i = 0; i < tables.idtable.size; i++) {
             IT::Entry& e = tables.idtable.table[i];
-            if (e.idtype == IT::V) { ofile << "\t" << e.id << "\t"; if (e.iddatatype == IT::STR) ofile << "dd 0" << endl; else ofile << "sbyte 0" << endl; }
+            if (e.idtype == IT::V) {
+                ofile << "\t" << e.id << "\t";
+                if (e.iddatatype == IT::STR) ofile << "dd 0" << endl;
+                else ofile << "sbyte 0" << endl;
+            }
         }
+
         ofile << ASM_CODE;
         for (int i = 0; i < tables.lextable.size; i++) {
             if (tables.lextable.table[i].lexema == LEX_FUNCTION) {
@@ -276,15 +290,16 @@ namespace Gener
                     int k = i;
                     while (k < tables.lextable.size) {
                         if (tables.lextable.table[k].lexema == LEX_LEFTBRACE) {
-                            int balance = 1; k++;
-                            while (k < tables.lextable.size && balance > 0) {
-                                if (tables.lextable.table[k].lexema == LEX_LEFTBRACE) balance++;
-                                if (tables.lextable.table[k].lexema == LEX_BRACELET) balance--;
+                            int bal = 1; k++;
+                            while (k < tables.lextable.size && bal > 0) {
+                                if (tables.lextable.table[k].lexema == LEX_LEFTBRACE) bal++;
+                                if (tables.lextable.table[k].lexema == LEX_BRACELET) bal--;
                                 k++;
                             } break;
                         } k++;
                     } i = k - 1; continue;
                 }
+
                 ofile << funcId.id << " PROC";
                 int k = i + 2; bool first = true;
                 while (tables.lextable.table[k].lexema != LEX_RIGHTTHESIS) {
