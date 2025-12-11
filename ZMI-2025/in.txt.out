@@ -2,77 +2,74 @@
 ----------------- Поток лексем ---------------------
 01 tfi(si){rl;}
 02 tfi(si,si){rl;}
-04 tfi(ti){
+04 tfi(ti,ti){
 05 ti;
 06 ti;
-07 h(i){
-08 al:{rl;}
-09 d:{
-10 i=ivl;
-11 i=ivi(i);
-12 ri;
-13 }
-14 }
-15 rl;
+08 h(i){
+09 al:{
+10 rl;
+11 }
+12 d:{
+13 i=ivl;
+14 i=ivi(i,i);
+15 ri;
 16 }
-18 tfi(ti,ti){
-19 ti;
-21 ovl;
-23 h(ivi){
-24 al:{
-25 ovl;
-26 }
-27 al:{
-28 h(ivi){
-29 al:{ovl;}
-30 d:{ovl;}
-31 }
-33 }
-34 d:{}
-35 }
-36 rl;
-37 }
-39 m{
-40 ti;
-41 ti;
-42 ti;
-43 si;
-44 ci;
-45 ti;
-47 ovl;
-49 ovl;
-51 i=l;
-52 ovl;
-53 ovi;
-55 i=l;
-56 ovl;
-57 ovi;
-59 i=l;
+17 }
+18 rl;
+19 }
+21 tfi(ti,ti,ti){
+22 ti;
+23 i=(ivi)vi;
+24 ri;
+25 }
+27 m{
+28 si;
+29 ti;
+30 ti;
+31 ti;
+32 ti;
+34 ovl;
+36 ovl;
+38 i=l;
+39 i=l;
+41 ovl;
+42 i=i(l,l,l);
+43 ovl;
+44 ovi;
+46 ovl;
+47 i=i(l,l,l);
+48 ovl;
+49 ovi;
+51 ovl;
+52 i=i(l,l);
+53 ovl;
+54 ovi;
+55 ovl;
+56 i=l;
+58 h(i){
+59 al:{
 60 ovl;
-61 ovi;
+61 }
+62 al:{
 63 ovl;
-64 i=ivl;
-65 ovl;
-66 ovi;
+64 h(i){
+65 al:{
+66 ovl;
+67 i=i(l,l);
 68 ovl;
-69 i=l;
-70 i=i(i);
-71 ovl;
-72 ovivl;
-74 i=l;
-75 i=i(i,l);
-76 ovl;
-77 ovi;
-79 ovl;
-80 i(l,l);
-81 i(l,l);
-82 i(l,l);
-84 ovl;
-85 i=i(l);
-86 ovl;
-87 ovi;
-89 ovl;
-90 }
+69 ovi;
+70 }
+71 d:{
+72 ovl;
+73 }
+74 }
+75 }
+76 d:{
+77 ovl;
+78 }
+79 }
+81 ovl;
+82 }
 
 
 -----Таблица лексем после преобразования в ПОЛИЗ (Сырая)
@@ -80,77 +77,74 @@
 ----------------- Поток лексем ---------------------
 01 tfi(si){rl;}
 02 tfi(si,si){rl;}
-04 tfi(ti){
+04 tfi(ti,ti){
 05 ti;
 06 ti;
-07 h(i){
-08 al:{rl;}
-09 d:{
-10 i=ilv;
-11 i=ii@v;
-12 ri;
-13 }
-14 }
-15 rl;
+08 h(i){
+09 al:{
+10 rl;
+11 }
+12 d:{
+13 i=ilv;
+14 i=iiiiv;
+15 ri;
 16 }
-18 tfi(ti,ti){
-19 ti;
-21 olv;
-23 h(iiv){
-24 al:{
-25 olv;
-26 }
-27 al:{
-28 h(iiv){
-29 al:{olv;}
-30 d:{olv;}
-31 }
-33 }
-34 d:{}
-35 }
-36 rl;
-37 }
-39 m{
-40 ti;
-41 ti;
-42 ti;
-43 si;
-44 ci;
-45 ti;
-47 olv;
-49 olv;
-51 i=l;
-52 olv;
-53 oiv;
-55 i=l;
-56 olv;
-57 oiv;
-59 i=l;
+17 }
+18 rl;
+19 }
+21 tfi(ti,ti,ti){
+22 ti;
+23 i=iiviv;
+24 ri;
+25 }
+27 m{
+28 si;
+29 ti;
+30 ti;
+31 ti;
+32 ti;
+34 olv;
+36 olv;
+38 i=l;
+39 i=l;
+41 olv;
+42 i=illl;
+43 olv;
+44 oiv;
+46 olv;
+47 i=illl;
+48 olv;
+49 oiv;
+51 olv;
+52 i=ill;
+53 olv;
+54 oiv;
+55 olv;
+56 i=l;
+58 h(i){
+59 al:{
 60 olv;
-61 oiv;
+61 }
+62 al:{
 63 olv;
-64 i=ilv;
-65 olv;
-66 oiv;
+64 h(i){
+65 al:{
+66 olv;
+67 i=ill;
 68 olv;
-69 i=l;
-70 i=i@;
-71 olv;
-72 oilvv;
-74 i=l;
-75 i=li@;
-76 olv;
-77 oiv;
-79 olv;
-80 ll@;
-81 ll@;
-82 ll@;
-84 olv;
-85 i=l@;
-86 olv;
-87 oiv;
-89 olv;
-90 }
+69 oiv;
+70 }
+71 d:{
+72 olv;
+73 }
+74 }
+75 }
+76 d:{
+77 olv;
+78 }
+79 }
+81 olv;
+82 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
@@ -158,64 +152,56 @@
 ------------------------------------------------------------------------------
 01           | strtoint s return 0 ;
 02           | stcmp s1 s2 return 0 ;
-04           | recCheck n 
-05           | res ;
-06           | next ;
-07           | n 
-08           | 0 return 0 ;
-09           | 10           | next = n 1 - ;
-11           | res = n next CALL1 + ;
-12           | return res ;
-13           | 14           | 15           | return 0 ;
-16           | 18           | logTest v1 v2 
-19           | diff ;
-21           | cout "--- Logic Comparison in Switch ---" < ;
-23           | v1 v2 > 
-24           | 1 
-25           | cout "Result: v1 GREATER than v2" < ;
-26           | 27           | 0 
-28           | v1 v2 == 
-29           | 1 cout "Result: v1 EQUAL v2" < ;
-30           | cout "Result: v1 LESS than v2" < ;
-31           | 33           | 34           | 35           | 36           | return 0 ;
-37           | 39           | 40           | hexVal ;
-41           | binVal ;
-42           | intVal ;
-43           | strVal ;
-44           | charVal ;
-45           | logicRes ;
-47           | cout "=== ULTRA HARDCORE TEST START ===" < ;
-49           | cout "1. Literals and Types" < ;
-51           | hexVal = 127 ;
-52           | cout "Hex 0x7F (Max 1-byte):" < ;
-53           | cout hexVal < ;
-55           | binVal = 3 ;
-56           | cout "Bin 0b11 (3):" < ;
-57           | cout binVal < ;
-59           | charVal = 'A' ;
-60           | cout "Char Literal A (65):" < ;
-61           | cout charVal < ;
-63           | cout "2. One Byte Overflow" < ;
-64           | intVal = hexVal 1 + ;
-65           | cout "127 + 1 = -128 (Overflow Check):" < ;
-66           | cout intVal < ;
-68           | cout "3. String Library" < ;
-69           | strVal = "100" ;
-70           | intVal = strVal CALL1 ;
-71           | cout "StrToInd 100 + 25:" < ;
-72           | cout intVal 25 + < ;
-74           | strVal = "pass" ;
-75           | logicRes = "pass" strVal CALL2 ;
-76           | cout "Strcmp pass vs pass (0 is equal):" < ;
-77           | cout logicRes < ;
-79           | cout "4. Comparisons via Switch" < ;
-80           | 5 10 CALL2 ;
-81           | 10 5 CALL2 ;
-82           | 5 5 CALL2 ;
-84           | cout "5. Recursion Sum(5) = 5+4+3+2+1" < ;
-85           | intVal = 5 CALL1 ;
-86           | cout "Expect 15:" < ;
-87           | cout intVal < ;
-89           | cout "=== ULTRA HARDCORE TEST END ===" < ;
-90           | 
+04           | power base exp 
+05           | powerres ;
+06           | powernextExp ;
+08           | exp 
+09           | 0 
+10           | return 1 ;
+11           | 12           | 13           | powernextExp = exp 1 - ;
+14           | powerres = base power base powernextExp * ;
+15           | return powerres ;
+16           | 17           | 18           | return 0 ;
+19           | 21           | mixer a b cc 
+22           | mixerres ;
+23           | mixerres = a b + cc * ;
+24           | return mixerres ;
+25           | 27           | 28           | status ;
+29           | val ;
+30           | key ;
+31           | result ;
+32           | check ;
+34           | cout "=== HARDCORE TEST: START ===" < ;
+36           | cout "Check Strings: (OK); :OK:; ->OK" < ;
+38           | val = 10 ;
+39           | key = 2 ;
+41           | cout "Test 1: Simple Overflow" < ;
+42           | result = mixer 100 28 1 ;
+43           | cout "100 + 28 = 128 -> Expect -128:" < ;
+44           | cout result < ;
+46           | cout "Test 2: Multiplication Overflow" < ;
+47           | result = mixer 10 5 10 ;
+48           | cout "(10 + 5) * 10 = 150 -> Expect -106:" < ;
+49           | cout result < ;
+51           | cout "Test 3: Power Recursion (2^7)" < ;
+52           | result = power 2 7 ;
+53           | cout "2^7 = 128 -> Expect -128:" < ;
+54           | cout result < ;
+55           | cout "Test 4: Nested Switch" < ;
+56           | check = 1 ;
+58           | check 
+59           | 0 
+60           | cout "Error: Case 0" < ;
+61           | 62           | 1 
+63           | cout "Layer 1: OK" < ;
+64           | val 
+65           | 10 
+66           | cout "Layer 2: OK (Val is 10)" < ;
+67           | result = power 2 6 ;
+68           | cout "2^6 = 64 (Safe):" < ;
+69           | cout result < ;
+70           | 71           | 72           | cout "Error: Layer 2 Default" < ;
+73           | 74           | 75           | 76           | 77           | cout "Error: Layer 1 Default" < ;
+78           | 79           | 81           | cout "=== HARDCORE TEST: END ===" < ;
+82           | 
 ------------------------------------------------------------------------------

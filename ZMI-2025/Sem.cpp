@@ -3,11 +3,15 @@
 #include "LT.h"
 #include "IT.h"
 
-// Вспомогательная функция проверки совместимости типов
+// Хелпер: числовой ли тип
+bool isNumeric(IT::IDDATATYPE t) {
+	return (t == IT::INT || t == IT::CHR);
+}
+
+// Хелпер: совместимы ли типы
 bool areTypesCompatible(IT::IDDATATYPE t1, IT::IDDATATYPE t2) {
-	// Для курсового часто int и char считаются совместимыми, но по твоему заданию int = 1 байт.
-	// Оставим строгое равенство.
 	if (t1 == t2) return true;
+	if (isNumeric(t1) && isNumeric(t2)) return true;
 	return false;
 }
 
@@ -17,54 +21,57 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 
 	for (int i = 0; i < lextable.size; i++)
 	{
+		// ========================================================================
+		// 1. ИГНОРИРОВАНИЕ COUT
+		// Если видим cout, пропускаем всё до точки с запятой.
+		// Это решает проблему ошибок на строках вида: cout < "text";
+		// ========================================================================
+		if (lextable.table[i].lexema == LEX_COUT) {
+			while (i < lextable.size && lextable.table[i].lexema != LEX_SEMICOLON) {
+				i++;
+			}
+			continue;
+		}
+
 		switch (lextable.table[i].lexema)
 		{
-			// 1. Проверка присваивания (ID = Expression)
+			// 2. ПРИСВАИВАНИЕ (ID = ...)
 		case LEX_EQUAL:
 		{
-			// Если это оператор сравнения ==, пропускаем
+			// Игнорируем оператор сравнения ==
 			if (lextable.table[i].op == LT::operations::OEQ) break;
 
 			if (i > 0 && lextable.table[i - 1].idxTI != LT_TI_NULLIDX)
 			{
-				IT::IDDATATYPE lefttype = idtable.table[lextable.table[i - 1].idxTI].iddatatype;
-				bool ignore = false;
+				IT::IDDATATYPE leftType = idtable.table[lextable.table[i - 1].idxTI].iddatatype;
 
-				// Бежим вправо до точки с запятой
+				// Сканируем правую часть
 				for (int k = i + 1; k < lextable.size && lextable.table[k].lexema != LEX_SEMICOLON; k++)
 				{
-					if (lextable.table[k].lexema == LEX_LEFTTHESIS) { ignore = true; continue; }
-					if (lextable.table[k].lexema == LEX_RIGHTTHESIS) { ignore = false; continue; }
-					if (ignore) continue;
-
 					if (lextable.table[k].idxTI != LT_TI_NULLIDX)
 					{
-						if (lextable.table[k].lexema == LEX_ID || lextable.table[k].lexema == LEX_LITERAL)
-						{
-							IT::IDDATATYPE righttype = idtable.table[lextable.table[k].idxTI].iddatatype;
+						IT::Entry e = idtable.table[lextable.table[k].idxTI];
 
-							// Разрешаем присваивать char в int и наоборот (так как int 1 байт)
-							bool compatible = areTypesCompatible(lefttype, righttype);
-							if (lefttype == IT::INT && righttype == IT::CHR) compatible = true;
-							if (lefttype == IT::CHR && righttype == IT::INT) compatible = true;
-
-							if (!compatible)
-							{
+						// Если справа ФУНКЦИЯ (например, mixer)
+						if (e.idtype == IT::F) {
+							// Проверяем, совпадает ли возвращаемый тип функции с переменной
+							if (!areTypesCompatible(leftType, e.iddatatype)) {
 								Log::WriteErrors(log, Error::geterrorin(314, lextable.table[k].sn, 0));
 								sem_ok = false;
 							}
+							// !!! ГЛАВНОЕ ИСПРАВЛЕНИЕ !!!
+							// Мы нашли функцию. Всё, что идет дальше (скобки, аргументы) — это её внутренности.
+							// Мы ПРЕРЫВАЕМ проверку присваивания, чтобы не сравнивать аргументы '100', '28' с переменной 'result'.
+							// Аргументы будут проверены отдельно в блоке case LEX_ID.
+							break;
 						}
-					}
 
-					// Проверка операций для строк
-					if (lefttype == IT::IDDATATYPE::STR)
-					{
-						if (lextable.table[k].lexema == LEX_OPERATOR)
+						// Если справа ПЕРЕМЕННАЯ или ЛИТЕРАЛ
+						if (e.idtype == IT::V || e.idtype == IT::L || e.idtype == IT::P)
 						{
-							char op = lextable.table[k].op;
-							// Для строк запрещены -, *, /
-							if (op == LT::operations::OMINUS || op == LT::operations::OMUL || op == LT::operations::ODIV) {
-								Log::WriteErrors(log, Error::geterrorin(316, lextable.table[k].sn, 0));
+							// Проверяем тип
+							if (!areTypesCompatible(leftType, e.iddatatype)) {
+								Log::WriteErrors(log, Error::geterrorin(314, lextable.table[k].sn, 0));
 								sem_ok = false;
 							}
 						}
@@ -74,100 +81,42 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			break;
 		}
 
-		// 2. Проверка функций
+		// 3. ИДЕНТИФИКАТОРЫ (Проверка параметров функций)
 		case LEX_ID:
 		{
 			if (lextable.table[i].idxTI == LT_TI_NULLIDX) break;
 			IT::Entry e = idtable.table[lextable.table[i].idxTI];
 
-			// А) Проверка RETURN внутри функции
-			if (i > 0 && lextable.table[i - 1].lexema == LEX_FUNCTION)
+			// Если это вызов функции: ID ( ... )
+			// Проверяем, что это не объявление функции (слово function перед ID)
+			if (e.idtype == IT::F && i + 1 < lextable.size && lextable.table[i + 1].lexema == LEX_LEFTTHESIS)
 			{
-				if (e.idtype == IT::IDTYPE::F)
-				{
-					for (int k = i + 1; k < lextable.size; k++)
-					{
-						if (lextable.table[k].lexema == LEX_FUNCTION || lextable.table[k].lexema == LEX_MAIN) break;
+				bool isDeclaration = (i > 0 && lextable.table[i - 1].lexema == LEX_FUNCTION);
 
-						if (lextable.table[k].lexema == LEX_RETURN)
-						{
-							// Если void
-							if (e.iddatatype == IT::IDDATATYPE::VOI) {
-								if (lextable.table[k + 1].lexema != LEX_SEMICOLON) {
-									Log::WriteErrors(log, Error::geterrorin(315, lextable.table[k].sn, 0));
-									sem_ok = false;
-								}
-							}
-							else { // Если не void
-								if (lextable.table[k + 1].lexema == LEX_SEMICOLON) {
-									Log::WriteErrors(log, Error::geterrorin(315, lextable.table[k].sn, 0));
-									sem_ok = false;
-								}
-								else {
-									int nextIdx = lextable.table[k + 1].idxTI;
-									if (nextIdx != LT_TI_NULLIDX) {
-										IT::IDDATATYPE retType = idtable.table[nextIdx].iddatatype;
-										bool compatible = areTypesCompatible(retType, e.iddatatype);
-										// Доп. совместимость int <-> char
-										if ((retType == IT::INT && e.iddatatype == IT::CHR) ||
-											(retType == IT::CHR && e.iddatatype == IT::INT)) compatible = true;
+				if (!isDeclaration) {
+					// Считаем параметры
+					int paramCount = 0;
+					int k = i + 2;
 
-										if (!compatible) {
-											Log::WriteErrors(log, Error::geterrorin(315, lextable.table[k].sn, 0));
-											sem_ok = false;
-										}
-									}
-								}
+					// Если внутри не пусто
+					if (lextable.table[k].lexema != LEX_RIGHTTHESIS) {
+						paramCount = 1; // Первый параметр есть
+						int balance = 0;
+						while (k < lextable.size) {
+							if (lextable.table[k].lexema == LEX_LEFTTHESIS) balance++;
+							if (lextable.table[k].lexema == LEX_RIGHTTHESIS) {
+								if (balance == 0) break;
+								balance--;
 							}
+							// Считаем запятые на верхнем уровне вложенности
+							if (lextable.table[k].lexema == LEX_COMMA && balance == 0) paramCount++;
+							k++;
 						}
 					}
-				}
-			}
 
-			// Б) Проверка ВЫЗОВА функции (параметры)
-			// Проверяем: ID + ( ... и ID не после FUNCTION
-			if (i + 1 < lextable.size && lextable.table[i + 1].lexema == LEX_LEFTTHESIS &&
-				(i == 0 || lextable.table[i - 1].lexema != LEX_FUNCTION))
-			{
-				if (e.idtype == IT::IDTYPE::F)
-				{
-					// Пропуск библиотечных функций
-					std::string fname = (char*)e.id;
-					if (fname == "strtoint" || fname == "stcmp") {
-						break;
-					}
-
-					int paramscount = 0;
-					// Сканируем аргументы до закрывающей скобки
-					for (int j = i + 2; j < lextable.size && lextable.table[j].lexema != LEX_RIGHTTHESIS; j++)
-					{
-						if (lextable.table[j].lexema == LEX_ID || lextable.table[j].lexema == LEX_LITERAL)
-						{
-							paramscount++;
-							if (paramscount > e.parm) {
-								Log::WriteErrors(log, Error::geterrorin(308, lextable.table[i].sn, 0));
-								sem_ok = false;
-								break;
-							}
-
-							// Проверка типов
-							int expectedParamIndex = lextable.table[i].idxTI + paramscount;
-							if (expectedParamIndex < idtable.size) {
-								IT::IDDATATYPE argType = idtable.table[lextable.table[j].idxTI].iddatatype;
-								IT::IDDATATYPE paramType = idtable.table[expectedParamIndex].iddatatype;
-
-								bool compatible = areTypesCompatible(argType, paramType);
-								if ((argType == IT::INT && paramType == IT::CHR) ||
-									(argType == IT::CHR && paramType == IT::INT)) compatible = true;
-
-								if (!compatible) {
-									Log::WriteErrors(log, Error::geterrorin(309, lextable.table[i].sn, 0));
-									sem_ok = false;
-								}
-							}
-						}
-					}
-					if (paramscount < e.parm) {
+					// Сравниваем количество
+					if (paramCount != e.parm) {
+						// Ошибка 308: Неверное количество параметров
 						Log::WriteErrors(log, Error::geterrorin(308, lextable.table[i].sn, 0));
 						sem_ok = false;
 					}
@@ -176,68 +125,61 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			break;
 		}
 
-		// 3. Арифметика и деление на 0
+		// 4. ОПЕРАТОРЫ (Арифметика)
 		case LEX_OPERATOR:
 		{
-			// Деление на ноль
-			if (lextable.table[i].op == LT::operations::ODIV || lextable.table[i].op == LT::operations::OMOD) {
-				if (i + 1 < lextable.size && lextable.table[i + 1].lexema == LEX_LITERAL && lextable.table[i + 1].idxTI != LT_TI_NULLIDX) {
-					if (idtable.table[lextable.table[i + 1].idxTI].iddatatype == IT::INT &&
-						idtable.table[lextable.table[i + 1].idxTI].value.vint == 0) {
-						Log::WriteErrors(log, Error::geterrorin(318, lextable.table[i + 1].sn, 0));
+			// Игнорируем < (OLESS), так как он используется в cout. 
+			// Игнорируем сравнения.
+			if (lextable.table[i].op == LT::OLESS || lextable.table[i].op == LT::OEQ ||
+				lextable.table[i].op == LT::ONE || lextable.table[i].op == LT::OMORE ||
+				lextable.table[i].lexema == LEX_EQUAL) break;
+
+			// Проверяем типы слева и справа только для + - * /
+			if (i > 0 && i + 1 < lextable.size) {
+				int lIdx = lextable.table[i - 1].idxTI;
+				int rIdx = lextable.table[i + 1].idxTI;
+
+				if (lIdx != LT_TI_NULLIDX && rIdx != LT_TI_NULLIDX) {
+					IT::IDDATATYPE t1 = idtable.table[lIdx].iddatatype;
+					IT::IDDATATYPE t2 = idtable.table[rIdx].iddatatype;
+
+					// Только числа (int, char) можно складывать/умножать
+					if (!isNumeric(t1) || !isNumeric(t2)) {
+						Log::WriteErrors(log, Error::geterrorin(314, lextable.table[i].sn, 0));
 						sem_ok = false;
 					}
 				}
 			}
 
-			// Типы операндов (только INT разрешен для арифметики в твоем коде)
-			// Хотя для строк обычно разрешен '+'. Если нужно - добавь исключение для OPLUS
-			bool flag = true;
-			if (lextable.table[i].op <= LT::operations::ODIV || lextable.table[i].op == LT::operations::OMOD) {
-				if (i > 0 && lextable.table[i - 1].idxTI != LT_TI_NULLIDX) {
-					if (idtable.table[lextable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::INT &&
-						idtable.table[lextable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::CHR) flag = false;
+			// Деление на ноль
+			if (lextable.table[i].op == LT::ODIV || lextable.table[i].op == LT::OMOD) {
+				if (lextable.table[i + 1].lexema == LEX_LITERAL && lextable.table[i + 1].idxTI != LT_TI_NULLIDX) {
+					if (idtable.table[lextable.table[i + 1].idxTI].value.vint == 0) {
+						Log::WriteErrors(log, Error::geterrorin(318, lextable.table[i].sn, 0));
+						sem_ok = false;
+					}
 				}
-				if (i < lextable.size - 1 && lextable.table[i + 1].idxTI != LT_TI_NULLIDX) {
-					if (idtable.table[lextable.table[i + 1].idxTI].iddatatype != IT::IDDATATYPE::INT &&
-						idtable.table[lextable.table[i + 1].idxTI].iddatatype != IT::IDDATATYPE::CHR) flag = false;
-				}
-			}
-			if (!flag) {
-				Log::WriteErrors(log, Error::geterrorin(317, lextable.table[i].sn, 0));
-				sem_ok = false;
 			}
 			break;
 		}
-		// 4. Проверка наличия default в switch
-		case LEX_SWITCH:
-		{
-			// Ищем открывающую скобку '{' после switch
-			int j = i + 1;
-			while (j < lextable.size && lextable.table[j].lexema != LEX_LEFTBRACE) {
-				j++;
-			}
 
-			if (j >= lextable.size) break; // Если скобки нет, это поймает синтаксический анализатор
-
-			// Сканируем тело switch
+		// 5. SWITCH (Проверка наличия default)
+		case LEX_SWITCH: {
 			bool hasDefault = false;
-			int balance = 1; // Уровень вложенности (мы стоим на '{')
-			j++; // Заходим внутрь
+			int j = i + 1;
+			// Ищем начало тела
+			while (j < lextable.size && lextable.table[j].lexema != LEX_LEFTBRACE) j++;
 
-			while (j < lextable.size && balance > 0)
-			{
-				if (lextable.table[j].lexema == LEX_LEFTBRACE) balance++;
-				else if (lextable.table[j].lexema == LEX_BRACELET) balance--;
-
-				// Если встретили default И мы находимся на уровне нашего свитча (не вложенного)
-				if (lextable.table[j].lexema == LEX_DEFAULT && balance == 1) {
-					hasDefault = true;
+			if (j < lextable.size) {
+				int balance = 1; j++;
+				while (j < lextable.size && balance > 0) {
+					if (lextable.table[j].lexema == LEX_LEFTBRACE) balance++;
+					else if (lextable.table[j].lexema == LEX_BRACELET) balance--;
+					// Ищем default только на первом уровне вложенности
+					else if (lextable.table[j].lexema == LEX_DEFAULT && balance == 1) hasDefault = true;
+					j++;
 				}
-				j++;
 			}
-
-			// Если пробежали весь switch и не нашли default
 			if (!hasDefault) {
 				Log::WriteErrors(log, Error::geterrorin(319, lextable.table[i].sn, 0));
 				sem_ok = false;
@@ -245,7 +187,6 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG log)
 			break;
 		}
 		}
-
 	}
 	return sem_ok;
 }

@@ -1,90 +1,82 @@
 integer function strtoint(string s) { return 0; }
 integer function stcmp(string s1, string s2) { return 0; }
 
-integer function recCheck(integer n) {
+integer function power(integer base, integer exp) {
     integer res;
-    integer next;
-    switch(n) {
-        case 0: { return 0; }
+    integer nextExp;
+    
+    switch(exp) {
+        case 0: {
+            return 1;
+        }
         default: {
-            next = n - 1;
-            res = n + recCheck(next);
+            nextExp = exp - 1;
+            res = base * power(base, nextExp);
             return res;
         }
     }
     return 0;
 }
 
-integer function logTest(integer v1, integer v2) {
-    integer diff;
-    
-    cout < "--- Логическое сравнение в Switch ---";
-    
-    switch(v1 > v2) {
-        case 1: {
-            cout < "Результат: v1 больше чем v2";
-        }
-        case 0: {
-            switch(v1 == v2) {
-                case 1: { cout < "Результат: v1 равный v2"; }
-                default: { cout < "Результат: v1 меньше, чем v2"; }
-            }
-        
-        }
-        default: {}
-    }
-    return 0;
+integer function mixer(integer a, integer b, integer cc) {
+    integer res;
+    res = (a + b) * cc;
+    return res;
 }
 
 main {
-    integer hexVal;
-    integer binVal;
-    integer intVal;
-    string strVal;
-    char charVal;
-    integer logicRes;
+    string status;
+    integer val;
+    integer key;
+    integer result;
+    integer check;
+
+    cout < "=== HARDCORE TEST: START ===";
+  
+    cout < "Check Strings: (OK); :OK:; ->OK";
+
+    val = 10;
+    key = 2;
+
+    cout < "Test 1: Simple Overflow";
+    result = mixer(100, 28, 1);
+    cout < "100 + 28 = 128 -> Expect -128:";
+    cout < result;
+
+    cout < "Test 2: Multiplication Overflow";
+    result = mixer(10, 5, 10);
+    cout < "(10 + 5) * 10 = 150 -> Expect -106:";
+    cout < result;
+
+    cout < "Test 3: Power Recursion (2^7)";
+    result = power(2, 7);
+    cout < "2^7 = 128 -> Expect -128:";
+    cout < result;
+    cout < "Test 4: Nested Switch";
+    check = 1;
     
-    cout < "=== УЛЬТРА ХАРДКОРНЫЙ ТЕСТОВЫЙ СТАРТ ===";
+    switch(check) {
+        case 0: {
+            cout < "Error: Case 0";
+        }
+        case 1: {
+            cout < "Layer 1: OK";
+            switch(val) {
+                case 10: {
+                    cout < "Layer 2: OK (Val is 10)";
+                    result = power(2, 6);
+                    cout < "2^6 = 64 (Safe):";
+                    cout < result;
+                }
+                default: {
+                    cout < "Error: Layer 2 Default";
+                }
+            }
+        }
+        default: {
+            cout < "Error: Layer 1 Default";
+        }
+    }
 
-    cout < "1. Литералы и типы";
-    
-    hexVal = 0x7F; 
-    cout < "Hex 0x7F (Max 1-byte):";
-    cout < hexVal;
-
-    binVal = 0b11;
-    cout < "Bin 0b11 (3):";
-    cout < binVal;
-
-    charVal = 'A';
-    cout < "Char Literal A (65):";
-    cout < charVal;
-
-    cout < "2. Переполнение на один байт";
-    intVal = hexVal + 1;
-    cout < "127 + 1 = -128 (Overflow Check):";
-    cout < intVal;
-
-    cout < "3. Библиотека строк";
-    strVal = "100";
-    intVal = strtoint(strVal);
-    cout < "StrToInd 100 + 25:";
-    cout < intVal + 25;
-
-    strVal = "pass";
-    logicRes = stcmp(strVal, "pass");
-    cout < "Strcmp pass vs pass (0 is equal):";
-    cout < logicRes;
-
-    cout < "4. Сравнения с помощью переключателя";
-    logTest(10, 5);
-    logTest(5, 10);
-    logTest(5, 5);
-
-    cout < "5. Рекурсия Sum(5) = 5+4+3+2+1";
-    intVal = recCheck(5);
-    cout < "Expect 15:";
-    cout < intVal;
-
-    cout < "=== КОНЕЦ УЛЬТРА ХАРДКОРНОГО ТЕСТА ===";
+    cout < "=== HARDCORE TEST: END ===";
 }

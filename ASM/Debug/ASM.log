@@ -1,4 +1,2 @@
 ﻿  Assembling ..\ZMI-2025\ASM\Asm.asm...
-..\ZMI-2025\ASM\Asm.asm(128): error A2006: undefined symbol : switch_99_default
-..\ZMI-2025\ASM\Asm.asm(164): warning A6004: procedure argument or local not referenced : v2
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: выход из команды "ml.exe /c /nologo /Zi /Fo"Debug\Asm.obj" /W3 /errorReport:prompt  /Ta"..\ZMI-2025\ASM\Asm.asm"" с кодом "1".
+  ASM.vcxproj -> D:\Программирование\3_сем\КПО\ZMI-2025\Debug\ASM.exe

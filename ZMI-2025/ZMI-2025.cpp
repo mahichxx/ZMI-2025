@@ -51,7 +51,7 @@ int wmain(int argc, wchar_t* argv[]) {
 		if (parm.more || parm.it) IT::showITable(lex.idtable, &cout);
 
 		// 4. Синтаксический анализ
-		MFST::Mfst mfst(lex.lextable, GRB::getGreibach());
+		MFST::Mfst mfst(lex.lextable, GRB::getGreibach(), log);
 		mfst.log = log;
 		if (parm.more || parm.lenta) mfst.more = true;
 

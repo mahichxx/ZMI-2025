@@ -12,6 +12,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InLib", "InLib\InLib.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASM", "ASM\ASM.vcxproj", "{991C560D-7122-41BB-9990-F4F94A6D1D35}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}"
+	ProjectSection(SolutionItems) = preProject
+		ZMI-2025\in.txt = ZMI-2025\in.txt
+		ZMI-2025\in.txt.log = ZMI-2025\in.txt.log
+		ZMI-2025\in.txt.out = ZMI-2025\in.txt.out
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

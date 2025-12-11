@@ -123,6 +123,13 @@
 	FST::NODE(1, FST::RELATION('f', 2)), \
 	FST::NODE()
 
+#define FST_ELSE 5, \
+	FST::NODE(1, FST::RELATION('e', 1)), \
+	FST::NODE(1, FST::RELATION('l', 2)), \
+	FST::NODE(1, FST::RELATION('s', 3)), \
+	FST::NODE(1, FST::RELATION('e', 4)), \
+	FST::NODE()
+
 // =========================================================
 //                 ЛИТЕРАЛЫ
 // =========================================================
@@ -300,8 +307,9 @@
                  FST::RELATION('%', 1), FST::RELATION('<', 1), FST::RELATION('>', 1), FST::RELATION('=', 1), FST::RELATION('!', 1)), \
 	FST::NODE()
 
+// Убрали < и > отсюда, чтобы не было конфликтов
 #define FST_LOGOPERATOR 2,  \
-	FST::NODE(4, FST::RELATION('<', 1), FST::RELATION('>', 1), FST::RELATION('!', 1), FST::RELATION('~', 1)), \
+	FST::NODE(2, FST::RELATION('!', 1), FST::RELATION('~', 1)), \
 	FST::NODE()
 
 #define FST_SEMICOLON 2,	\

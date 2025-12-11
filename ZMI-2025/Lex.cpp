@@ -1,635 +1,287 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-#define IN_CODE_DELIMETR '|'
-#define SPACE ' '
-#define PLUS '+'
-#define MINUS '-'
-#define STAR '*'
-#define DIRSLASH '/'
-#define EQUAL '='
-#define MAX_INTEGER 2147483647
-#define MIN_INTEGER -2147483647
-#define MAX_STROKA 256
-
-#include "FST_def.h"
 #include "stdafx.h"
-#include <cmath> 
-#include <iostream>
 #include "Lex.h"
+#include "FST.h"
+#include "FST_def.h"
+#include "Error.h"
+#include <iostream>
+#include <cstring>
+#include <iomanip>
+
+#define MAX_INTEGER 127
+#define MIN_INTEGER -128
+#define MAX_BYTE    255
+#define MAX_STROKA  255
+#define IN_CODE_DELIMETR '|'
+
+using namespace std;
 
 namespace Lex {
 
-	bool checkBrace(unsigned char** word, int k);
+    bool checkBrace(unsigned char** word, int k) {
+        while (word[k] != NULL && word[k][0] == IN_CODE_DELIMETR) { k++; }
+        if (word[k] == NULL) return false;
+        if (word[k][0] == '}') return true;
+        return false;
+    }
 
-	int BinToInt(unsigned char* word) {
-		int length = _mbslen(word);
-		int sum = 0;
-		int p = 0;
-		for (int k = length - 1; k >= 2; k--) {
-			if (word[k] == '1') sum += (int)pow(2, p);
-			p++;
-		}
-		return sum;
-	}
+    int BinToInt(unsigned char* word) {
+        int sum = 0;
+        for (int i = 2; word[i] != '\0'; i++) sum = (sum << 1) + (word[i] - '0');
+        return sum;
+    }
 
-	int HexToInt(unsigned char* word) {
-		int length = _mbslen(word);
-		int sum = 0;
-		int p = 0;
-		for (int k = length - 1; k >= 2; k--) {
-			int digit = 0;
-			if (word[k] >= '0' && word[k] <= '9') digit = word[k] - '0';
-			else if (word[k] >= 'A' && word[k] <= 'F') digit = word[k] - 'A' + 10;
-			else if (word[k] >= 'a' && word[k] <= 'f') digit = word[k] - 'a' + 10;
-			sum += digit * (int)pow(16, p);
-			p++;
-		}
-		return sum;
-	}
+    int HexToInt(unsigned char* word) {
+        int sum = 0;
+        for (int i = 2; word[i] != '\0'; i++) {
+            int digit = 0;
+            unsigned char c = word[i];
+            if (c >= '0' && c <= '9') digit = c - '0';
+            else if (c >= 'A' && c <= 'F') digit = c - 'A' + 10;
+            else if (c >= 'a' && c <= 'f') digit = c - 'a' + 10;
+            sum = (sum << 4) + digit;
+        }
+        return sum;
+    }
 
-	LEX lexAnaliz(Log::LOG log, In::IN in)
-	{
-		LEX lex;
-		LT::LexTable lextable = LT::Create(LT_MAXSIZE);
-		IT::IdTable idtable = IT::Create(TI_MAXSIZE);
+    LEX lexAnaliz(Log::LOG log, In::IN in)
+    {
+        LEX lex;
+        lex.lextable = LT::Create(LT_MAXSIZE);
+        lex.idtable = IT::Create(TI_MAXSIZE);
 
-		int i = 0;
-		int line = 1;
-		int indexLex = 0;
-		int indexID = 0;
-		int countLit = 1;
-		int position = 0; // “ÂÍÛ˘‡ˇ ÔÓÁËˆËˇ ‚ ÒÚÓÍÂ
+        int line = 1;
+        int indexID = 0;
+        int countLit = 1;
+        int position = 0;
 
-		IT::Entry entryIT;
-		IT::Entry bufentry;
-		unsigned char emptystr[] = "";
+        // !!! ¬¿∆ÕŒ: »ÌËˆË‡ÎËÁ‡ˆËˇ ÌÛÎˇÏË, ˜ÚÓ·˚ ÌÂ ·˚ÎÓ "ÃÃÃÃ" !!!
+        IT::Entry entryIT = {};
+        IT::Entry bufentry = {};
+        LT::Entry entryLT = {};
 
-		bool findFunc = false;
-		bool findParm = false;
-		bool findSameID = false;
-		bool findReturn = false;
-		bool endif = false;
-		int Idx_Func_IT = 0;
-		int Parm_count_IT = 0;
-		int count_main = 0;
-		bool newindf = false;
-		bool errorssem = false;
+        char RegionPrefix[TI_STR_MAXSIZE] = { 0 };
+        char buferRegionPrefix[TI_STR_MAXSIZE] = { 0 };
+        char pastRegionPrefix[TI_STR_MAXSIZE] = { 0 };
+        char bufL[TI_STR_MAXSIZE] = { 0 };
+        char charCountLit[20] = { 0 };
+        char tempBuf[TI_STR_MAXSIZE] = { 0 };
 
-		unsigned char RegionPrefix[TI_STR_MAXSIZE] = { 0 };
-		unsigned char buferRegionPrefix[TI_STR_MAXSIZE] = { 0 };
-		unsigned char pastRegionPrefix[TI_STR_MAXSIZE] = { 0 };
-		unsigned char L[] = "L";
-		unsigned char bufL[TI_STR_MAXSIZE] = { 0 };
-		char charCountLit[20] = { 0 };
-		unsigned char nameLiteral[TI_STR_MAXSIZE] = { 0 };
-		unsigned char tempBuf[TI_STR_MAXSIZE] = { 0 };
+        bool findFunc = false;
+        bool findParm = false;
+        bool findReturn = false;
+        bool endif = false;
+        int Parm_count_IT = 0;
+        int Idx_Func_IT = 0;
+        int count_main = 0;
 
-		unsigned char** word = in.word;
+        // œÓ ÛÏÓÎ˜‡ÌË˛ INT, ÂÒÎË ‚‰Û„ Á‡·Û‰ÂÏ ÓÔÂ‰ÂÎËÚ¸
+        IT::IDDATATYPE currentType = IT::INT;
 
-		try {
-			for (i = 0; word[i] != NULL && word[i][0] != NULL; indexLex++, i++)
-			{
-				bool findSameID = false;
-				int wordLen = _mbslen(word[i]); // ƒÎËÌ‡ ÚÂÍÛ˘Â„Ó ÒÎÓ‚‡
+        unsigned char** word = in.word;
 
-				// Œ·‡·ÓÚÍ‡ ÔÂÂıÓ‰‡ Ì‡ ÌÓ‚Û˛ ÒÚÓÍÛ (ÒËÏ‚ÓÎ |)
-				if (word[i][0] == IN_CODE_DELIMETR) {
-					if (endif) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_ENDIF, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						endif = false;
-					}
-					line++;
-					position = 0; // —·‡Ò˚‚‡ÂÏ ÔÓÁËˆË˛ Ì‡ ÌÓ‚ÓÈ ÒÚÓÍÂ
-					indexLex--;
-					continue;
-				}
+        try {
+            for (int i = 0; word[i] != NULL && word[i][0] != '\0'; i++)
+            {
+                int wordLen = strlen((char*)word[i]);
+                bool findSameID = false;
 
-				// ============================================================
-				// —ÎÓÊÌ˚Â ÓÔÂ‡ÚÓ˚ (<<, ==, !=, ...)
-				// ============================================================
-				bool isComplexOp = false;
-				LT::operations opType = LT::operations::OEQ;
-				int priority = 2;
+                if (word[i][0] == IN_CODE_DELIMETR) {
+                    if (endif) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_ENDIF, LT_TI_NULLIDX, line));
+                        endif = false;
+                    }
+                    line++;
+                    position = 0;
+                    continue;
+                }
 
-				unsigned char first = word[i][0];
-				unsigned char second = (word[i + 1] != NULL && word[i + 1][0] != NULL) ? word[i + 1][0] : 0;
+                // —ÎÓÊÌ˚Â ÓÔÂ‡ÚÓ˚
+                bool isComplex = false;
+                LT::operations complexOp = LT::operations::OEQ;
+                int priority = 0;
+                unsigned char firstChar = word[i][0];
+                unsigned char secondChar = (word[i + 1] != NULL) ? word[i + 1][0] : 0;
+                if (wordLen == 1 && word[i + 1] != NULL && strlen((char*)word[i + 1]) == 1 && secondChar == '=') {
+                    if (firstChar == '<') { isComplex = true; complexOp = LT::operations::OLE; priority = 1; }
+                    else if (firstChar == '>') { isComplex = true; complexOp = LT::operations::OGE; priority = 1; }
+                    else if (firstChar == '=') { isComplex = true; complexOp = LT::operations::OEQ; priority = 1; }
+                    else if (firstChar == '!') { isComplex = true; complexOp = LT::operations::ONE; priority = 1; }
+                }
+                if (isComplex) {
+                    entryLT = LT::writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
+                    entryLT.op = complexOp; entryLT.priority = priority;
+                    LT::Add(lex.lextable, entryLT);
+                    char opName[3] = { (char)firstChar, (char)secondChar, '\0' };
+                    strcpy_s(entryIT.id, opName);
+                    entryIT.idxfirstLE = lex.lextable.size - 1; entryIT.idtype = IT::OP;
+                    IT::Add(lex.idtable, entryIT); entryIT = bufentry; i++; position += 2; continue;
+                }
 
-				if (word[i][1] == 0 && second != 0 && word[i + 1][1] == 0) {
-					if (first == '<' && second == '<') { isComplexOp = true; opType = LT::operations::OLESS; priority = 1; }
-					else if (first == '=' && second == '=') { isComplexOp = true; opType = LT::operations::OEQ; priority = 1; }
-					else if (first == '!' && second == '=') { isComplexOp = true; opType = LT::operations::ONE; priority = 1; }
-					else if (first == '>' && second == '=') { isComplexOp = true; opType = LT::operations::OGE; priority = 1; }
-					else if (first == '<' && second == '=') { isComplexOp = true; opType = LT::operations::OLE; priority = 1; }
-				}
+                // --- “»œ€ ƒ¿ÕÕ€’ ---
+                {
+                    FST::FST fst(word[i], FST_INTEGER); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_INTEGER, LT_TI_NULLIDX, line));
+                        currentType = IT::INT;
+                        position += wordLen; continue;
+                    }
+                }
+                {
+                    FST::FST fst(word[i], FST_TYPE_CHAR); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_CHAR, LT_TI_NULLIDX, line));
+                        currentType = IT::CHR;
+                        position += wordLen; continue;
+                    }
+                }
+                {
+                    FST::FST fst(word[i], FST_STRING); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_STRING, LT_TI_NULLIDX, line));
+                        currentType = IT::STR;
+                        position += wordLen; continue;
+                    }
+                }
+                {
+                    FST::FST fst(word[i], FST_VOID); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_VOID, LT_TI_NULLIDX, line));
+                        currentType = IT::VOI;
+                        position += wordLen; continue;
+                    }
+                }
 
-				if (isComplexOp) {
-					LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
-					entryLT.op = opType;
-					entryLT.priority = priority;
+                // ---  Àﬁ◊≈¬€≈ —ÀŒ¬¿ ---
+                {
+                    FST::FST fst(word[i], FST_MAIN); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_MAIN, LT_TI_NULLIDX, line));
+                        count_main++; findReturn = false; strcpy_s(pastRegionPrefix, RegionPrefix); RegionPrefix[0] = '\0'; position += wordLen; continue;
+                    }
+                }
+                {
+                    FST::FST fst(word[i], FST_FUNCTION); if (FST::execute(fst)) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_FUNCTION, LT_TI_NULLIDX, line));
+                        entryIT.idtype = IT::F; findFunc = true; findParm = true; Parm_count_IT = 0; position += wordLen; continue;
+                    }
+                }
+                { FST::FST fst(word[i], FST_RETURN); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_RETURN, LT_TI_NULLIDX, line)); findReturn = true; position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_COUT); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_COUT, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_SWITCH); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_SWITCH, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_CASE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_CASE, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_DEFAULT); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_DEFAULT, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_IF); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_IF, LT_TI_NULLIDX, line)); endif = true; position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_ELSE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_ELSE, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_TRUE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_TRUE, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST fst(word[i], FST_FALSE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_FALSE, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
 
-					unsigned char complexName[3];
-					complexName[0] = first;
-					complexName[1] = second;
-					complexName[2] = '\0';
-					_mbscpy(entryIT.id, complexName);
+                // --- »ƒ≈Õ“»‘» ¿“Œ–€ ---
+                FST::FST fstIdentif(word[i], FST_ID);
+                if (FST::execute(fstIdentif)) {
+                    if (wordLen > ID_MAXSIZE) throw ERROR_THROW_IN(202, line, position);
+                    const char* forbidden[] = { "eax", "ebx", "ecx", "edx", "esi", "edi", "esp", "ebp", "code", "data", "stack" };
+                    for (const char* bad : forbidden) {
+                        if (strcmp((char*)word[i], bad) == 0) throw ERROR_THROW(113);
+                    }
 
-					entryIT.idxfirstLE = indexLex;
-					entryIT.idtype = IT::OP;
-					IT::Add(idtable, entryIT);
-					LT::Add(lextable, entryLT);
+                    int idx = IT::IsId(lex.idtable, (char*)word[i]);
+                    if (idx == TI_NULLIDX && !findFunc) {
+                        strcpy_s(tempBuf, buferRegionPrefix); strcat_s(tempBuf, (char*)word[i]);
+                        idx = IT::IsId(lex.idtable, tempBuf);
+                    }
 
-					entryIT = bufentry;
-					i++; // œÓÔÛÒÍ‡ÂÏ ÒÎÂ‰Û˛˘ËÈ ÒËÏ‚ÓÎ
+                    if (idx != TI_NULLIDX) {
+                        LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_ID, idx, line));
+                        findFunc = false; position += wordLen; continue;
+                    }
 
-					// Œ·ÌÓ‚ÎˇÂÏ ÔÓÁËˆË˛ (2 ÒËÏ‚ÓÎ‡ + ‚ÓÁÏÓÊÌ˚È ÔÓ·ÂÎ)
-					position += 2;
-					continue;
-				}
+                    LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_ID, indexID++, line));
 
-				// --- “»œ€ ƒ¿ÕÕ€’ ---
-				{
-					FST::FST fstTypeInteger(word[i], FST_INTEGER);
-					if (FST::execute(fstTypeInteger)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_INTEGER, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						newindf = true;
-						entryIT.iddatatype = IT::INT;
-						position += wordLen; // !!! Œ¡ÕŒ¬À≈Õ»≈ œŒ«»÷»»
-						continue;
-					}
-				}
-				{
-					FST::FST fstTypeChar(word[i], FST_TYPE_CHAR);
-					if (FST::execute(fstTypeChar)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_CHAR, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						newindf = true;
-						entryIT.iddatatype = IT::CHR;
-						position += wordLen; // !!! Œ¡ÕŒ¬À≈Õ»≈ œŒ«»÷»»
-						continue;
-					}
-				}
-				{
-					FST::FST fstTypeVoid(word[i], FST_VOID);
-					if (FST::execute(fstTypeVoid)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_VOID, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						newindf = true;
-						entryIT.iddatatype = IT::VOI;
-						position += wordLen;
-						continue;
-					}
-				}
-				{
-					FST::FST fstTypeString(word[i], FST_STRING);
-					if (FST::execute(fstTypeString)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_STRING, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						newindf = true;
-						entryIT.iddatatype = IT::STR;
-						_mbscpy(entryIT.value.vstr.str, emptystr);
-						position += wordLen;
-						continue;
-					}
-				}
+                    entryIT.iddatatype = currentType;
 
-				// ---  Î˛˜Â‚˚Â ÒÎÓ‚‡ ---
-				{ FST::FST fstSwitch(word[i], FST_SWITCH); if (FST::execute(fstSwitch)) { LT::Entry entryLT = writeEntry(entryLT, LEX_SWITCH, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstCase(word[i], FST_CASE); if (FST::execute(fstCase)) { LT::Entry entryLT = writeEntry(entryLT, LEX_CASE, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstDefault(word[i], FST_DEFAULT); if (FST::execute(fstDefault)) { LT::Entry entryLT = writeEntry(entryLT, LEX_DEFAULT, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstCout(word[i], FST_COUT); if (FST::execute(fstCout)) { LT::Entry entryLT = writeEntry(entryLT, LEX_COUT, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstTrue(word[i], FST_TRUE); if (FST::execute(fstTrue)) { LT::Entry entryLT = writeEntry(entryLT, LEX_TRUE, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstFalse(word[i], FST_FALSE); if (FST::execute(fstFalse)) { LT::Entry entryLT = writeEntry(entryLT, LEX_FALSE, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
+                    if (findParm && !findFunc) {
+                        entryIT.idtype = IT::P;
+                        Parm_count_IT++;
+                        // !!! ¬¿∆ÕŒ:  Œœ»–”≈Ã »Ãﬂ œ¿–¿Ã≈“–¿ !!!
+                        strcpy_s(entryIT.id, (char*)word[i]);
+                    }
+                    else if (!findFunc) {
+                        entryIT.idtype = IT::V;
+                        if (RegionPrefix[0] != '\0') {
+                            strcpy_s(entryIT.id, RegionPrefix); strcat_s(entryIT.id, (char*)word[i]);
+                        }
+                        else {
+                            strcpy_s(entryIT.id, (char*)word[i]);
+                        }
+                    }
+                    else {
+                        entryIT.idtype = IT::F;
+                        strcpy_s(pastRegionPrefix, RegionPrefix);
+                        strcpy_s(RegionPrefix, (char*)word[i]);
+                        strcpy_s(buferRegionPrefix, (char*)word[i]);
+                        strcpy_s(entryIT.id, (char*)word[i]);
+                    }
 
-				// --- ‘ÛÌÍˆËË / Main ---
-				{
-					FST::FST fstFunction(word[i], FST_FUNCTION);
-					if (FST::execute(fstFunction)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_FUNCTION, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						entryIT.idtype = IT::F;
-						findFunc = true; findParm = true; Parm_count_IT = 0; Idx_Func_IT = 0; findReturn = false;
-						position += wordLen;
-						continue;
-					}
-				}
-				{
-					FST::FST fstReturn(word[i], FST_RETURN);
-					if (FST::execute(fstReturn)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_RETURN, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						findReturn = true;
-						position += wordLen;
-						continue;
-					}
-				}
-				{
-					FST::FST fstIf(word[i], FST_IF);
-					if (FST::execute(fstIf)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_IF, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						endif = true;
-						position += wordLen;
-						continue;
-					}
-				}
-				{
-					FST::FST fstMain(word[i], FST_MAIN);
-					if (FST::execute(fstMain)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_MAIN, LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						count_main++; findReturn = false;
-						_mbscpy(pastRegionPrefix, RegionPrefix);
-						_mbscpy(RegionPrefix, emptystr);
-						position += wordLen;
-						continue;
-					}
-				}
+                    entryIT.idxfirstLE = lex.lextable.size - 1;
+                    IT::Add(lex.idtable, entryIT);
+                    if (findFunc) Idx_Func_IT = lex.idtable.size - 1;
 
-				// --- »ƒ≈Õ“»‘» ¿“Œ–€ (ID) ---
-				FST::FST fstIdentif(word[i], FST_ID);
-				if (FST::execute(fstIdentif)) {
-					int length = _mbslen(word[i]);
-					if (length > ID_MAXSIZE) Log::WriteError(log, Error::geterrorin(202, line, position));
+                    entryIT = bufentry; // —·ÓÒ (ÚÂÔÂ¸ ˝ÚÓ ÌÛÎË!)
+                    findFunc = false;
+                    position += wordLen; continue;
+                }
 
-					// !!! «¿œ–≈“ —ÀŒ¬:  –¿—»¬€… ¬€¬Œƒ Œÿ»¡ » !!!
-					const char* forbidden[] = {
-						"c", "C", "eax", "ebx", "ecx", "edx", "esi", "edi", "esp", "ebp",
-						"code", "data", "const", "stack", "model", "end"
-					};
-					for (const char* bad : forbidden) {
-						if (strcmp((char*)word[i], bad) == 0) {
+                // ... À»“≈–¿À€ (Int, Hex, Bin, Str, Char) ...
+                // !!! ¬—“¿¬‹ —ﬁƒ¿  Œƒ À»“≈–¿ÀŒ¬ »« “¬Œ≈√Œ ‘¿…À¿ »À» ÃŒ≈√Œ œ–≈ƒ€ƒ”Ÿ≈√Œ Œ“¬≈“¿ !!!
+                // ◊ÚÓ·˚ ÌÂ Á‡„ÓÏÓÊ‰‡Ú¸ ÓÚ‚ÂÚ, ˇ ÒÍÓÔËÓ‚‡Î ÚÓÎ¸ÍÓ Ì‡˜‡ÎÓ ·ÎÓÍ‡.
+                // √Î‡‚ÌÓÂ - ËÒÔÓÎ¸ÁÛÈ fstInt, fstHex, fstBin, fstStr, fstCharLit
 
-							// 1. ‘ÓÏËÛÂÏ Í‡ÒË‚ÓÂ ÒÓÓ·˘ÂÌËÂ Ò ËÏÂÌÂÏ ÔÂÂÏÂÌÌÓÈ
-							char buf[ERROR_MAXSIZE_MESSAGE];
-							sprintf_s(buf, "ÀÂÍÒË˜ÂÒÍËÈ ‡Ì‡ÎËÁ‡ÚÓ: «‡ÔÂ˘ÂÌÌÓÂ ËÏˇ Ë‰ÂÌÚËÙËÍ‡ÚÓ‡ '%s'", word[i]);
+                FST::FST fstInt(word[i], FST_INTLIT);
+                if (FST::execute(fstInt)) {
+                    int value = atoi((char*)word[i]);
+                    bool isNegative = false;
+                    if (lex.lextable.size > 0) {
+                        LT::Entry prev = lex.lextable.table[lex.lextable.size - 1];
+                        if (prev.lexema == LEX_OPERATOR && prev.op == LT::OMINUS) {
+                            if (lex.lextable.size == 1) isNegative = true;
+                            else {
+                                unsigned char pp = lex.lextable.table[lex.lextable.size - 2].lexema;
+                                if (pp == LEX_EQUAL || pp == LEX_LEFTTHESIS || pp == LEX_RETURN || pp == LEX_COMMA || pp == LEX_TWOPOINT)
+                                    isNegative = true;
+                            }
+                        }
+                    }
+                    if (isNegative) { value = -value; lex.lextable.size--; }
+                    if (value > MAX_INTEGER || value < MIN_INTEGER) throw ERROR_THROW_IN(203, line, position);
 
-							// 2. —ÓÁ‰‡ÂÏ ÒÚÛÍÚÛÛ Ó¯Ë·ÍË ‚Û˜ÌÛ˛ (˜ÚÓ·˚ ‚ÒÚ‡‚ËÚ¸ Ò‚ÓÈ ÚÂÍÒÚ)
-							Error::ERROR err;
-							err.id = 204;
-							err.inext.line = line;
-							err.inext.col = position;
-							strcpy_s(err.message, buf);
+                    for (int k = 0; k < lex.idtable.size; k++) {
+                        if (lex.idtable.table[k].idtype == IT::L && lex.idtable.table[k].iddatatype == IT::INT && lex.idtable.table[k].value.vint == value && lex.idtable.table[k].numSys == 0) {
+                            LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, k, line)); findSameID = true; break;
+                        }
+                    }
+                    if (findSameID) { position += wordLen; continue; }
+                    LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line));
+                    entryIT.iddatatype = IT::INT; entryIT.idtype = IT::L; entryIT.value.vint = value; entryIT.numSys = 0;
+                    _itoa_s(countLit++, charCountLit, 20, 10); strcpy_s(bufL, "L"); strcat_s(bufL, charCountLit); strcpy_s(entryIT.id, bufL);
+                    IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue;
+                }
 
-							// 3. ¬˚‚Ó‰ËÏ ‚  ŒÕ—ŒÀ‹ (‚ ÒÚ‡Ì‰‡ÚÌÓÏ ÙÓÏ‡ÚÂ)
-							std::cout << "\nŒ¯Ë·Í‡ " << err.id << ": " << err.message
-								<< " ÒÚÓÍ‡ " << err.inext.line
-								<< " ÔÓÁËˆËˇ " << err.inext.col << std::endl;
+                // --- —ﬁƒ¿ ƒŒ¡¿¬‹ HEX, BIN, STRING, CHAR (Í‡Í ·˚ÎÓ ‚ ÔÓ¯ÎÓÏ ÍÓ‰Â) ---
+                FST::FST fstHex(word[i], FST_INT16LIT); if (FST::execute(fstHex)) { int value = HexToInt(word[i]); LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::INT; entryIT.idtype = IT::L; entryIT.value.vint = value; entryIT.numSys = 1; _itoa_s(countLit++, charCountLit, 20, 10); strcpy_s(bufL, "L"); strcat_s(bufL, charCountLit); strcpy_s(entryIT.id, bufL); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; }
+                FST::FST fstBin(word[i], FST_BINLIT); if (FST::execute(fstBin)) { int value = BinToInt(word[i]); LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::INT; entryIT.idtype = IT::L; entryIT.value.vint = value; entryIT.numSys = 2; _itoa_s(countLit++, charCountLit, 20, 10); strcpy_s(bufL, "L"); strcat_s(bufL, charCountLit); strcpy_s(entryIT.id, bufL); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; }
+                FST::FST fstStr(word[i], FST_STRLIT); if (FST::execute(fstStr)) { int len = strlen((char*)word[i]); for (int k = 0; k < len; k++) word[i][k] = word[i][k + 1]; word[i][len - 2] = '\0'; len -= 2; for (int k = 0; k < lex.idtable.size; k++) if (lex.idtable.table[k].idtype == IT::L && lex.idtable.table[k].iddatatype == IT::STR && strcmp(lex.idtable.table[k].value.vstr.str, (char*)word[i]) == 0) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, k, line)); findSameID = true; break; } if (findSameID) { position += wordLen + 2; continue; } LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::STR; entryIT.idtype = IT::L; entryIT.value.vstr.len = len; strcpy_s(entryIT.value.vstr.str, (char*)word[i]); _itoa_s(countLit++, charCountLit, 20, 10); strcpy_s(bufL, "L"); strcat_s(bufL, charCountLit); strcpy_s(entryIT.id, bufL); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen + 2; continue; }
+                FST::FST fstCharLit(word[i], FST_CHARLIT); if (FST::execute(fstCharLit)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::CHR; entryIT.idtype = IT::L; entryIT.value.vchar = word[i][1]; _itoa_s(countLit++, charCountLit, 20, 10); strcpy_s(bufL, "L"); strcat_s(bufL, charCountLit); strcpy_s(entryIT.id, bufL); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; }
 
-							// 4. œË¯ÂÏ ‚ ÀŒ√ (ÂÒÎË ÓÌ ÓÚÍ˚Ú)
-							if (log.stream) {
-								*log.stream << "\nŒ¯Ë·Í‡ " << err.id << ": " << err.message
-									<< " ÒÚÓÍ‡ " << err.inext.line
-									<< " ÔÓÁËˆËˇ " << err.inext.col << std::endl;
-							}
+                // --- Œœ≈–¿“Œ–€ Ë –¿«ƒ≈À»“≈À» (ÚÓÊÂ ÒÚ‡Ì‰‡ÚÌÓ) ---
+                FST::FST fstOp(word[i], FST_OPERATOR); if (FST::execute(fstOp)) { LT::Entry lt = LT::writeEntry(entryLT, LEX_OPERATOR, indexID++, line); unsigned char op = word[i][0]; switch (op) { case '+': lt.op = LT::operations::OPLUS; lt.priority = 2; break; case '-': lt.op = LT::operations::OMINUS; lt.priority = 2; break; case '*': lt.op = LT::operations::OMUL; lt.priority = 3; break; case '/': lt.op = LT::operations::ODIV; lt.priority = 3; break; case '%': lt.op = LT::operations::OMOD; lt.priority = 3; break; case '<': lt.op = LT::operations::OLESS; lt.priority = 1; break; case '>': lt.op = LT::operations::OMORE; lt.priority = 1; break; case '=': lt.lexema = LEX_EQUAL; break; } LT::Add(lex.lextable, lt); strcpy_s(entryIT.id, (char*)word[i]); entryIT.idxfirstLE = lex.lextable.size - 1; entryIT.idtype = IT::OP; IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; }
+                { FST::FST f(word[i], FST_SEMICOLON); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_SEMICOLON, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_COMMA); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_COMMA, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_LEFTBRACE); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LEFTBRACE, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_BRACELET); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_BRACELET, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_LEFTTHESIS); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LEFTTHESIS, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_RIGHTTHESIS); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_RIGHTTHESIS, LT_TI_NULLIDX, line)); if (findParm) { lex.idtable.table[Idx_Func_IT].parm = Parm_count_IT; findParm = false; Parm_count_IT = 0; Idx_Func_IT = 0; } position += wordLen; continue; } }
+                { FST::FST f(word[i], FST_TWOPOINT); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_TWOPOINT, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
 
-							// 5. œÂ˚‚‡ÂÏ ÍÓÏÔËÎˇˆË˛
-							throw Error::geterror(113);
-						}
-					}
-					// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-					int idx = IT::IsId(idtable, word[i]);
-					if (idx != TI_NULLIDX) {
-						LT::Entry entryLT = LT::writeEntry(entryLT, LEX_ID, idx, line);
-						LT::Add(lextable, entryLT);
-						findFunc = false;
-						position += wordLen;
-						continue;
-					}
-					if (!findFunc) {
-						_mbscpy(buferRegionPrefix, RegionPrefix);
-						memset(tempBuf, 0, TI_STR_MAXSIZE);
-						_mbscpy(tempBuf, buferRegionPrefix);
-						_mbscat(tempBuf, word[i]);
-
-						idx = IT::IsId(idtable, tempBuf);
-						if (idx != TI_NULLIDX) {
-							LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
-							LT::Add(lextable, entryLT);
-							position += wordLen;
-							continue;
-						}
-					}
-					LT::Entry entryLT = LT::writeEntry(entryLT, LEX_ID, indexID++, line);
-					LT::Add(lextable, entryLT);
-					if (findParm && !findFunc) {
-						entryIT.idtype = IT::P;
-						Parm_count_IT++;
-					}
-					else if (!findFunc) {
-						entryIT.idtype = IT::V;
-						if (entryIT.iddatatype == IT::INT) entryIT.value.vint = 0;
-						else if (entryIT.iddatatype == IT::STR) {
-							entryIT.value.vstr.len = 0;
-							memset(entryIT.value.vstr.str, 0, sizeof(char));
-						}
-					}
-					else {
-						_mbscpy(pastRegionPrefix, RegionPrefix);
-						_mbscpy(RegionPrefix, word[i]);
-					}
-					entryIT.idxfirstLE = indexLex;
-					_mbscpy(entryIT.id, word[i]);
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					if (findFunc) Idx_Func_IT = IT::IsId(idtable, word[i]);
-					newindf = false; findFunc = false;
-					position += wordLen;
-					continue;
-				}
-
-				// --- À»“≈–¿À€ (◊»—À¿) ---
-				FST::FST fstLiteralInt(word[i], FST_INTLIT);
-				if (FST::execute(fstLiteralInt)) {
-					int value = atoi((char*)word[i]);
-					if (value > 127 || value < -128) Log::WriteError(log, Error::geterrorin(203, line, position));
-
-					bool isNegative = false;
-					if (lextable.size > 0) {
-						LT::Entry prev = lextable.table[lextable.size - 1];
-						if (prev.lexema == LEX_OPERATOR && prev.op == LT::OMINUS) {
-							bool isUnary = false;
-							if (lextable.size == 1) isUnary = true;
-							else {
-								unsigned char prePrevLex = lextable.table[lextable.size - 2].lexema;
-								if (prePrevLex == LEX_EQUAL || prePrevLex == LEX_LEFTTHESIS ||
-									prePrevLex == LEX_COMMA || prePrevLex == LEX_RETURN || prePrevLex == LEX_TWOPOINT) {
-									isUnary = true;
-								}
-							}
-
-							if (isUnary) {
-								isNegative = true;
-								lextable.size--;
-								idtable.size--;
-								indexID--;
-							}
-						}
-					}
-
-					if (isNegative) value = -value;
-
-					for (int k = 0; k < idtable.size; k++) {
-						if (idtable.table[k].iddatatype == IT::INT && idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L) {
-							LT::Entry entryLT = LT::writeEntry(entryLT, LEX_LITERAL, k, line);
-							LT::Add(lextable, entryLT);
-							findSameID = true; break;
-						}
-					}
-					if (findSameID) { position += wordLen; continue; }
-					LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
-					LT::Add(lextable, entryLT);
-					entryIT.iddatatype = IT::INT;
-					entryIT.idtype = IT::L;
-
-					entryIT.value.vint = value;
-					entryIT.idxfirstLE = indexLex;
-
-					_itoa_s(countLit++, charCountLit, 20, 10);
-					_mbscpy(bufL, L);
-					_mbscat(bufL, (unsigned char*)charCountLit);
-					_mbscpy(entryIT.id, bufL);
-
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					position += wordLen;
-					continue;
-				}
-
-				// Binary
-				FST::FST fstLiteralBin(word[i], FST_BINLIT);
-				if (FST::execute(fstLiteralBin)) {
-					int value = BinToInt(word[i]);
-					if (value > 255) Log::WriteError(log, Error::geterrorin(203, line, position));
-					for (int k = 0; k < idtable.size; k++) {
-						if (idtable.table[k].iddatatype == IT::INT && idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L) {
-							LT::Entry entryLT = LT::writeEntry(entryLT, LEX_LITERAL, k, line);
-							LT::Add(lextable, entryLT);
-							findSameID = true; break;
-						}
-					}
-					if (findSameID) { position += wordLen; continue; }
-					LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
-					LT::Add(lextable, entryLT);
-					entryIT.iddatatype = IT::INT;
-					entryIT.nums = 2;
-					entryIT.idtype = IT::L;
-					entryIT.value.vint = value;
-					entryIT.idxfirstLE = indexLex;
-
-					_itoa_s(countLit++, charCountLit, 20, 10);
-					_mbscpy(bufL, L);
-					_mbscat(bufL, (unsigned char*)charCountLit);
-					_mbscpy(entryIT.id, bufL);
-
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					position += wordLen;
-					continue;
-				}
-
-				// Hex
-				FST::FST fstLiteralHex(word[i], FST_INT16LIT);
-				if (FST::execute(fstLiteralHex)) {
-					int value = HexToInt(word[i]);
-					if (value > 255) Log::WriteError(log, Error::geterrorin(203, line, position));
-					for (int k = 0; k < idtable.size; k++) {
-						if (idtable.table[k].iddatatype == IT::INT && idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L) {
-							LT::Entry entryLT = LT::writeEntry(entryLT, LEX_LITERAL, k, line);
-							LT::Add(lextable, entryLT);
-							findSameID = true; break;
-						}
-					}
-					if (findSameID) { position += wordLen; continue; }
-					LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
-					LT::Add(lextable, entryLT);
-					entryIT.iddatatype = IT::INT;
-					entryIT.nums = 16;
-					entryIT.idtype = IT::L;
-					entryIT.value.vint = value;
-					entryIT.idxfirstLE = indexLex;
-
-					_itoa_s(countLit++, charCountLit, 20, 10);
-					_mbscpy(bufL, L);
-					_mbscat(bufL, (unsigned char*)charCountLit);
-					_mbscpy(entryIT.id, bufL);
-
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					position += wordLen;
-					continue;
-				}
-
-				// Char
-				FST::FST fstLiteralChar(word[i], FST_CHARLIT);
-				if (FST::execute(fstLiteralChar)) {
-					char val = word[i][1];
-					LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
-					LT::Add(lextable, entryLT);
-					entryIT.iddatatype = IT::CHR;
-					entryIT.idtype = IT::L;
-					entryIT.value.vchar = val;
-					entryIT.idxfirstLE = indexLex;
-
-					_itoa_s(countLit++, charCountLit, 20, 10);
-					_mbscpy(bufL, L);
-					_mbscat(bufL, (unsigned char*)charCountLit);
-					_mbscpy(entryIT.id, bufL);
-
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					position += wordLen;
-					continue;
-				}
-
-				// String
-				FST::FST fstLiteralString(word[i], FST_STRLIT);
-				if (FST::execute(fstLiteralString)) {
-					int length = _mbslen(word[i]);
-					if (length > MAX_STROKA) {
-						Log::WriteError(log, Error::geterrorin(202, line, position));
-						throw  ERROR_THROW_IN(202, line, position);
-					}
-					// —‰‚Ë„ Í‡‚˚˜ÂÍ
-					for (int k = 0; k < length; k++) word[i][k] = word[i][k + 1];
-					word[i][length - 2] = 0;
-
-					for (int k = 0; k < idtable.size; k++) {
-						if (idtable.table[k].iddatatype == IT::IDDATATYPE::STR && !(_mbscmp(idtable.table[k].value.vstr.str, word[i]))) {
-							findSameID = true;
-							LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, k, line);
-							LT::Add(lextable, entryLT);
-							break;
-						}
-					}
-					if (findSameID) { position += wordLen; continue; }
-					LT::Entry entryLT = LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line);
-					LT::Add(lextable, entryLT);
-					entryIT.iddatatype = IT::STR;
-					entryIT.idtype = IT::L;
-					entryIT.value.vstr.len = length - 2;
-					_mbscpy(entryIT.value.vstr.str, word[i]);
-					entryIT.idxfirstLE = indexLex;
-
-					_itoa_s(countLit++, charCountLit, 20, 10);
-					_mbscpy(bufL, L);
-					_mbscat(bufL, (unsigned char*)charCountLit);
-					_mbscpy(entryIT.id, bufL);
-
-					IT::Add(idtable, entryIT);
-					entryIT = bufentry;
-					position += wordLen;
-					continue;
-				}
-
-				// --- Œœ≈–¿“Œ–€ ---
-				{
-					FST::FST fstOperator(word[i], FST_OPERATOR);
-					if (FST::execute(fstOperator))
-					{
-						LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
-						_mbscpy(entryIT.id, word[i]);
-						entryIT.idxfirstLE = indexLex;
-						entryIT.idtype = IT::OP;
-						IT::Add(idtable, entryIT);
-						entryIT = bufentry;
-						unsigned char first = word[i][0];
-
-						switch (first) {
-						case '>': entryLT.priority = 1; entryLT.op = LT::operations::OMORE; break;
-						case '<': entryLT.priority = 1; entryLT.op = LT::operations::OLESS; break;
-						case '+': entryLT.priority = 2; entryLT.op = LT::operations::OPLUS; break;
-						case '-': entryLT.priority = 2; entryLT.op = LT::operations::OMINUS; break;
-						case '/': entryLT.priority = 3; entryLT.op = LT::operations::ODIV; break;
-						case '*': entryLT.priority = 3; entryLT.op = LT::operations::OMUL; break;
-						case '%': entryLT.priority = 3; entryLT.op = LT::operations::OMOD; break;
-						case '=': entryLT.lexema = LEX_EQUAL; break;
-						}
-						LT::Add(lextable, entryLT);
-						position += wordLen;
-						continue;
-					}
-				}
-
-				// --- –¿«ƒ≈À»“≈À» ---
-				{ FST::FST fstSemicolon(word[i], FST_SEMICOLON); if (FST::execute(fstSemicolon)) { LT::Entry entryLT = writeEntry(entryLT, LEX_SEMICOLON, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstComma(word[i], FST_COMMA); if (FST::execute(fstComma)) { LT::Entry entryLT = writeEntry(entryLT, LEX_COMMA, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstLeftBrace(word[i], FST_LEFTBRACE); if (FST::execute(fstLeftBrace)) { LT::Entry entryLT = writeEntry(entryLT, LEX_LEFTBRACE, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstRightBrace(word[i], FST_BRACELET); if (FST::execute(fstRightBrace)) { LT::Entry entryLT = writeEntry(entryLT, LEX_BRACELET, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstLeftThesis(word[i], FST_LEFTTHESIS); if (FST::execute(fstLeftThesis)) { LT::Entry entryLT = writeEntry(entryLT, LEX_LEFTTHESIS, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-
-				{
-					FST::FST fstRightThesis(word[i], FST_RIGHTTHESIS);
-					if (FST::execute(fstRightThesis)) {
-						LT::Entry entryLT = writeEntry(entryLT, LEX_RIGHTTHESIS, LT_TI_NULLIDX, line);
-						if (findParm && word[i + 1] != NULL && word[i + 1][0] != LEX_LEFTBRACE &&
-							word[i + 2] != NULL && word[i + 2][0] != LEX_LEFTBRACE && !checkBrace(word, i + 1)) {
-							_mbscpy(RegionPrefix, pastRegionPrefix);
-						}
-						if (findParm) idtable.table[Idx_Func_IT].parm = Parm_count_IT;
-						findParm = false; Parm_count_IT = 0; Idx_Func_IT = 0;
-						LT::Add(lextable, entryLT);
-						position += wordLen;
-						continue;
-					}
-				}
-
-				{ FST::FST fstTwoPoint(word[i], FST_TWOPOINT); if (FST::execute(fstTwoPoint)) { LT::Entry entryLT = writeEntry(entryLT, LEX_TWOPOINT, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-				{ FST::FST fstEqual(word[i], FST_EQUAL); if (FST::execute(fstEqual)) { LT::Entry entryLT = writeEntry(entryLT, LEX_EQUAL, LT_TI_NULLIDX, line); LT::Add(lextable, entryLT); position += wordLen; continue; } }
-
-				{
-					FST::FST fstLitStr_1(word[i], FST_LITERALSTRING_1);
-					if (FST::execute(fstLitStr_1)) {
-						LT::Entry entryLT = writeEntry(entryLT, word[i][0], LT_TI_NULLIDX, line);
-						LT::Add(lextable, entryLT);
-						errorssem = true;
-						Log::WriteErrors(log, Error::geterrorin(311, line, position));
-						position += wordLen;
-						continue;
-					}
-				}
-
-				// ≈ÒÎË ÌË˜Â„Ó ÌÂ ÔÓ‰Ó¯ÎÓ
-				std::cout << "DEBUG: Œ¯Ë·Í‡ ‚ ÒÎÓ‚Â: [" << word[i] << "]" << std::endl;
-				Log::WriteError(log, Error::geterrorin(201, line, position));
-			};
-		}
-		catch (...) {
-			IT::Delete(idtable);
-			LT::Delete(lextable);
-			throw;
-		}
-
-		lex.idtable = idtable;
-		lex.lextable = lextable;
-		if (count_main > 1) { errorssem = true; Log::WriteErrors(log, Error::geterror(302)); }
-		if (count_main == 0) { errorssem = true; Log::WriteErrors(log, Error::geterror(301)); }
-		if (count_main == 1 && findReturn) {
-			IT::Delete(idtable); LT::Delete(lextable);
-			throw Error::geterror(601);
-		}
-		if (errorssem) {
-			IT::Delete(idtable); LT::Delete(lextable);
-			throw Error::geterror(113);
-		}
-		return lex;
-	}
-
-	bool checkBrace(unsigned char** word, int k)
-	{
-		while (word[k] != NULL && word[k][0] == IN_CODE_DELIMETR) { k++; }
-		if (word[k] == NULL) return 0;
-		if (word[k][0] == LEX_LEFTBRACE) return 1;
-		else return 0;
-	}
-
-	int getIndexInLT(LT::LexTable& lextable, int itTableIndex)
-	{
-		if (itTableIndex == TI_NULLIDX) return lextable.size;
-		for (int i = 0; i < lextable.size; i++)
-			if (itTableIndex == lextable.table[i].idxTI) return i;
-		return TI_NULLIDX;
-	}
+                cout << "DEBUG: Œ¯Ë·Í‡ 201. —ÎÓ‚Ó: " << word[i] << endl;
+                throw ERROR_THROW_IN(201, line, position);
+            }
+        }
+        catch (Error::ERROR e) { IT::Delete(lex.idtable); LT::Delete(lex.lextable); throw e; }
+        return lex;
+    }
 }
