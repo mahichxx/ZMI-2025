@@ -1,82 +1,87 @@
-integer function strtoint(string s) { return 0; }
-integer function stcmp(string s1, string s2) { return 0; }
+[ Standard Library Stubs ]
+byte proc strtoint(text s) { ret 0; }
+byte proc stcmp(text s1, text s2) { ret 0; }
 
-integer function power(integer base, integer exp) {
-    integer res;
-    integer nextExp;
+[ Recursive Power Function ]
+byte proc power(byte base, byte exp) {
+    byte res;
+    byte nextExp;
     
-    switch(exp) {
-        case 0: {
-            return 1;
+    check(exp) {
+        is 0: {
+            ret 1;
         }
-        default: {
+        else: {
             nextExp = exp - 1;
             res = base * power(base, nextExp);
-            return res;
+            ret res;
         }
     }
-    return 0;
+    ret 0;
 }
 
-integer function mixer(integer a, integer b, integer cc) {
-    integer res;
+[ Math Helper ]
+byte proc mixer(byte a, byte b, byte cc) {
+    byte res;
     res = (a + b) * cc;
-    return res;
+    ret res;
 }
 
-main {
-    string status;
-    integer val;
-    integer key;
-    integer result;
-    integer check;
+[ Entry Point: BOX instead of MAIN ]
+box {
+    text status;
+    byte val;
+    byte key;
+    byte result;
+    byte flag; [ Renamed variable 'check' -> 'flag' ]
 
-    cout < "=== HARDCORE TEST: START ===";
+    show < "=== STORAGE LANGUAGE TEST: START ===";
   
-    cout < "Check Strings: (OK); :OK:; ->OK";
+    show < "New Syntax Check: [ OK ]";
 
     val = 10;
     key = 2;
 
-    cout < "Test 1: Simple Overflow";
+    show < "Test 1: Simple Overflow";
     result = mixer(100, 28, 1);
-    cout < "100 + 28 = 128 -> Expect -128:";
-    cout < result;
+    show < "100 + 28 = 128 -> Expect -128:";
+    show < result;
 
-    cout < "Test 2: Multiplication Overflow";
+    show < "Test 2: Multiplication";
     result = mixer(10, 5, 10);
-    cout < "(10 + 5) * 10 = 150 -> Expect -106:";
-    cout < result;
+    show < "(10 + 5) * 10 = 150 -> Expect -106:";
+    show < result;
 
-    cout < "Test 3: Power Recursion (2^7)";
+    show < "Test 3: Recursion (2^7)";
     result = power(2, 7);
-    cout < "2^7 = 128 -> Expect -128:";
-    cout < result;
-    cout < "Test 4: Nested Switch";
-    check = 1;
+    show < "2^7 = 128 -> Expect -128:";
+    show < result;
+
+    show < "Test 4: Nested Check (Switch)";
+    flag = 1;
     
-    switch(check) {
-        case 0: {
-            cout < "Error: Case 0";
+    check(flag) {
+        is 0: {
+            show < "Error: Case 0";
         }
-        case 1: {
-            cout < "Layer 1: OK";
-            switch(val) {
-                case 10: {
-                    cout < "Layer 2: OK (Val is 10)";
+        is 1: {
+            show < "Layer 1: OK";
+            check(val) {
+                is 10: {
+                    show < "Layer 2: OK (Val is 10)";
                     result = power(2, 6);
-                    cout < "2^6 = 64 (Safe):";
-                    cout < result;
+                    show < "2^6 = 64 (Safe):";
+                    show < result;
                 }
-                default: {
-                    cout < "Error: Layer 2 Default";
+                else: {
+                    show < "Error: Layer 2 Default";
                 }
             }
         }
-        default: {
-            cout < "Error: Layer 1 Default";
+        else: {
+            show < "Error: Layer 1 Default";
         }
     }
 
-    cout < "=== HARDCORE TEST: END ===";
+    show < "=== STORAGE LANGUAGE TEST: END ===";
 }

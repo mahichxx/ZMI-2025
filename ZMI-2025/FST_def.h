@@ -1,30 +1,27 @@
 #pragma once
 #include <stddef.h>
-#pragma region auto
 
 // =========================================================
 //                 ТИПЫ ДАННЫХ
 // =========================================================
 
-#define FST_INTEGER 8,	\
-	FST::NODE(1, FST::RELATION('i', 1)),\
-	FST::NODE(1, FST::RELATION('n', 2)),\
+// integer -> byte
+#define FST_INTEGER 5,	\
+	FST::NODE(1, FST::RELATION('b', 1)),\
+	FST::NODE(1, FST::RELATION('y', 2)),\
 	FST::NODE(1, FST::RELATION('t', 3)),\
 	FST::NODE(1, FST::RELATION('e', 4)),\
-	FST::NODE(1, FST::RELATION('g', 5)),\
-	FST::NODE(1, FST::RELATION('e', 6)),\
-	FST::NODE(1, FST::RELATION('r', 7)),\
 	FST::NODE()
 
-#define FST_STRING 7,	\
-	FST::NODE(1, FST::RELATION('s', 1)),\
-	FST::NODE(1, FST::RELATION('t', 2)),\
-	FST::NODE(1, FST::RELATION('r', 3)),\
-	FST::NODE(1, FST::RELATION('i', 4)),\
-	FST::NODE(1, FST::RELATION('n', 5)),\
-	FST::NODE(1, FST::RELATION('g', 6)),\
+// string -> text
+#define FST_STRING 5,	\
+	FST::NODE(1, FST::RELATION('t', 1)),\
+	FST::NODE(1, FST::RELATION('e', 2)),\
+	FST::NODE(1, FST::RELATION('x', 3)),\
+	FST::NODE(1, FST::RELATION('t', 4)),\
 	FST::NODE()
 
+// char (оставим как есть, или можно сменить на sym)
 #define FST_TYPE_CHAR 5, \
 	FST::NODE(1, FST::RELATION('c', 1)),\
 	FST::NODE(1, FST::RELATION('h', 2)),\
@@ -32,6 +29,7 @@
 	FST::NODE(1, FST::RELATION('r', 4)),\
 	FST::NODE()
 
+// void (оставим как есть)
 #define FST_VOID 5,	\
 	FST::NODE(1, FST::RELATION('v', 1)),\
 	FST::NODE(1, FST::RELATION('o', 2)),\
@@ -43,64 +41,57 @@
 //                 КЛЮЧЕВЫЕ СЛОВА
 // =========================================================
 
-#define FST_MAIN 5,	\
-	FST::NODE(1, FST::RELATION('m', 1)),\
-	FST::NODE(1, FST::RELATION('a', 2)),\
-	FST::NODE(1, FST::RELATION('i', 3)),\
-	FST::NODE(1, FST::RELATION('n', 4)),\
+// main -> box
+#define FST_MAIN 4,	\
+	FST::NODE(1, FST::RELATION('b', 1)),\
+	FST::NODE(1, FST::RELATION('o', 2)),\
+	FST::NODE(1, FST::RELATION('x', 3)),\
 	FST::NODE()
 
-#define FST_FUNCTION 9,	\
-	FST::NODE(1, FST::RELATION('f', 1)),\
-	FST::NODE(1, FST::RELATION('u', 2)),\
-	FST::NODE(1, FST::RELATION('n', 3)),\
+// function -> proc
+#define FST_FUNCTION 5,	\
+	FST::NODE(1, FST::RELATION('p', 1)),\
+	FST::NODE(1, FST::RELATION('r', 2)),\
+	FST::NODE(1, FST::RELATION('o', 3)),\
 	FST::NODE(1, FST::RELATION('c', 4)),\
-	FST::NODE(1, FST::RELATION('t', 5)),\
-	FST::NODE(1, FST::RELATION('i', 6)),\
-	FST::NODE(1, FST::RELATION('o', 7)),\
-	FST::NODE(1, FST::RELATION('n', 8)),\
 	FST::NODE()
 
-#define FST_RETURN 7,	\
+// return -> ret
+#define FST_RETURN 4,	\
 	FST::NODE(1, FST::RELATION('r', 1)),\
 	FST::NODE(1, FST::RELATION('e', 2)),\
 	FST::NODE(1, FST::RELATION('t', 3)),\
-	FST::NODE(1, FST::RELATION('u', 4)),\
-	FST::NODE(1, FST::RELATION('r', 5)),\
-	FST::NODE(1, FST::RELATION('n', 6)),\
 	FST::NODE()
 
-#define FST_SWITCH 7, \
-    FST::NODE(1, FST::RELATION('s', 1)), \
-    FST::NODE(1, FST::RELATION('w', 2)), \
-    FST::NODE(1, FST::RELATION('i', 3)), \
-    FST::NODE(1, FST::RELATION('t', 4)), \
-    FST::NODE(1, FST::RELATION('c', 5)), \
-    FST::NODE(1, FST::RELATION('h', 6)), \
+// switch -> check
+#define FST_SWITCH 6, \
+    FST::NODE(1, FST::RELATION('c', 1)), \
+    FST::NODE(1, FST::RELATION('h', 2)), \
+    FST::NODE(1, FST::RELATION('e', 3)), \
+    FST::NODE(1, FST::RELATION('c', 4)), \
+    FST::NODE(1, FST::RELATION('k', 5)), \
     FST::NODE()
 
-#define FST_CASE 5, \
-    FST::NODE(1, FST::RELATION('c', 1)), \
-    FST::NODE(1, FST::RELATION('a', 2)), \
+// case -> is
+#define FST_CASE 3, \
+    FST::NODE(1, FST::RELATION('i', 1)), \
+    FST::NODE(1, FST::RELATION('s', 2)), \
+    FST::NODE()
+
+// default -> else
+#define FST_DEFAULT 5, \
+    FST::NODE(1, FST::RELATION('e', 1)), \
+    FST::NODE(1, FST::RELATION('l', 2)), \
     FST::NODE(1, FST::RELATION('s', 3)), \
     FST::NODE(1, FST::RELATION('e', 4)), \
     FST::NODE()
 
-#define FST_DEFAULT 8, \
-    FST::NODE(1, FST::RELATION('d', 1)), \
-    FST::NODE(1, FST::RELATION('e', 2)), \
-    FST::NODE(1, FST::RELATION('f', 3)), \
-    FST::NODE(1, FST::RELATION('a', 4)), \
-    FST::NODE(1, FST::RELATION('u', 5)), \
-    FST::NODE(1, FST::RELATION('l', 6)), \
-    FST::NODE(1, FST::RELATION('t', 7)), \
-    FST::NODE()
-
+// cout -> show
 #define FST_COUT 5, \
-    FST::NODE(1, FST::RELATION('c', 1)), \
-    FST::NODE(1, FST::RELATION('o', 2)), \
-    FST::NODE(1, FST::RELATION('u', 3)), \
-    FST::NODE(1, FST::RELATION('t', 4)), \
+    FST::NODE(1, FST::RELATION('s', 1)), \
+    FST::NODE(1, FST::RELATION('h', 2)), \
+    FST::NODE(1, FST::RELATION('o', 3)), \
+    FST::NODE(1, FST::RELATION('w', 4)), \
     FST::NODE()
 
 #define FST_TRUE 5, \
@@ -118,11 +109,19 @@
     FST::NODE(1, FST::RELATION('e', 5)), \
     FST::NODE()
 
+// if, else (для if) - оставим, чтобы не было ошибок компиляции, 
+// но так как мы используем слово 'else' для default, тут может быть конфликт имен макросов.
+// Но в Lex.cpp мы проверяем автоматы по очереди.
 #define FST_IF 3, \
 	FST::NODE(1, FST::RELATION('i', 1)), \
 	FST::NODE(1, FST::RELATION('f', 2)), \
 	FST::NODE()
 
+// Этот макрос для 'else' (как часть if) теперь совпадает с FST_DEFAULT (else как часть check).
+// Это нормально, они будут генерировать разные токены в зависимости от того, какой автомат сработает первым.
+// В Lex.cpp FST_DEFAULT проверяется раньше (или позже), но лексема будет одна - слово "else".
+// Мы настроим так, чтобы слово "else" всегда давало токен LEX_DEFAULT ('d'), 
+// а так как мы убрали поддержку IF из грамматики, это идеально нам подходит.
 #define FST_ELSE 5, \
 	FST::NODE(1, FST::RELATION('e', 1)), \
 	FST::NODE(1, FST::RELATION('l', 2)), \
@@ -131,10 +130,9 @@
 	FST::NODE()
 
 // =========================================================
-//                 ЛИТЕРАЛЫ
+//                 ЛИТЕРАЛЫ (Без изменений)
 // =========================================================
 
-// Decimal (123)
 #define FST_INTLIT 2,	\
 	FST::NODE(20,	\
 	FST::RELATION('1', 0), FST::RELATION('2', 0), FST::RELATION('3', 0), FST::RELATION('4', 0), FST::RELATION('5', 0), FST::RELATION('6', 0),\
@@ -144,14 +142,12 @@
 	FST::RELATION('7', 1), FST::RELATION('8', 1), FST::RELATION('9', 1), FST::RELATION('0', 1)),\
 	FST::NODE()
 
-// Binary (0b101) - ИСПРАВЛЕНО
 #define FST_BINLIT 4, \
     FST::NODE(1, FST::RELATION('0', 1)), \
     FST::NODE(1, FST::RELATION('b', 2)), \
     FST::NODE(4, FST::RELATION('0', 2), FST::RELATION('1', 2), FST::RELATION('0', 3), FST::RELATION('1', 3)), \
     FST::NODE()
 
-// Hex (0x1A)
 #define FST_INT16LIT 4,	\
 	FST::NODE(1, FST::RELATION('0', 1)),\
 	FST::NODE(1, FST::RELATION('x', 2)),\
@@ -160,14 +156,12 @@
 	FST::RELATION('1', 2), FST::RELATION('2', 2), FST::RELATION('3', 2), FST::RELATION('4', 2), FST::RELATION('5', 2), FST::RELATION('6', 2),\
 	FST::RELATION('7', 2), FST::RELATION('8', 2), FST::RELATION('9', 2), FST::RELATION('0', 2),\
 	FST::RELATION('a', 2), FST::RELATION('b', 2), FST::RELATION('c', 2), FST::RELATION('d', 2), FST::RELATION('e', 2), FST::RELATION('f', 2),\
-    /* Переход в финальное состояние (3) */ \
     FST::RELATION('A', 3), FST::RELATION('B', 3), FST::RELATION('C', 3), FST::RELATION('D', 3), FST::RELATION('E', 3), FST::RELATION('F', 3),\
 	FST::RELATION('1', 3), FST::RELATION('2', 3), FST::RELATION('3', 3), FST::RELATION('4', 3), FST::RELATION('5', 3), FST::RELATION('6', 3),\
 	FST::RELATION('7', 3), FST::RELATION('8', 3), FST::RELATION('9', 3), FST::RELATION('0', 3),\
 	FST::RELATION('a', 3), FST::RELATION('b', 3), FST::RELATION('c', 3), FST::RELATION('d', 3), FST::RELATION('e', 3), FST::RELATION('f', 3)),\
 	FST::NODE()
 
-// Char literal ('a')
 #define FST_CHARLIT 4, \
     FST::NODE(1, FST::RELATION('\'', 1)), \
     FST::NODE(256, \
@@ -189,7 +183,6 @@
     FST::NODE(1, FST::RELATION('\'', 3)), \
     FST::NODE()
 
-// String literal
 #define FST_STRLIT 3,	\
 	FST::NODE(1, FST::RELATION('"', 1)),\
 	FST::NODE(96,	\
@@ -307,7 +300,6 @@
                  FST::RELATION('%', 1), FST::RELATION('<', 1), FST::RELATION('>', 1), FST::RELATION('=', 1), FST::RELATION('!', 1)), \
 	FST::NODE()
 
-// Убрали < и > отсюда, чтобы не было конфликтов
 #define FST_LOGOPERATOR 2,  \
 	FST::NODE(2, FST::RELATION('!', 1), FST::RELATION('~', 1)), \
 	FST::NODE()
@@ -356,5 +348,3 @@
 #define FST_EXCL FST_OPERATOR
 #define FST_TILDA FST_OPERATOR
 #define FST_ROOF FST_OPERATOR
-
-#pragma endregion

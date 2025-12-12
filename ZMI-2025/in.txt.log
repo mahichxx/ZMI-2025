@@ -1,6 +1,6 @@
 
 ---------------Протокол-----------------
- ------12.12.25 00:13:50-----
+ ------12.12.25 11:42:34-----
   
  ---- Параметры ---- 
 
@@ -9,9 +9,9 @@
 -log: in.txt.log
 
 
-Всего символов: 1864
+Всего символов: 1758
 
-Всего строк: 81
+Всего строк: 86
 
 Пропущено: 0
 
@@ -23,21 +23,21 @@
 _____Литерал___________________________________________
 L1              | int(1)     | 0                | 0
 L2              | int(1)     | 0                | 1
-L3              | string     | 0                | === HARDCORE TEST: START ...
-L4              | string     | 0                | Check Strings: (OK); :OK:...
+L3              | string     | 0                | === STORAGE LANGUAGE TEST...
+L4              | string     | 0                | [24]New Syntax Check: [ OK ]
 L5              | int(1)     | 0                | 10
 L6              | int(1)     | 0                | 2
 L7              | string     | 0                | [23]Test 1: Simple Overflow
 L8              | int(1)     | 0                | 100
 L9              | int(1)     | 0                | 28
 L10             | string     | 0                | 100 + 28 = 128 -> Expect ...
-L11             | string     | 0                | Test 2: Multiplication Ov...
+L11             | string     | 0                | [22]Test 2: Multiplication
 L12             | int(1)     | 0                | 5
 L13             | string     | 0                | (10 + 5) * 10 = 150 -> Ex...
-L14             | string     | 0                | Test 3: Power Recursion (...
+L14             | string     | 0                | [23]Test 3: Recursion (2^7)
 L15             | int(1)     | 0                | 7
 L16             | string     | 0                | [25]2^7 = 128 -> Expect -128:
-L17             | string     | 0                | [21]Test 4: Nested Switch
+L17             | string     | 0                | Test 4: Nested Check (Swi...
 L18             | string     | 0                | [13]Error: Case 0
 L19             | string     | 0                | [11]Layer 1: OK
 L20             | string     | 0                | [23]Layer 2: OK (Val is 10)
@@ -45,7 +45,7 @@ L21             | int(1)     | 0                | 6
 L22             | string     | 0                | [16]2^6 = 64 (Safe):
 L23             | string     | 0                | [22]Error: Layer 2 Default
 L24             | string     | 0                | [22]Error: Layer 1 Default
-L25             | string     | 0                | === HARDCORE TEST: END ==...
+L25             | string     | 0                | === STORAGE LANGUAGE TEST...
 _____Переменная___________________________________________
 powerres        | int(1)     | 39               | -
 powernextExp    | int(1)     | 42               | -
@@ -54,7 +54,7 @@ status          | string     | 120              | -
 val             | int(1)     | 123              | -
 key             | int(1)     | 126              | -
 result          | int(1)     | 129              | -
-check           | int(1)     | 132              | -
+flag            | int(1)     | 132              | -
 _____Параметр___________________________________________
 s               | string     | 5                | -
 s1              | string     | 17               | -

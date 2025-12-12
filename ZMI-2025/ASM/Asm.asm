@@ -18,21 +18,21 @@ stcmp PROTO :DWORD, :DWORD
 .const
 	L2	sdword 0
 	L11	sdword 1
-	L30	db '=== HARDCORE TEST: START ===', 0
-	L32	db 'Check Strings: (OK); :OK:; ->OK', 0
+	L30	db '=== STORAGE LANGUAGE TEST: START ===', 0
+	L32	db 'New Syntax Check: [ OK ]', 0
 	L34	sdword 10
 	L36	sdword 2
 	L38	db 'Test 1: Simple Overflow', 0
 	L40	sdword 100
 	L41	sdword 28
 	L43	db '100 + 28 = 128 -> Expect -128:', 0
-	L46	db 'Test 2: Multiplication Overflow', 0
+	L46	db 'Test 2: Multiplication', 0
 	L48	sdword 5
 	L50	db '(10 + 5) * 10 = 150 -> Expect -106:', 0
-	L53	db 'Test 3: Power Recursion (2^7)', 0
+	L53	db 'Test 3: Recursion (2^7)', 0
 	L55	sdword 7
 	L57	db '2^7 = 128 -> Expect -128:', 0
-	L60	db 'Test 4: Nested Switch', 0
+	L60	db 'Test 4: Nested Check (Switch)', 0
 	L63	db 'Error: Case 0', 0
 	L65	db 'Layer 1: OK', 0
 	L67	db 'Layer 2: OK (Val is 10)', 0
@@ -40,7 +40,7 @@ stcmp PROTO :DWORD, :DWORD
 	L71	db '2^6 = 64 (Safe):', 0
 	L74	db 'Error: Layer 2 Default', 0
 	L76	db 'Error: Layer 1 Default', 0
-	L78	db '=== HARDCORE TEST: END ===', 0
+	L78	db '=== STORAGE LANGUAGE TEST: END ===', 0
 .data
 	switch_val dd 0
 	powerres	sbyte 0
@@ -50,7 +50,7 @@ stcmp PROTO :DWORD, :DWORD
 	val	sbyte 0
 	key	sbyte 0
 	result	sbyte 0
-	check	sbyte 0
+	flag	sbyte 0
 .code
 power PROC, base :DWORD, exp :DWORD
 	movsx eax, powerres
@@ -130,7 +130,7 @@ main PROC
 	push eax
 	movsx eax, result
 	push eax
-	movsx eax, check
+	movsx eax, flag
 	push eax
 	push offset L30
 	pop eax
@@ -213,14 +213,14 @@ main PROC
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, check
+	movsx eax, flag
 	push eax
 	pop eax
-	mov check, al
+	mov flag, al
 	push 1
 	pop eax
 	mov switch_val, eax
-	movsx eax, check
+	movsx eax, flag
 	push eax
 	mov eax, switch_val
 	cmp eax, 0

@@ -19,11 +19,10 @@ namespace In
 
 		in.word = new unsigned char* [IN_MAX_WORDS];
 		for (int i = 0; i < IN_MAX_WORDS; i++)
-			// calloc или {0} гарантирует нули, но при перезаписи надо быть аккуратным
 			in.word[i] = new unsigned char[256] {0};
 
-		int st = 0;
-		int cl = 0;
+		int st = 0; // индекс слова
+		int cl = 0; // индекс символа в слове
 
 		unsigned char* text = new unsigned char[IN_MAX_LEN_TEXT];
 		memset(text, 0, IN_MAX_LEN_TEXT);
@@ -37,11 +36,39 @@ namespace In
 		if (fileSize > IN_MAX_LEN_TEXT) throw ERROR_THROW(113);
 
 		unsigned char quoteChar = 0;
+		bool inComment = false; // Флаг: находимся ли мы внутри комментария [ ... ]
 
 		char c;
 		while (in.size < IN_MAX_LEN_TEXT && fin.get(c))
 		{
 			unsigned char x = (unsigned char)c;
+
+			// 1. Обработка начала комментария '['
+			// Если мы не в строке и не в комментарии
+			if (!inComment && quoteChar == 0 && x == '[') {
+				inComment = true;
+				continue; // Пропускаем сам символ '['
+			}
+
+			// 2. Обработка конца комментария ']'
+			if (inComment && x == ']') {
+				inComment = false;
+				// Заменяем комментарий на пробел, чтобы слова не склеились
+				// Например: word[comment]word -> word word
+				if (in.word[st][0] != 0) {
+					in.word[st][cl] = 0; st++; cl = 0;
+				}
+				continue; // Пропускаем символ ']'
+			}
+
+			// 3. Если мы внутри комментария — ИГНОРИРУЕМ ВСЁ
+			if (inComment) {
+				// Можно считать переносы строк внутри комментов, чтобы не сбивался счетчик строк
+				if (x == IN_CODE_ENDL) in.lines++;
+				continue;
+			}
+
+			// --- Дальше стандартная логика (если не в комментарии) ---
 
 			if (x == IN_CODE_ENDL)
 			{
@@ -49,12 +76,10 @@ namespace In
 				col = 0;
 				quoteChar = 0;
 				if (in.word[st][0] != 0) {
-					in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-					st++; cl = 0;
+					in.word[st][cl] = 0; st++; cl = 0;
 				}
 				in.word[st][cl++] = '|';
-				in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-				st++; cl = 0;
+				in.word[st][cl] = 0; st++; cl = 0;
 				text[in.size++] = x;
 				continue;
 			}
@@ -69,20 +94,18 @@ namespace In
 			else if (type == in.I) {
 				in.ignor++;
 			}
-			else if (type == in.P) {
+			else if (type == in.P) { // Кавычки
 				if (quoteChar == 0) {
 					quoteChar = x;
 					if (in.word[st][0] != 0) {
-						in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-						st++; cl = 0;
+						in.word[st][cl] = 0; st++; cl = 0;
 					}
 					in.word[st][cl++] = x;
 				}
 				else {
 					if (quoteChar == x) {
 						if (cl < 255) in.word[st][cl++] = x;
-						in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-						st++; cl = 0;
+						in.word[st][cl] = 0; st++; cl = 0;
 						quoteChar = 0;
 					}
 					else {
@@ -91,19 +114,18 @@ namespace In
 				}
 				text[in.size++] = x; col++;
 			}
-			else if (type == in.S) {
+			else if (type == in.S) { // Пробелы
 				if (quoteChar != 0) {
 					if (cl < 255) in.word[st][cl++] = x;
 				}
 				else {
 					if (in.word[st][0] != 0) {
-						in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-						st++; cl = 0;
+						in.word[st][cl] = 0; st++; cl = 0;
 					}
 				}
 				text[in.size++] = x; col++;
 			}
-			else {
+			else { // Обычные символы
 				if (quoteChar != 0) {
 					if (cl < 255) in.word[st][cl++] = x;
 				}
@@ -111,15 +133,12 @@ namespace In
 					if (type == in.T) {
 						if (cl < 255) in.word[st][cl++] = x;
 					}
-
 					else {
 						if (in.word[st][0] != 0) {
-							in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-							st++; cl = 0;
+							in.word[st][cl] = 0; st++; cl = 0;
 						}
 						in.word[st][cl++] = x;
-						in.word[st][cl] = 0; // !!! ЗАВЕРШАЮЩИЙ НОЛЬ !!!
-						st++; cl = 0;
+						in.word[st][cl] = 0; st++; cl = 0;
 					}
 				}
 				text[in.size++] = x; col++;
