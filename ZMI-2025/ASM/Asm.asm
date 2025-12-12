@@ -13,277 +13,212 @@ outstr PROTO :DWORD
 newline PROTO
 strtoint PROTO :DWORD
 stcmp PROTO :DWORD, :DWORD
+strle PROTO :DWORD
+mabs PROTO :SDWORD
+rnd PROTO :SDWORD
 
 .stack 4096
 .const
 	L2	sdword 0
-	L11	sdword 1
-	L25	db 'Привет мир!', 0
-	L32	db '=== STORAGE LANGUAGE TEST: START ===', 0
-	L34	db 'New Syntax Check: [ OK ]', 0
-	L36	sdword 10
-	L38	sdword 2
-	L40	db 'Test 1: Simple Overflow', 0
-	L42	sdword 100
-	L43	sdword 28
-	L45	db '100 + 28 = 128 -> Expect -128:', 0
-	L48	db 'Test 2: Multiplication', 0
-	L50	sdword 5
-	L52	db '(10 + 5) * 10 = 150 -> Expect -106:', 0
-	L55	db 'Test 3: Recursion (2^7)', 0
-	L57	sdword 7
-	L59	db '2^7 = 128 -> Expect -128:', 0
-	L62	db 'Test 4: Nested Check (Switch)', 0
-	L65	db 'Error: Case 0', 0
-	L67	db 'Layer 1: OK', 0
-	L69	db 'Layer 2: OK (Val is 10)', 0
-	L71	sdword 6
-	L73	db '2^6 = 64 (Safe):', 0
-	L76	db 'Error: Layer 2 Default', 0
-	L78	db 'Error: Layer 1 Default', 0
-	L80	db '=== STORAGE LANGUAGE TEST: END ===', 0
+	L26	db '=== START FINAL TEST ===', 0
+	L29	db 'Проверка кириллицы: Успешно!', 0
+	L32	db '--- Testing Libraries ---', 0
+	L35	db 'Length of welcome string (expect 24):', 0
+	L39	sdword -120
+	L42	db 'Abs(-120) result:', 0
+	L45	sdword 10
+	L47	db 'Random value (0-9):', 0
+	L50	db '--- Math Test ---', 0
+	L52	sdword 50
+	L54	db '50 + 50 = ', 0
+	L57	sdword 100
+	L58	sdword 30
+	L60	db '100 + 30 (Overflow check):', 0
+	L63	db '--- Logic Test (Switch) ---', 0
+	L65	sdword 1
+	L67	db 'Branch 0 (Skipped)', 0
+	L69	db 'Branch 1 (Selected)', 0
+	L71	db 'Jackpot! Random is 0', 0
+	L73	db 'Random is not 0', 0
+	L75	db 'Default Branch', 0
+	L77	db '=== TEST COMPLETE ===', 0
 .data
 	switch_val dd 0
-	powerres	sbyte 0
-	powernextExp	sbyte 0
-	mixerres	sbyte 0
-	status	dd 0
-	val	sbyte 0
-	key	sbyte 0
-	result	sbyte 0
-	flag	sbyte 0
+	addersum	sbyte 0
+	welcome	dd 0
+	russianPhrase	dd 0
+	number	sbyte 0
+	lenVal	sbyte 0
+	randomVal	sbyte 0
+	selector	sbyte 0
+	calcResult	sbyte 0
 .code
-power PROC, base :DWORD, exp :DWORD
-	movsx eax, powerres
-	push eax
-	movsx eax, powernextExp
-	push eax
-	pop eax
-	mov switch_val, eax
-	push exp
-	mov eax, switch_val
-	cmp eax, 0
-	jne sw_44_next_0
-	pop eax
-	ret
-	push 1
-	jmp sw_44_end
-sw_44_next_0:
-	movsx eax, powernextExp
-	push eax
-	pop eax
-	mov powernextExp, al
-	push exp
-	push 1
-	pop ebx
-	pop eax
-	sub eax, ebx
-	push eax
-	movsx eax, powerres
-	push eax
-	pop eax
-	mov powerres, al
-	push base
-	push base
-	movsx eax, powernextExp
-	push eax
-	pop ebx
-	pop eax
-	imul eax, ebx
-	push eax
-	pop eax
-	ret
-	movsx eax, powerres
-	push eax
-sw_44_end:
-	pop eax
-	ret
-	push 0
-power ENDP
-mixer PROC, a :DWORD, b :DWORD, cc :DWORD
-	movsx eax, mixerres
-	push eax
-	movsx eax, mixerres
-	push eax
-	pop eax
-	mov mixerres, al
+adder PROC, a :DWORD, b :DWORD
 	push a
 	push b
 	pop ebx
 	pop eax
 	add eax, ebx
 	push eax
-	push cc
-	pop ebx
 	pop eax
-	imul eax, ebx
-	push eax
+	mov addersum, al
 	pop eax
 	ret
-	movsx eax, mixerres
+	movsx eax, addersum
 	push eax
-mixer ENDP
+adder ENDP
 main PROC
-	push offset L25
+	push offset L26
+	pop eax
+	mov welcome, eax
+	push welcome
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	push status
-	movsx eax, val
-	push eax
-	movsx eax, key
-	push eax
-	movsx eax, result
-	push eax
-	movsx eax, flag
-	push eax
+	push offset L29
+	pop eax
+	mov russianPhrase, eax
+	push russianPhrase
+	pop eax
+	invoke outstr, eax
+	invoke newline
 	push offset L32
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	push offset L34
+	push welcome
+	call strle
+	push eax
+	pop eax
+	mov lenVal, al
+	push offset L35
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, val
+	movsx eax, lenVal
 	push eax
 	pop eax
-	mov val, al
+	invoke outnum, eax
+	invoke newline
+	push -120
+	pop eax
+	mov number, al
+	movsx eax, number
+	push eax
+	call mabs
+	push eax
+	pop eax
+	mov number, al
+	push offset L42
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	movsx eax, number
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
 	push 10
-	movsx eax, key
+	call rnd
 	push eax
 	pop eax
-	mov key, al
-	push 2
-	push offset L40
+	mov randomVal, al
+	push offset L47
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, result
+	movsx eax, randomVal
 	push eax
 	pop eax
-	mov result, al
+	invoke outnum, eax
+	invoke newline
+	push offset L50
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	push 50
+	push 50
+	call adder
+	push eax
+	pop eax
+	mov calcResult, al
+	push offset L54
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	movsx eax, calcResult
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
 	push 100
-	push 28
+	push 30
+	call adder
+	push eax
+	pop eax
+	mov calcResult, al
+	push offset L60
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	movsx eax, calcResult
+	push eax
+	pop eax
+	invoke outnum, eax
+	invoke newline
+	push offset L63
+	pop eax
+	invoke outstr, eax
+	invoke newline
 	push 1
-	push offset L45
 	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, result
+	mov selector, al
+	movsx eax, selector
 	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L48
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, result
-	push eax
-	pop eax
-	mov result, al
-	push 10
-	push 5
-	push 10
-	push offset L52
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, result
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L55
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, result
-	push eax
-	pop eax
-	mov result, al
-	push 2
-	push 7
-	push offset L59
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, result
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	push offset L62
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	movsx eax, flag
-	push eax
-	pop eax
-	mov flag, al
-	push 1
 	pop eax
 	mov switch_val, eax
-	movsx eax, flag
-	push eax
 	mov eax, switch_val
 	cmp eax, 0
-	jne sw_229_next_0
-	push offset L65
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	jmp sw_229_end
-sw_229_next_0:
-	mov eax, switch_val
-	cmp eax, 1
-	jne sw_229_next_1
+	jne sw_225_next_0
 	push offset L67
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	pop eax
-	mov switch_val, eax
-	movsx eax, val
-	push eax
+	jmp sw_225_end
+sw_225_next_0:
 	mov eax, switch_val
-	cmp eax, 10
-	jne sw_251_next_10
+	cmp eax, 1
+	jne sw_225_next_1
 	push offset L69
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, result
+	movsx eax, randomVal
 	push eax
 	pop eax
-	mov result, al
-	push 2
-	push 6
+	mov switch_val, eax
+	mov eax, switch_val
+	cmp eax, 0
+	jne sw_247_next_0
+	push offset L71
+	pop eax
+	invoke outstr, eax
+	invoke newline
+	jmp sw_247_end
+sw_247_next_0:
 	push offset L73
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, result
-	push eax
-	pop eax
-	invoke outnum, eax
-	invoke newline
-	jmp sw_251_end
-sw_251_next_10:
-	push offset L76
+sw_247_end:
+	jmp sw_225_end
+sw_225_next_1:
+	push offset L75
 	pop eax
 	invoke outstr, eax
 	invoke newline
-sw_251_end:
-	jmp sw_229_end
-sw_229_next_1:
-	push offset L78
-	pop eax
-	invoke outstr, eax
-	invoke newline
-sw_229_end:
-	push offset L80
+sw_225_end:
+	push offset L77
 	pop eax
 	invoke outstr, eax
 	invoke newline

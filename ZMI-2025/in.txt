@@ -1,89 +1,98 @@
-[ Курсовой проект Загнетовой Марии ]
+[ ====================================== ]
+[   ИТОГОВЫЙ ТЕСТ КОМПИЛЯТОРА (ZMI-2025) ]
+[ ====================================== ]
 
-byte proc strtoint(text s) { ret 0; }
-byte proc stcmp(text s1, text s2) { ret 0; }
+[ 1. Объявление библиотечных функций ]
+byte proc strtoint(text strArg) { ret 0; }
+byte proc stcmp(text sOne, text sTwo) { ret 0; }
 
-[ Recursive Power Function ]
-byte proc power(byte base, byte exp) {
-    byte res;
-    byte nextExp;
-    
-    check(exp) {
-        is 0: {
-            ret 1;
-        }
-        else: {
-            nextExp = exp - 1;
-            res = base * power(base, nextExp);
-            ret res;
-        }
-    }
-    ret 0;
+[ 2. Объявление новых функций ]
+byte proc strle(text txtArg) { ret 0; }
+byte proc mabs(byte nArg) { ret 0; }
+byte proc rnd(byte maxArg) { ret 0; }
+
+[ 3. Пользовательская функция сложения ]
+byte proc adder(byte a, byte b) {
+    byte sum;
+    sum = a + b;
+    ret sum;
 }
 
-[ Math Helper ]
-byte proc mixer(byte a, byte b, byte cc) {
-    byte res;
-    res = (a + b) * cc;
-    ret res;
-}
-
-[ Entry Point: BOX instead of MAIN ]
+[ Точка входа ]
 box {
-    show < "Привет мир!";
-    text status;
-    byte val;
-    byte key;
-    byte result;
-    byte flag; [ Renamed variable 'check' -> 'flag' ]
+    [ --- Объявление переменных --- ]
+    text welcome;
+    text russianPhrase;
+    byte number;
+    byte lenVal;  [ ПЕРЕИМЕНОВАНО ИЗ LENGTH ]
+    byte randomVal;
+    byte selector;
+    byte calcResult;
 
-    show < "=== STORAGE LANGUAGE TEST: START ===";
-  
-    show < "New Syntax Check: [ OK ]";
-
-    val = 10;
-    key = 2;
-
-    show < "Test 1: Simple Overflow";
-    result = mixer(100, 28, 1);
-    show < "100 + 28 = 128 -> Expect -128:";
-    show < result;
-
-    show < "Test 2: Multiplication";
-    result = mixer(10, 5, 10);
-    show < "(10 + 5) * 10 = 150 -> Expect -106:";
-    show < result;
-
-    show < "Test 3: Recursion (2^7)";
-    result = power(2, 7);
-    show < "2^7 = 128 -> Expect -128:";
-    show < result;
-
-    show < "Test 4: Nested Check (Switch)";
-    flag = 1;
+    [ --- Тест 1: Вывод строк и литералов --- ]
+    welcome = "=== START FINAL TEST ===";
+    show < welcome;
     
-    check(flag) {
+    [ Проверка русского языка ]
+    russianPhrase = "Проверка кириллицы: Успешно!";
+    show < russianPhrase;
+
+    [ --- Тест 2: Новые функции --- ]
+    show < "--- Testing Libraries ---";
+    
+    [ Функция длины строки ]
+    lenVal = strle(welcome);
+    show < "Length of welcome string (expect 24):";
+    show < lenVal;
+
+    [ Функция модуля числа ]
+    number = -120;
+    number = mabs(number);
+    show < "Abs(-120) result:";
+    show < number;
+
+    [ Функция рандома ]
+    randomVal = rnd(10);
+    show < "Random value (0-9):";
+    show < randomVal;
+
+    [ --- Тест 3: Арифметика и Переполнение byte --- ]
+    show < "--- Math Test ---";
+    [ 50 + 50 = 100 (влезает в byte) ]
+    calcResult = adder(50, 50);
+    show < "50 + 50 = ";
+    show < calcResult;
+
+    [ 100 + 30 = 130 (переполнение, т.к. макс 127) -> станет -126 ]
+    calcResult = adder(100, 30);
+    show < "100 + 30 (Overflow check):";
+    show < calcResult;
+
+    [ --- Тест 4: Условный оператор (check/is/else) --- ]
+    show < "--- Logic Test (Switch) ---";
+    selector = 1;
+
+    check(selector) {
         is 0: {
-            show < "Error: Case 0";
+            show < "Branch 0 (Skipped)";
         }
         is 1: {
-            show < "Layer 1: OK";
-            check(val) {
-                is 10: {
-                    show < "Layer 2: OK (Val is 10)";
-                    result = power(2, 6);
-                    show < "2^6 = 64 (Safe):";
-                    show < result;
+            show < "Branch 1 (Selected)";
+            
+            [ Вложенная проверка рандома ]
+            check(randomVal) {
+                is 0: {
+                    show < "Jackpot! Random is 0";
                 }
                 else: {
-                    show < "Error: Layer 2 Default";
+                    show < "Random is not 0";
                 }
             }
         }
         else: {
-            show < "Error: Layer 1 Default";
+            show < "Default Branch";
         }
     }
 
-    show < "=== STORAGE LANGUAGE TEST: END ===";
+    show < "=== TEST COMPLETE ===";
 }
