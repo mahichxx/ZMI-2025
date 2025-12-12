@@ -21,7 +21,7 @@
 	FST::NODE(1, FST::RELATION('t', 4)),\
 	FST::NODE()
 
-// char (оставим как есть, или можно сменить на sym)
+// char (можно использовать как sym или char)
 #define FST_TYPE_CHAR 5, \
 	FST::NODE(1, FST::RELATION('c', 1)),\
 	FST::NODE(1, FST::RELATION('h', 2)),\
@@ -29,7 +29,7 @@
 	FST::NODE(1, FST::RELATION('r', 4)),\
 	FST::NODE()
 
-// void (оставим как есть)
+// void
 #define FST_VOID 5,	\
 	FST::NODE(1, FST::RELATION('v', 1)),\
 	FST::NODE(1, FST::RELATION('o', 2)),\
@@ -109,19 +109,13 @@
     FST::NODE(1, FST::RELATION('e', 5)), \
     FST::NODE()
 
-// if, else (для if) - оставим, чтобы не было ошибок компиляции, 
-// но так как мы используем слово 'else' для default, тут может быть конфликт имен макросов.
-// Но в Lex.cpp мы проверяем автоматы по очереди.
+// if (оставим для совместимости)
 #define FST_IF 3, \
 	FST::NODE(1, FST::RELATION('i', 1)), \
 	FST::NODE(1, FST::RELATION('f', 2)), \
 	FST::NODE()
 
-// Этот макрос для 'else' (как часть if) теперь совпадает с FST_DEFAULT (else как часть check).
-// Это нормально, они будут генерировать разные токены в зависимости от того, какой автомат сработает первым.
-// В Lex.cpp FST_DEFAULT проверяется раньше (или позже), но лексема будет одна - слово "else".
-// Мы настроим так, чтобы слово "else" всегда давало токен LEX_DEFAULT ('d'), 
-// а так как мы убрали поддержку IF из грамматики, это идеально нам подходит.
+// else (для if, совпадает с default)
 #define FST_ELSE 5, \
 	FST::NODE(1, FST::RELATION('e', 1)), \
 	FST::NODE(1, FST::RELATION('l', 2)), \
@@ -130,7 +124,7 @@
 	FST::NODE()
 
 // =========================================================
-//                 ЛИТЕРАЛЫ (Без изменений)
+//                 ЛИТЕРАЛЫ
 // =========================================================
 
 #define FST_INTLIT 2,	\
@@ -162,9 +156,10 @@
 	FST::RELATION('a', 3), FST::RELATION('b', 3), FST::RELATION('c', 3), FST::RELATION('d', 3), FST::RELATION('e', 3), FST::RELATION('f', 3)),\
 	FST::NODE()
 
+// !!! СИМВОЛЫ (CHAR) С ПОДДЕРЖКОЙ РУССКОГО !!!
 #define FST_CHARLIT 4, \
     FST::NODE(1, FST::RELATION('\'', 1)), \
-    FST::NODE(256, \
+    FST::NODE(322, \
         FST::RELATION('a', 2), FST::RELATION('b', 2), FST::RELATION('c', 2), FST::RELATION('d', 2), FST::RELATION('e', 2), \
         FST::RELATION('f', 2), FST::RELATION('g', 2), FST::RELATION('h', 2), FST::RELATION('i', 2), FST::RELATION('j', 2), \
         FST::RELATION('k', 2), FST::RELATION('l', 2), FST::RELATION('m', 2), FST::RELATION('n', 2), FST::RELATION('o', 2), \
@@ -178,14 +173,30 @@
         FST::RELATION('Y', 2), FST::RELATION('Z', 2), \
         FST::RELATION('0', 2), FST::RELATION('1', 2), FST::RELATION('2', 2), FST::RELATION('3', 2), \
         FST::RELATION('4', 2), FST::RELATION('5', 2), FST::RELATION('6', 2), FST::RELATION('7', 2), FST::RELATION('8', 2), \
-        FST::RELATION('9', 2), FST::RELATION(' ', 2), FST::RELATION('!', 2), FST::RELATION('?', 2), FST::RELATION('.', 2) \
+        FST::RELATION('9', 2), FST::RELATION(' ', 2), FST::RELATION('!', 2), FST::RELATION('?', 2), FST::RELATION('.', 2), \
+        /* --- КИРИЛЛИЦА (А-Я, а-я, Ё, ё) --- */ \
+        FST::RELATION('А', 2), FST::RELATION('Б', 2), FST::RELATION('В', 2), FST::RELATION('Г', 2), FST::RELATION('Д', 2), \
+        FST::RELATION('Е', 2), FST::RELATION('Ё', 2), FST::RELATION('Ж', 2), FST::RELATION('З', 2), FST::RELATION('И', 2), \
+        FST::RELATION('Й', 2), FST::RELATION('К', 2), FST::RELATION('Л', 2), FST::RELATION('М', 2), FST::RELATION('Н', 2), \
+        FST::RELATION('О', 2), FST::RELATION('П', 2), FST::RELATION('Р', 2), FST::RELATION('С', 2), FST::RELATION('Т', 2), \
+        FST::RELATION('У', 2), FST::RELATION('Ф', 2), FST::RELATION('Х', 2), FST::RELATION('Ц', 2), FST::RELATION('Ч', 2), \
+        FST::RELATION('Ш', 2), FST::RELATION('Щ', 2), FST::RELATION('Ъ', 2), FST::RELATION('Ы', 2), FST::RELATION('Ь', 2), \
+        FST::RELATION('Э', 2), FST::RELATION('Ю', 2), FST::RELATION('Я', 2), \
+        FST::RELATION('а', 2), FST::RELATION('б', 2), FST::RELATION('в', 2), FST::RELATION('г', 2), FST::RELATION('д', 2), \
+        FST::RELATION('е', 2), FST::RELATION('ё', 2), FST::RELATION('ж', 2), FST::RELATION('з', 2), FST::RELATION('и', 2), \
+        FST::RELATION('й', 2), FST::RELATION('к', 2), FST::RELATION('л', 2), FST::RELATION('м', 2), FST::RELATION('н', 2), \
+        FST::RELATION('о', 2), FST::RELATION('п', 2), FST::RELATION('р', 2), FST::RELATION('с', 2), FST::RELATION('т', 2), \
+        FST::RELATION('у', 2), FST::RELATION('ф', 2), FST::RELATION('х', 2), FST::RELATION('ц', 2), FST::RELATION('ч', 2), \
+        FST::RELATION('ш', 2), FST::RELATION('щ', 2), FST::RELATION('ъ', 2), FST::RELATION('ы', 2), FST::RELATION('ь', 2), \
+        FST::RELATION('э', 2), FST::RELATION('ю', 2), FST::RELATION('я', 2) \
         ), \
     FST::NODE(1, FST::RELATION('\'', 3)), \
     FST::NODE()
 
+// !!! СТРОКИ (STRING) С ПОДДЕРЖКОЙ РУССКОГО !!!
 #define FST_STRLIT 3,	\
 	FST::NODE(1, FST::RELATION('"', 1)),\
-	FST::NODE(96,	\
+	FST::NODE(162,	\
     FST::RELATION('"', 2), \
     FST::RELATION(' ', 1), \
 	FST::RELATION('a', 1), FST::RELATION('b', 1), FST::RELATION('c', 1), FST::RELATION('d', 1), FST::RELATION('e', 1), \
@@ -210,7 +221,22 @@
     FST::RELATION('[', 1), FST::RELATION(']', 1), FST::RELATION('{', 1), FST::RELATION('}', 1), \
     FST::RELATION('%', 1), FST::RELATION('@', 1), FST::RELATION('#', 1), FST::RELATION('$', 1), \
     FST::RELATION('^', 1), FST::RELATION('&', 1), FST::RELATION('|', 1), FST::RELATION('~', 1), \
-    FST::RELATION('\'', 1), FST::RELATION('\\', 1), FST::RELATION('`', 1) \
+    FST::RELATION('\'', 1), FST::RELATION('\\', 1), FST::RELATION('`', 1), \
+    /* --- КИРИЛЛИЦА В СТРОКАХ --- */ \
+    FST::RELATION('А', 1), FST::RELATION('Б', 1), FST::RELATION('В', 1), FST::RELATION('Г', 1), FST::RELATION('Д', 1), \
+    FST::RELATION('Е', 1), FST::RELATION('Ё', 1), FST::RELATION('Ж', 1), FST::RELATION('З', 1), FST::RELATION('И', 1), \
+    FST::RELATION('Й', 1), FST::RELATION('К', 1), FST::RELATION('Л', 1), FST::RELATION('М', 1), FST::RELATION('Н', 1), \
+    FST::RELATION('О', 1), FST::RELATION('П', 1), FST::RELATION('Р', 1), FST::RELATION('С', 1), FST::RELATION('Т', 1), \
+    FST::RELATION('У', 1), FST::RELATION('Ф', 1), FST::RELATION('Х', 1), FST::RELATION('Ц', 1), FST::RELATION('Ч', 1), \
+    FST::RELATION('Ш', 1), FST::RELATION('Щ', 1), FST::RELATION('Ъ', 1), FST::RELATION('Ы', 1), FST::RELATION('Ь', 1), \
+    FST::RELATION('Э', 1), FST::RELATION('Ю', 1), FST::RELATION('Я', 1), \
+    FST::RELATION('а', 1), FST::RELATION('б', 1), FST::RELATION('в', 1), FST::RELATION('г', 1), FST::RELATION('д', 1), \
+    FST::RELATION('е', 1), FST::RELATION('ё', 1), FST::RELATION('ж', 1), FST::RELATION('з', 1), FST::RELATION('и', 1), \
+    FST::RELATION('й', 1), FST::RELATION('к', 1), FST::RELATION('л', 1), FST::RELATION('м', 1), FST::RELATION('н', 1), \
+    FST::RELATION('о', 1), FST::RELATION('п', 1), FST::RELATION('р', 1), FST::RELATION('с', 1), FST::RELATION('т', 1), \
+    FST::RELATION('у', 1), FST::RELATION('ф', 1), FST::RELATION('х', 1), FST::RELATION('ц', 1), FST::RELATION('ч', 1), \
+    FST::RELATION('ш', 1), FST::RELATION('щ', 1), FST::RELATION('ъ', 1), FST::RELATION('ы', 1), FST::RELATION('ь', 1), \
+    FST::RELATION('э', 1), FST::RELATION('ю', 1), FST::RELATION('я', 1) \
     ), \
 	FST::NODE()
 
@@ -336,7 +362,7 @@
 	FST::NODE(1, FST::RELATION(':', 1)),\
 	FST::NODE()
 
-// Заглушки для старого кода
+// Заглушки
 #define FST_LITERALSTRING_1 FST_STRLIT
 #define FST_PLUS FST_OPERATOR
 #define FST_MINUS FST_OPERATOR

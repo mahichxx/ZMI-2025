@@ -18,29 +18,30 @@ stcmp PROTO :DWORD, :DWORD
 .const
 	L2	sdword 0
 	L11	sdword 1
-	L30	db '=== STORAGE LANGUAGE TEST: START ===', 0
-	L32	db 'New Syntax Check: [ OK ]', 0
-	L34	sdword 10
-	L36	sdword 2
-	L38	db 'Test 1: Simple Overflow', 0
-	L40	sdword 100
-	L41	sdword 28
-	L43	db '100 + 28 = 128 -> Expect -128:', 0
-	L46	db 'Test 2: Multiplication', 0
-	L48	sdword 5
-	L50	db '(10 + 5) * 10 = 150 -> Expect -106:', 0
-	L53	db 'Test 3: Recursion (2^7)', 0
-	L55	sdword 7
-	L57	db '2^7 = 128 -> Expect -128:', 0
-	L60	db 'Test 4: Nested Check (Switch)', 0
-	L63	db 'Error: Case 0', 0
-	L65	db 'Layer 1: OK', 0
-	L67	db 'Layer 2: OK (Val is 10)', 0
-	L69	sdword 6
-	L71	db '2^6 = 64 (Safe):', 0
-	L74	db 'Error: Layer 2 Default', 0
-	L76	db 'Error: Layer 1 Default', 0
-	L78	db '=== STORAGE LANGUAGE TEST: END ===', 0
+	L25	db 'Привет мир!', 0
+	L32	db '=== STORAGE LANGUAGE TEST: START ===', 0
+	L34	db 'New Syntax Check: [ OK ]', 0
+	L36	sdword 10
+	L38	sdword 2
+	L40	db 'Test 1: Simple Overflow', 0
+	L42	sdword 100
+	L43	sdword 28
+	L45	db '100 + 28 = 128 -> Expect -128:', 0
+	L48	db 'Test 2: Multiplication', 0
+	L50	sdword 5
+	L52	db '(10 + 5) * 10 = 150 -> Expect -106:', 0
+	L55	db 'Test 3: Recursion (2^7)', 0
+	L57	sdword 7
+	L59	db '2^7 = 128 -> Expect -128:', 0
+	L62	db 'Test 4: Nested Check (Switch)', 0
+	L65	db 'Error: Case 0', 0
+	L67	db 'Layer 1: OK', 0
+	L69	db 'Layer 2: OK (Val is 10)', 0
+	L71	sdword 6
+	L73	db '2^6 = 64 (Safe):', 0
+	L76	db 'Error: Layer 2 Default', 0
+	L78	db 'Error: Layer 1 Default', 0
+	L80	db '=== STORAGE LANGUAGE TEST: END ===', 0
 .data
 	switch_val dd 0
 	powerres	sbyte 0
@@ -123,6 +124,10 @@ mixer PROC, a :DWORD, b :DWORD, cc :DWORD
 	push eax
 mixer ENDP
 main PROC
+	push offset L25
+	pop eax
+	invoke outstr, eax
+	invoke newline
 	push status
 	movsx eax, val
 	push eax
@@ -132,11 +137,11 @@ main PROC
 	push eax
 	movsx eax, flag
 	push eax
-	push offset L30
+	push offset L32
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	push offset L32
+	push offset L34
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -150,7 +155,7 @@ main PROC
 	pop eax
 	mov key, al
 	push 2
-	push offset L38
+	push offset L40
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -161,7 +166,7 @@ main PROC
 	push 100
 	push 28
 	push 1
-	push offset L43
+	push offset L45
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -170,7 +175,7 @@ main PROC
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L46
+	push offset L48
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -181,7 +186,7 @@ main PROC
 	push 10
 	push 5
 	push 10
-	push offset L50
+	push offset L52
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -190,7 +195,7 @@ main PROC
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L53
+	push offset L55
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -200,7 +205,7 @@ main PROC
 	mov result, al
 	push 2
 	push 7
-	push offset L57
+	push offset L59
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -209,7 +214,7 @@ main PROC
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L60
+	push offset L62
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -224,17 +229,17 @@ main PROC
 	push eax
 	mov eax, switch_val
 	cmp eax, 0
-	jne sw_225_next_0
-	push offset L63
+	jne sw_229_next_0
+	push offset L65
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	jmp sw_225_end
-sw_225_next_0:
+	jmp sw_229_end
+sw_229_next_0:
 	mov eax, switch_val
 	cmp eax, 1
-	jne sw_225_next_1
-	push offset L65
+	jne sw_229_next_1
+	push offset L67
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -244,8 +249,8 @@ sw_225_next_0:
 	push eax
 	mov eax, switch_val
 	cmp eax, 10
-	jne sw_247_next_10
-	push offset L67
+	jne sw_251_next_10
+	push offset L69
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -255,7 +260,7 @@ sw_225_next_0:
 	mov result, al
 	push 2
 	push 6
-	push offset L71
+	push offset L73
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -264,21 +269,21 @@ sw_225_next_0:
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	jmp sw_247_end
-sw_247_next_10:
-	push offset L74
-	pop eax
-	invoke outstr, eax
-	invoke newline
-sw_247_end:
-	jmp sw_225_end
-sw_225_next_1:
+	jmp sw_251_end
+sw_251_next_10:
 	push offset L76
 	pop eax
 	invoke outstr, eax
 	invoke newline
-sw_225_end:
+sw_251_end:
+	jmp sw_229_end
+sw_229_next_1:
 	push offset L78
+	pop eax
+	invoke outstr, eax
+	invoke newline
+sw_229_end:
+	push offset L80
 	pop eax
 	invoke outstr, eax
 	invoke newline

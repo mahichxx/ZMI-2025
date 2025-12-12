@@ -1,4 +1,5 @@
-[ Standard Library Stubs ]
+[ Курсовой проект Загнетовой Марии ]
+
 byte proc strtoint(text s) { ret 0; }
 byte proc stcmp(text s1, text s2) { ret 0; }
 
@@ -29,6 +30,7 @@ byte proc mixer(byte a, byte b, byte cc) {
 
 [ Entry Point: BOX instead of MAIN ]
 box {
+    show < "Привет мир!";
     text status;
     byte val;
     byte key;

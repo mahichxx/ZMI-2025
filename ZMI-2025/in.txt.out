@@ -1,209 +1,212 @@
 
 ----------------- Поток лексем ---------------------
 01 
-02 tfi(si){rl;}
-03 tfi(si,si){rl;}
-06 tfi(ti,ti){
-07 ti;
+03 tfi(si){rl;}
+04 tfi(si,si){rl;}
+07 tfi(ti,ti){
 08 ti;
-10 h(i){
-11 al:{
-12 rl;
-13 }
-14 d:{
-15 i=ivl;
-16 i=ivi(i,i);
-17 ri;
-18 }
+09 ti;
+11 h(i){
+12 al:{
+13 rl;
+14 }
+15 d:{
+16 i=ivl;
+17 i=ivi(i,i);
+18 ri;
 19 }
-20 rl;
-21 }
-24 tfi(ti,ti,ti){
-25 ti;
-26 i=(ivi)vi;
-27 ri;
-28 }
-31 m{
-32 si;
-33 ti;
-34 ti;
+20 }
+21 rl;
+22 }
+25 tfi(ti,ti,ti){
+26 ti;
+27 i=(ivi)vi;
+28 ri;
+29 }
+32 m{
+33 ovl;
+34 si;
 35 ti;
 36 ti;
-38 ovl;
+37 ti;
+38 ti;
 40 ovl;
-42 i=l;
-43 i=l;
-45 ovl;
-46 i=i(l,l,l);
+42 ovl;
+44 i=l;
+45 i=l;
 47 ovl;
-48 ovi;
-50 ovl;
-51 i=i(l,l,l);
+48 i=i(l,l,l);
+49 ovl;
+50 ovi;
 52 ovl;
-53 ovi;
-55 ovl;
-56 i=i(l,l);
+53 i=i(l,l,l);
+54 ovl;
+55 ovi;
 57 ovl;
-58 ovi;
-60 ovl;
-61 i=l;
-63 h(i){
-64 al:{
-65 ovl;
-66 }
-67 al:{
-68 ovl;
-69 h(i){
-70 al:{
-71 ovl;
-72 i=i(l,l);
+58 i=i(l,l);
+59 ovl;
+60 ovi;
+62 ovl;
+63 i=l;
+65 h(i){
+66 al:{
+67 ovl;
+68 }
+69 al:{
+70 ovl;
+71 h(i){
+72 al:{
 73 ovl;
-74 ovi;
-75 }
-76 d:{
-77 ovl;
-78 }
-79 }
+74 i=i(l,l);
+75 ovl;
+76 ovi;
+77 }
+78 d:{
+79 ovl;
 80 }
-81 d:{
-82 ovl;
-83 }
-84 }
-86 ovl;
-87 }
+81 }
+82 }
+83 d:{
+84 ovl;
+85 }
+86 }
+88 ovl;
+89 }
 
 
 -----Таблица лексем после преобразования в ПОЛИЗ (Сырая)
 
 ----------------- Поток лексем ---------------------
 01 
-02 tfi(si){rl;}
-03 tfi(si,si){rl;}
-06 tfi(ti,ti){
-07 ti;
+03 tfi(si){rl;}
+04 tfi(si,si){rl;}
+07 tfi(ti,ti){
 08 ti;
-10 h(i){
-11 al:{
-12 rl;
-13 }
-14 d:{
-15 i=ilv;
-16 i=iiiiv;
-17 ri;
-18 }
+09 ti;
+11 h(i){
+12 al:{
+13 rl;
+14 }
+15 d:{
+16 i=ilv;
+17 i=iiiiv;
+18 ri;
 19 }
-20 rl;
-21 }
-24 tfi(ti,ti,ti){
-25 ti;
-26 i=iiviv;
-27 ri;
-28 }
-31 m{
-32 si;
-33 ti;
-34 ti;
+20 }
+21 rl;
+22 }
+25 tfi(ti,ti,ti){
+26 ti;
+27 i=iiviv;
+28 ri;
+29 }
+32 m{
+33 olv;
+34 si;
 35 ti;
 36 ti;
-38 olv;
+37 ti;
+38 ti;
 40 olv;
-42 i=l;
-43 i=l;
-45 olv;
-46 i=illl;
+42 olv;
+44 i=l;
+45 i=l;
 47 olv;
-48 oiv;
-50 olv;
-51 i=illl;
+48 i=illl;
+49 olv;
+50 oiv;
 52 olv;
-53 oiv;
-55 olv;
-56 i=ill;
+53 i=illl;
+54 olv;
+55 oiv;
 57 olv;
-58 oiv;
-60 olv;
-61 i=l;
-63 h(i){
-64 al:{
-65 olv;
-66 }
-67 al:{
-68 olv;
-69 h(i){
-70 al:{
-71 olv;
-72 i=ill;
+58 i=ill;
+59 olv;
+60 oiv;
+62 olv;
+63 i=l;
+65 h(i){
+66 al:{
+67 olv;
+68 }
+69 al:{
+70 olv;
+71 h(i){
+72 al:{
 73 olv;
-74 oiv;
-75 }
-76 d:{
-77 olv;
-78 }
-79 }
+74 i=ill;
+75 olv;
+76 oiv;
+77 }
+78 d:{
+79 olv;
 80 }
-81 d:{
-82 olv;
-83 }
-84 }
-86 olv;
-87 }
+81 }
+82 }
+83 d:{
+84 olv;
+85 }
+86 }
+88 olv;
+89 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
 Номер строки | Выражение в ПОЛИЗ
 ------------------------------------------------------------------------------
-02           | strtoint s return 0 ;
-03           | stcmp s1 s2 return 0 ;
-06           | power base exp 
-07           | powerres ;
-08           | powernextExp ;
-10           | exp 
-11           | 0 
-12           | return 1 ;
-13           | 14           | 15           | powernextExp = exp 1 - ;
-16           | powerres = base power base powernextExp * ;
-17           | return powerres ;
-18           | 19           | 20           | return 0 ;
-21           | 24           | mixer a b cc 
-25           | mixerres ;
-26           | mixerres = a b + cc * ;
-27           | return mixerres ;
-28           | 31           | 32           | status ;
-33           | val ;
-34           | key ;
-35           | result ;
-36           | flag ;
-38           | cout "=== STORAGE LANGUAGE TEST: START ===" < ;
-40           | cout "New Syntax Check: [ OK ]" < ;
-42           | val = 10 ;
-43           | key = 2 ;
-45           | cout "Test 1: Simple Overflow" < ;
-46           | result = mixer 100 28 1 ;
-47           | cout "100 + 28 = 128 -> Expect -128:" < ;
-48           | cout result < ;
-50           | cout "Test 2: Multiplication" < ;
-51           | result = mixer 10 5 10 ;
-52           | cout "(10 + 5) * 10 = 150 -> Expect -106:" < ;
-53           | cout result < ;
-55           | cout "Test 3: Recursion (2^7)" < ;
-56           | result = power 2 7 ;
-57           | cout "2^7 = 128 -> Expect -128:" < ;
-58           | cout result < ;
-60           | cout "Test 4: Nested Check (Switch)" < ;
-61           | flag = 1 ;
-63           | flag 
-64           | 0 
-65           | cout "Error: Case 0" < ;
-66           | 67           | 1 
-68           | cout "Layer 1: OK" < ;
-69           | val 
-70           | 10 
-71           | cout "Layer 2: OK (Val is 10)" < ;
-72           | result = power 2 6 ;
-73           | cout "2^6 = 64 (Safe):" < ;
-74           | cout result < ;
-75           | 76           | 77           | cout "Error: Layer 2 Default" < ;
-78           | 79           | 80           | 81           | 82           | cout "Error: Layer 1 Default" < ;
-83           | 84           | 86           | cout "=== STORAGE LANGUAGE TEST: END ===" < ;
-87           | 
+03           | strtoint s return 0 ;
+04           | stcmp s1 s2 return 0 ;
+07           | power base exp 
+08           | powerres ;
+09           | powernextExp ;
+11           | exp 
+12           | 0 
+13           | return 1 ;
+14           | 15           | 16           | powernextExp = exp 1 - ;
+17           | powerres = base power base powernextExp * ;
+18           | return powerres ;
+19           | 20           | 21           | return 0 ;
+22           | 25           | mixer a b cc 
+26           | mixerres ;
+27           | mixerres = a b + cc * ;
+28           | return mixerres ;
+29           | 32           | 33           | cout "Привет мир!" < ;
+34           | status ;
+35           | val ;
+36           | key ;
+37           | result ;
+38           | flag ;
+40           | cout "=== STORAGE LANGUAGE TEST: START ===" < ;
+42           | cout "New Syntax Check: [ OK ]" < ;
+44           | val = 10 ;
+45           | key = 2 ;
+47           | cout "Test 1: Simple Overflow" < ;
+48           | result = mixer 100 28 1 ;
+49           | cout "100 + 28 = 128 -> Expect -128:" < ;
+50           | cout result < ;
+52           | cout "Test 2: Multiplication" < ;
+53           | result = mixer 10 5 10 ;
+54           | cout "(10 + 5) * 10 = 150 -> Expect -106:" < ;
+55           | cout result < ;
+57           | cout "Test 3: Recursion (2^7)" < ;
+58           | result = power 2 7 ;
+59           | cout "2^7 = 128 -> Expect -128:" < ;
+60           | cout result < ;
+62           | cout "Test 4: Nested Check (Switch)" < ;
+63           | flag = 1 ;
+65           | flag 
+66           | 0 
+67           | cout "Error: Case 0" < ;
+68           | 69           | 1 
+70           | cout "Layer 1: OK" < ;
+71           | val 
+72           | 10 
+73           | cout "Layer 2: OK (Val is 10)" < ;
+74           | result = power 2 6 ;
+75           | cout "2^6 = 64 (Safe):" < ;
+76           | cout result < ;
+77           | 78           | 79           | cout "Error: Layer 2 Default" < ;
+80           | 81           | 82           | 83           | 84           | cout "Error: Layer 1 Default" < ;
+85           | 86           | 88           | cout "=== STORAGE LANGUAGE TEST: END ===" < ;
+89           | 
 ------------------------------------------------------------------------------
