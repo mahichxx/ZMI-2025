@@ -14,6 +14,7 @@ namespace Polish {
 			switch (entry.op) {
 			case LT::OEQ: case LT::ONE: return 1;
 			case LT::OMORE: case LT::OLESS: case LT::OGE: case LT::OLE: return 1;
+			case LT::OLESS_CMP: return 1; // <--- ÄÎÁÀÂÈËÈ ÑÞÄÀ
 			case LT::OPLUS: case LT::OMINUS: return 2;
 			case LT::OMUL: case LT::ODIV: case LT::OMOD: return 3;
 			default: return 0;

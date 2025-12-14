@@ -82,21 +82,13 @@ namespace Gener {
 		int lastCaseValue = -1;
 		int assignmentTargetIdx = -1;
 
+		// !!! ФЛАГ ВОЗВРАТА !!!
+		bool isReturn = false;
+
 		for (int i = 0; i < tables.lextable.size; i++) {
 			LT::Entry& t = tables.lextable.table[i];
 
-			// --- СКОБКИ И БАЛАНС ---
-			if (t.lexema == LEX_LEFTBRACE) {
-				currentBalance++;
-
-				// !!! ФИКС: Инициализация switch_val ПРИ ВХОДЕ В ТЕЛО !!!
-				// Если это { открывающая свитч, то выражение перед ней уже вычислено и лежит в стеке.
-				if (!switches.empty() && switches.top().braceBalance == currentBalance - 1) {
-					out << "\tpop eax" << endl;
-					out << "\tmov switch_val, eax" << endl;
-				}
-			}
-
+			if (t.lexema == LEX_LEFTBRACE) currentBalance++;
 			if (t.lexema == LEX_BRACELET) {
 				currentBalance--;
 				if (!switches.empty()) {
@@ -115,7 +107,6 @@ namespace Gener {
 			if (t.lexema == LEX_FUNCTION) {
 				i++;
 				IT::Entry& func = tables.idtable.table[tables.lextable.table[i].idxTI];
-
 				if (IsLib((char*)func.id)) {
 					while (tables.lextable.table[i].lexema != LEX_LEFTBRACE) i++;
 					int balance = 1; i++;
@@ -143,8 +134,7 @@ namespace Gener {
 				}
 				out << endl;
 				while (tables.lextable.table[i].lexema != LEX_LEFTBRACE) i++;
-				currentBalance++;
-				continue;
+				currentBalance++; continue;
 			}
 
 			// 2. MAIN
@@ -157,50 +147,36 @@ namespace Gener {
 				currentBalance++; continue;
 			}
 
-			// 3. RETURN
+			// 3. RETURN (ТОЛЬКО СТАВИМ ФЛАГ)
 			if (t.lexema == LEX_RETURN) {
-				out << "\tpop eax\n\tret" << endl;
+				isReturn = true;
 				continue;
 			}
 
-			// 4. SWITCH (CHECK)
+			// 4. SWITCH
 			if (t.lexema == LEX_SWITCH) {
-				SwitchCtx ctx;
-				ctx.id = i;
-				ctx.lastCaseVal = -1;
-				ctx.braceBalance = currentBalance; // Запоминаем текущий уровень
+				SwitchCtx ctx; ctx.id = i; ctx.lastCaseVal = -1; ctx.braceBalance = currentBalance;
 				switches.push(ctx);
-
-				// !!! УБРАЛ POP ОТСЮДА !!!
-				// Значение еще не посчитано. POP будет на скобке {
+				out << "\tpop eax\n\tmov switch_val, eax" << endl;
 				continue;
 			}
-
-			// CASE (IS)
 			if (t.lexema == LEX_CASE) {
 				if (switches.empty()) continue;
 				SwitchCtx& ctx = switches.top();
-
 				int val = tables.idtable.table[tables.lextable.table[i + 1].idxTI].value.vint;
-
 				if (ctx.lastCaseVal != -1) {
 					out << "\tjmp sw_" << ctx.id << "_end" << endl;
 					out << "sw_" << ctx.id << "_next_" << ctx.lastCaseVal << ":" << endl;
 				}
-
 				out << "\tmov eax, switch_val" << endl;
 				out << "\tcmp eax, " << val << endl;
 				out << "\tjne sw_" << ctx.id << "_next_" << val << endl;
-
 				ctx.lastCaseVal = val;
 				i++; continue;
 			}
-
-			// DEFAULT (ELSE)
 			if (t.lexema == LEX_DEFAULT) {
 				if (switches.empty()) continue;
 				SwitchCtx& ctx = switches.top();
-
 				if (ctx.lastCaseVal != -1) {
 					out << "\tjmp sw_" << ctx.id << "_end" << endl;
 					out << "sw_" << ctx.id << "_next_" << ctx.lastCaseVal << ":" << endl;
@@ -216,16 +192,15 @@ namespace Gener {
 				else out << "\tpush " << l.value.vint << endl;
 			}
 			else if (t.lexema == LEX_ID) {
-				// !!! ФИКС: Пропускаем ОБЪЯВЛЕНИЯ переменных !!!
-				// Если перед ID стоит тип данных (byte/text/void...), значит это объявление, пушить не надо.
+				// Пропуск объявлений
 				if (i > 0) {
 					char prevLex = tables.lextable.table[i - 1].lexema;
 					if (prevLex == LEX_INTEGER || prevLex == LEX_STRING || prevLex == LEX_CHAR || prevLex == LEX_VOID) {
-						continue; // Это объявление (byte a;), пропускаем
+						out << "\t; Decl: " << GetID(tables.idtable.table[t.idxTI]) << endl;
+						continue;
 					}
 				}
 
-				// Проверка на цель присваивания
 				if (i + 1 < tables.lextable.size && tables.lextable.table[i + 1].lexema == LEX_EQUAL) {
 					assignmentTargetIdx = t.idxTI;
 				}
@@ -247,6 +222,7 @@ namespace Gener {
 
 			// 7. ОПЕРАТОРЫ
 			if (t.lexema == LEX_OPERATOR) {
+				// Если это вывод (show <)
 				if (t.op == LT::OLESS) {
 					bool isString = false;
 					if (i > 0) {
@@ -262,26 +238,49 @@ namespace Gener {
 					out << "\tinvoke newline" << endl;
 				}
 				else {
+					// Арифметика и Сравнения
 					out << "\tpop ebx\n\tpop eax" << endl;
+
 					if (t.op == LT::OPLUS) out << "\tadd eax, ebx" << endl;
-					if (t.op == LT::OMINUS) out << "\tsub eax, ebx" << endl;
-					if (t.op == LT::OMUL) out << "\timul eax, ebx" << endl;
-					if (t.op == LT::ODIV) out << "\tcdq\n\tidiv ebx" << endl;
+					else if (t.op == LT::OMINUS) out << "\tsub eax, ebx" << endl;
+					else if (t.op == LT::OMUL) out << "\timul eax, ebx" << endl;
+					else if (t.op == LT::ODIV) out << "\tcdq\n\tidiv ebx" << endl;
+					else if (t.op == LT::OMOD) out << "\tcdq\n\tidiv ebx\n\tmov eax, edx" << endl;
+
+					// Сравнения
+					else {
+						out << "\tcmp eax, ebx" << endl;
+						out << "\tmov eax, 0" << endl; // Обнуляем для set
+
+						if (t.op == LT::OEQ) out << "\tsete al" << endl;
+						else if (t.op == LT::ONE) out << "\tsetne al" << endl;
+						else if (t.op == LT::OMORE) out << "\tsetg al" << endl;
+						else if (t.op == LT::OGE) out << "\tsetge al" << endl;
+						else if (t.op == LT::OLE) out << "\tsetle al" << endl;
+
+						// !!! НОВЫЙ ОПЕРАТОР СРАВНЕНИЯ !!!
+						else if (t.op == LT::OLESS_CMP) out << "\tsetl al" << endl;
+					}
 					out << "\tpush eax" << endl;
 				}
 			}
-
-			// 8. ПРИСВАИВАНИЕ
 			if (t.lexema == LEX_EQUAL) continue;
 
-			// 9. ТОЧКА С ЗАПЯТОЙ
+			// 9. ТОЧКА С ЗАПЯТОЙ (Обработка концов инструкций)
 			if (t.lexema == LEX_SEMICOLON) {
+				// Присваивание
 				if (assignmentTargetIdx != -1) {
 					IT::Entry& l = tables.idtable.table[assignmentTargetIdx];
 					out << "\tpop eax" << endl;
 					if (l.iddatatype == IT::STR || l.idtype == IT::P) out << "\tmov " << GetID(l) << ", eax" << endl;
 					else out << "\tmov " << GetID(l) << ", al" << endl;
 					assignmentTargetIdx = -1;
+				}
+				// Возврат из функции
+				else if (isReturn) {
+					out << "\tpop eax" << endl;
+					out << "\tret" << endl;
+					isReturn = false;
 				}
 			}
 		}

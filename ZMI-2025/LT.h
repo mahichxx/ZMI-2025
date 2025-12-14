@@ -54,7 +54,9 @@ namespace LT
 {
 	enum operations {
 		OPLUS = 1, OMINUS, OMUL, ODIV, OMOD,
-		OEQ, ONE, OMORE, OLESS, OGE, OLE, OAND, OOR
+		OEQ, ONE, OMORE, OLESS, OGE, OLE,
+		OLESS_CMP, // <--- ÍÎÂÛÉ ÊÎÄ ÄËß ÑÐÀÂÍÅÍÈß "ÌÅÍÜØÅ"
+		OAND, OOR
 	};
 
 	struct Entry
