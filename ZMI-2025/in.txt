@@ -1,13 +1,10 @@
-[   Итоговый пример ZMI-2025    ]
-
-[ Объявление библиотечных функций ]
 byte proc strtoint(text strArg) { ret 0; }
 byte proc stcmp(text sOne, text sTwo) { ret 0; }
 byte proc strle(text txtArg) { ret 0; }
 byte proc mabs(byte nArg) { ret 0; }
 byte proc rnd(byte maxArg) { ret 0; }
 
-[ Пользовательская функция ]
+[ Функция ]
 
 byte proc calc(byte a, byte b) {
     byte res;
@@ -26,82 +23,69 @@ box {
     byte lenVal;
     byte rndVal;
 
-   
-
-    [ 1. ТИПЫ ДАННЫХ И ЛИТЕРАЛЫ  ]
-
-    welcome = "------- 1. DATA TYPES TEST -------";
-    welcome = "------- 1. ТЕСТ ТИПОВ ДАННЫХ -------";
+    welcome = "Типы данных";
+    welcome = "Строковый тип данных";
     show < welcome;
 
-    [ Десятичный ]
     numDec = 100;
     show < "Decimal (100):";
     show < numDec;
 
-    [ Шестнадцатеричный ]
     numHex = 0xFF;
     show < "Hex (0xFF -> -1):";
     show < numHex;
 
-    [ Двоичный  ]
     numBin = 0b101;
     show < "Binary (0b101):";
     show < numBin;
 
-    [ Символьный ]
     myChar = 'Z';
     show < "Char (Z -> 90):";
     show < myChar;
 
-    [ Логический: true=1, false=0 ]
+    [ Логический: 
+    true=1, 
+    false=0 ]
+
     myBool = true;
     show < "Bool (true -> 1):";
     show < myBool;
 
-    [ 2. АРИФМЕТИКА И ФУНКЦИИ  ]
+    [ Арефмитические операции ]
 
-    show < "------- 2. MATH & FUNCTIONS -------";
-    show < "------- 2.МАТЕМАТИКА & ФУНКЦИИ -------"; 
+    show < "Math | Математика";
 
     res = 100 / 3;
-    show < "100 / 3 =";
+    show < "100 / 3 ="; 
     show < res;
     
     res = 100 % 3;
     show < "100 % 3 =";
     show < res;
 
-    [ Вызов пользовательской функции ]
     res = calc(10, 5);
     show < "calc(10, 5) -> (10+5) * 2 =";
     show < res;
 
-    [ Библиотечная функция модуля ]
     res = mabs(-50);
     show < "mabs(-50) =";
     show < res;
 
-    [ 3. РАБОТА СО СТРОКАМИ ]
+    [ Операции со строками ]
  
-    show < "------- 3. STRINGS (Cyrillic) -------";
-    show < "------- 3. СТРОКИ (Кириллица) -------";
+    show < "Strings | Строки ";
     
-    [ Длина строки ]
     lenVal = strle("Привет");
     show < "Length of Privet (expect 6):";
     show < lenVal;
 
-    [ Преобразование строки в число ]
     res = strtoint("42");
     show < "String 42 to Byte:";
     show < res;
 
+    [ Операции сравнения ]
 
-    [ 4. ОПЕРАЦИИ СРАВНЕНИЯ (1=True, 0=False) ]
-
-    show < "------- 4. COMPARISON TEST -------";
-    show < "------- 4. СРАВНИТЕЛЬНЫЙ ТЕСТ -------";
+    show < "Comparison | Cравнение ";
 
     res = 10 == 10;
     show < "10 == 10 (Expect 1):";
@@ -127,12 +111,11 @@ box {
     show < "5 >= 10 (Expect 0):";
     show < res;
 
-    [ 5. УСЛОВНЫЙ ОПЕРАТОР (CHECK/SWITCH) ]
+    [ Условный оператор ]
 
-    show < "------- 5. LOGIC & RANDOM -------";
-    show < "------- 5. ЛОГИКА & СЛУЧАЙНОСТЬ -------";
-    rndVal = rnd(2); [ Генерируем 0 или 1 ]
-    show < "Random (0 or 1):";
+    show < "Conditional operator | Условный оператор";
+    rndVal = rnd(3);
+    show < "Random (0 - 2):";
     show < rndVal;
 
     check(rndVal) {
@@ -146,7 +129,5 @@ box {
             show < "Default/По умолчанию";
         }
     }
-
-    show < "=== TEST COMPLETE ===";
-    show < "------- ТЕСТ ЗАВЕРШЕН -------";
+    show < "The end | Конец";
 }

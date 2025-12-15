@@ -21,51 +21,46 @@ rnd PROTO :SDWORD
 .const
 	L2	sdword 0
 	L19	sdword 2
-	L29	db '------- 1. DATA TYPES TEST -------', 0
-	L31	db '------- 1. ÒÅÑÒ ÒÈÏÎÂ ÄÀÍÍÛÕ -------', 0
-	L34	sdword 100
-	L36	db 'Decimal (100):', 0
-	L39	sdword 255
-	L41	db 'Hex (0xFF -> -1):', 0
-	L44	sdword 5
-	L46	db 'Binary (0b101):', 0
-	L49	byte 'Z'
-	L51	db 'Char (Z -> 90):', 0
-	L54	sdword 1
-	L56	db 'Bool (true -> 1):', 0
-	L59	db '------- 2. MATH & FUNCTIONS -------', 0
-	L61	db '------- 2.ÌÀÒÅÌÀÒÈÊÀ & ÔÓÍÊÖÈÈ -------', 0
-	L64	sdword 3
-	L66	db '100 / 3 =', 0
-	L71	db '100 % 3 =', 0
-	L74	sdword 10
-	L75	sdword 5
-	L77	db 'calc(10, 5) -> (10+5) * 2 =', 0
-	L81	sdword -50
-	L83	db 'mabs(-50) =', 0
-	L86	db '------- 3. STRINGS (Cyrillic) -------', 0
-	L88	db '------- 3. ÑÒÐÎÊÈ (Êèðèëëèöà) -------', 0
-	L90	db 'Ïðèâåò', 0
-	L92	db 'Length of Privet (expect 6):', 0
-	L95	db '42', 0
-	L97	db 'String 42 to Byte:', 0
-	L100	db '------- 4. COMPARISON TEST -------', 0
-	L102	db '------- 4. ÑÐÀÂÍÈÒÅËÜÍÛÉ ÒÅÑÒ -------', 0
-	L106	db '10 == 10 (Expect 1):', 0
-	L111	db '10 != 5 (Expect 1):', 0
-	L114	sdword 20
-	L117	db '20 > 10 (Expect 1):', 0
-	L122	db '5 < 10 (Expect 1):', 0
-	L127	db '10 <= 10 (Expect 1):', 0
-	L132	db '5 >= 10 (Expect 0):', 0
-	L135	db '------- 5. LOGIC & RANDOM -------', 0
-	L137	db '------- 5. ËÎÃÈÊÀ & ÑËÓ×ÀÉÍÎÑÒÜ -------', 0
-	L140	db 'Random (0 or 1):', 0
-	L143	db 'Case 0: Zero/Íîëü', 0
-	L145	db 'Case 1: One/Îäèí', 0
-	L147	db 'Default/Ïî óìîë÷àíèþ', 0
-	L149	db '=== TEST COMPLETE ===', 0
-	L151	db '------- ÒÅÑÒ ÇÀÂÅÐØÅÍ -------', 0
+	L30	db 'Òèïû äàííûõ', 0
+	L32	db 'Ñòðîêîâûé òèï äàííûõ', 0
+	L35	sdword 100
+	L37	db 'Decimal (100):', 0
+	L40	sdword 255
+	L42	db 'Hex (0xFF -> -1):', 0
+	L45	sdword 5
+	L47	db 'Binary (0b101):', 0
+	L50	byte 'Z'
+	L52	db 'Char (Z -> 90):', 0
+	L55	sdword 1
+	L57	db 'Bool (true -> 1):', 0
+	L60	db 'Math | Ìàòåìàòèêà', 0
+	L63	sdword 3
+	L65	db '100 / 3 =', 0
+	L70	db '100 % 3 =', 0
+	L73	sdword 10
+	L74	sdword 5
+	L76	db 'calc(10, 5) -> (10+5) * 2 =', 0
+	L80	sdword -50
+	L82	db 'mabs(-50) =', 0
+	L85	db 'Strings | Ñòðîêè ', 0
+	L87	db 'Ïðèâåò', 0
+	L89	db 'Length of Privet (expect 6):', 0
+	L92	db '42', 0
+	L94	db 'String 42 to Byte:', 0
+	L97	db 'Comparison | Cðàâíåíèå ', 0
+	L101	db '10 == 10 (Expect 1):', 0
+	L106	db '10 != 5 (Expect 1):', 0
+	L109	sdword 20
+	L112	db '20 > 10 (Expect 1):', 0
+	L117	db '5 < 10 (Expect 1):', 0
+	L122	db '10 <= 10 (Expect 1):', 0
+	L127	db '5 >= 10 (Expect 0):', 0
+	L130	db 'Conditional operator | Óñëîâíûé îïåðàòîð', 0
+	L133	db 'Random (0 - 2):', 0
+	L136	db 'Case 0: Zero/Íîëü', 0
+	L138	db 'Case 1: One/Îäèí', 0
+	L140	db 'Default/Ïî óìîë÷àíèþ', 0
+	L142	db 'The end | Êîíåö', 0
 .data
 	switch_val dd 0
 	calcres	sbyte 0
@@ -75,6 +70,7 @@ rnd PROTO :SDWORD
 	numBin	sbyte 0
 	myChar	sbyte 0
 	myBool	sbyte 0
+	res	sbyte 0
 	lenVal	sbyte 0
 	rndVal	sbyte 0
 .code
@@ -105,13 +101,13 @@ main PROC
 	; Decl: numBin
 	; Decl: myChar
 	; Decl: myBool
-	; Decl: calcres
+	; Decl: res
 	; Decl: lenVal
 	; Decl: rndVal
-	push offset L29
+	push offset L30
 	pop eax
 	mov welcome, eax
-	push offset L31
+	push offset L32
 	pop eax
 	mov welcome, eax
 	push welcome
@@ -121,7 +117,7 @@ main PROC
 	push 100
 	pop eax
 	mov numDec, al
-	push offset L36
+	push offset L37
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -133,7 +129,7 @@ main PROC
 	push 255
 	pop eax
 	mov numHex, al
-	push offset L41
+	push offset L42
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -145,7 +141,7 @@ main PROC
 	push 5
 	pop eax
 	mov numBin, al
-	push offset L46
+	push offset L47
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -157,7 +153,7 @@ main PROC
 	push 90
 	pop eax
 	mov myChar, al
-	push offset L51
+	push offset L52
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -169,7 +165,7 @@ main PROC
 	push 1
 	pop eax
 	mov myBool, al
-	push offset L56
+	push offset L57
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -178,11 +174,7 @@ main PROC
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L59
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push offset L61
+	push offset L60
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -194,12 +186,12 @@ main PROC
 	idiv ebx
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L66
+	mov res, al
+	push offset L65
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -213,12 +205,12 @@ main PROC
 	mov eax, edx
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L71
+	mov res, al
+	push offset L70
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -228,12 +220,12 @@ main PROC
 	call calc
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L77
+	mov res, al
+	push offset L76
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -242,30 +234,26 @@ main PROC
 	call mabs
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L83
+	mov res, al
+	push offset L82
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L86
+	push offset L85
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	push offset L88
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push offset L90
+	push offset L87
 	call strle
 	push eax
 	pop eax
 	mov lenVal, al
-	push offset L92
+	push offset L89
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -274,25 +262,21 @@ main PROC
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L95
+	push offset L92
 	call strtoint
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L97
+	mov res, al
+	push offset L94
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L100
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push offset L102
+	push offset L97
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -305,12 +289,12 @@ main PROC
 	sete al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L106
+	mov res, al
+	push offset L101
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -324,12 +308,12 @@ main PROC
 	setne al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L111
+	mov res, al
+	push offset L106
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -343,12 +327,12 @@ main PROC
 	setg al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L117
+	mov res, al
+	push offset L112
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -362,12 +346,12 @@ main PROC
 	setl al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L122
+	mov res, al
+	push offset L117
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -381,12 +365,12 @@ main PROC
 	setle al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L127
+	mov res, al
+	push offset L122
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
@@ -400,30 +384,26 @@ main PROC
 	setge al
 	push eax
 	pop eax
-	mov calcres, al
-	push offset L132
+	mov res, al
+	push offset L127
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	movsx eax, calcres
+	movsx eax, res
 	push eax
 	pop eax
 	invoke outnum, eax
 	invoke newline
-	push offset L135
+	push offset L130
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	push offset L137
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push 2
+	push 3
 	call rnd
 	push eax
 	pop eax
 	mov rndVal, al
-	push offset L140
+	push offset L133
 	pop eax
 	invoke outstr, eax
 	invoke newline
@@ -438,32 +418,28 @@ main PROC
 	push eax
 	mov eax, switch_val
 	cmp eax, 0
-	jne sw_413_next_0
-	push offset L143
+	jne sw_397_next_0
+	push offset L136
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	jmp sw_413_end
-sw_413_next_0:
+	jmp sw_397_end
+sw_397_next_0:
 	mov eax, switch_val
 	cmp eax, 1
-	jne sw_413_next_1
-	push offset L145
+	jne sw_397_next_1
+	push offset L138
 	pop eax
 	invoke outstr, eax
 	invoke newline
-	jmp sw_413_end
-sw_413_next_1:
-	push offset L147
+	jmp sw_397_end
+sw_397_next_1:
+	push offset L140
 	pop eax
 	invoke outstr, eax
 	invoke newline
-sw_413_end:
-	push offset L149
-	pop eax
-	invoke outstr, eax
-	invoke newline
-	push offset L151
+sw_397_end:
+	push offset L142
 	pop eax
 	invoke outstr, eax
 	invoke newline

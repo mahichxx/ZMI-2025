@@ -71,12 +71,9 @@ namespace MFST {
 					GRB::Rule::Chain chain;
 					if ((nrulechain = rule.getNextChain(lenta[lenta_position], chain, nrulechain + 1)) >= 0) {
 
-						// Лог в файл
 						MFST_TRACE1;
-						// Лог в консоль (если нужно)
 						if (more) { MFST_TRACE1_M; }
 
-						// ВАЖНАЯ ЛОГИКА (ОБЯЗАТЕЛЬНО ВЫПОЛНЯЕТСЯ)
 						savestate();
 						st.pop();
 						push_chain(chain);
@@ -185,24 +182,35 @@ namespace MFST {
 			if (more) { MFST_TRACE4_M("------>LENTA_END"); }
 
 			*log.stream << "------------------------------------------------------------------------------------------\n";
-			sprintf_s(buf, MFST_DIAGN_MAXSIZE, "%d: Всего строк %d, синтаксический анализ выполнен без ошибок", 0, lex.table[lex.size - 1].sn);
-			cout << "-----Синтаксический анализ обработал строк " << lex.table[lex.size - 1].sn << ",\n";
-			rc = true;
+
+			if (st.size() > 0) {
+				if (st.size() > 1) {
+					sprintf_s(buf, MFST_DIAGN_MAXSIZE, "Синтаксическая ошибка: Неожиданный конец файла (возможно, пропущена '}')");
+					cout << "Ошибка 607: " << buf << endl;
+					*log.stream << "Ошибка 607: " << buf << endl;
+					rc = false;
+				}
+				else {
+					sprintf_s(buf, MFST_DIAGN_MAXSIZE, "%d: Всего строк %d, синтаксический анализ выполнен без ошибок", 0, lex.table[lex.size - 1].sn);
+					cout << "- Синтаксический анализ обработал строк " << lex.table[lex.size - 1].sn << ",\n";
+					rc = true;
+				}
+			}
+			else {
+				rc = true;
+			}
 			break;
 
 		case NS_NORULE:
 			MFST_TRACE4("------>NS_NORULE");
 			if (more) { MFST_TRACE4_M("------>NS_NORULE"); }
-
 			*log.stream << "------------------------------------------------------------------------------------------\n";
 
-			// Вывод ошибок в консоль
 			cout << "ОШИБКА СИНТАКСИСА:\n";
 			cout << getDiagnosis(0, buf) << endl;
 			if (diagnosis[1].lenta_position != -1) cout << getDiagnosis(1, buf) << endl;
 			if (diagnosis[2].lenta_position != -1) cout << getDiagnosis(2, buf) << endl;
 
-			// Запись в лог
 			*log.stream << getDiagnosis(0, buf) << endl;
 			break;
 

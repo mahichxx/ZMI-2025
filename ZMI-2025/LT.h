@@ -55,7 +55,7 @@ namespace LT
 	enum operations {
 		OPLUS = 1, OMINUS, OMUL, ODIV, OMOD,
 		OEQ, ONE, OMORE, OLESS, OGE, OLE,
-		OLESS_CMP, // <--- ÍÎÂÛÉ ÊÎÄ ÄËß ÑÐÀÂÍÅÍÈß "ÌÅÍÜØÅ"
+		OLESS_CMP, 
 		OAND, OOR
 	};
 

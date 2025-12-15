@@ -3,40 +3,120 @@
   "WorkspaceRootPath": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\IT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\PN.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|solutionrelative:ZMI-2025\\in.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Error.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Error.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Lex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{991C560D-7122-41BB-9990-F4F94A6D1D35}|ASM\\ASM.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ASM\\Asm.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{991C560D-7122-41BB-9990-F4F94A6D1D35}|ASM\\ASM.vcxproj|solutionrelative:ZMI-2025\\ASM\\Asm.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.log||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|solutionrelative:ZMI-2025\\in.txt.log||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|solutionrelative:ZMI-2025\\in.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\PN.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.out||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0440\u0435\u0448\u0435\u043D\u0438\u044F{49D8777B-FEC2-4E4C-88B7-6E0D2CE97C17}|solutionrelative:ZMI-2025\\in.txt.out||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\In.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Greibach.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Generation.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\MFST.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Greibach.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\LT.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\LT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\In.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Log.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Lex.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Error.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Error.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\IT.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\MFST.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Parm.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Sem.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\IT.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Lex.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Generation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Sem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ZMI-2025.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\ZMI-2025.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Parm.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\Log.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\In.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\FST.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF643869-EDEF-4E65-A3FD-A1832996620B}|ZMI-2025\\ZMI-2025.vcxproj|solutionrelative:ZMI-2025\\FST.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,17 +126,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "in.txt",
               "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt",
               "RelativeDocumentMoniker": "ZMI-2025\\in.txt",
               "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt",
               "RelativeToolTip": "ZMI-2025\\in.txt",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAABwAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAiwIQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
               "WhenOpened": "2025-12-11T18:53:01.987Z",
               "IsPinned": true,
@@ -64,13 +144,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 15,
               "Title": "Error.cpp",
               "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Error.cpp",
               "RelativeDocumentMoniker": "ZMI-2025\\Error.cpp",
               "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Error.cpp",
               "RelativeToolTip": "ZMI-2025\\Error.cpp",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAACkAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAFEAAABfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-12T15:23:27.586Z",
               "IsPinned": true,
@@ -78,16 +158,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 21,
               "Title": "Lex.cpp",
               "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.cpp",
               "RelativeDocumentMoniker": "ZMI-2025\\Lex.cpp",
               "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.cpp",
               "RelativeToolTip": "ZMI-2025\\Lex.cpp",
-              "ViewState": "AgIAAEYBAAAAAAAAAAAvwFQBAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-14T23:20:00.028Z",
               "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Asm.asm",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ASM\\Asm.asm",
+              "RelativeDocumentMoniker": "ZMI-2025\\ASM\\Asm.asm",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ASM\\Asm.asm",
+              "RelativeToolTip": "ZMI-2025\\ASM\\Asm.asm",
+              "ViewState": "AgIAAKMBAAAAAAAAAAAgwLIBAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-15T02:32:32.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PN.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\PN.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.cpp",
+              "RelativeToolTip": "ZMI-2025\\PN.cpp",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAqwJoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:43:45.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "in.txt.log",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.log",
+              "RelativeDocumentMoniker": "ZMI-2025\\in.txt.log",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.log",
+              "RelativeToolTip": "ZMI-2025\\in.txt.log",
+              "ViewState": "AgIAAK8IAAAAAAAAAAAAAO0HAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-14T23:02:28.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PN.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\PN.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\PN.h",
+              "RelativeToolTip": "ZMI-2025\\PN.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:48:48.167Z",
               "EditorCaption": ""
             },
             {
@@ -98,27 +230,131 @@
               "RelativeDocumentMoniker": "ZMI-2025\\in.txt.out",
               "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.out",
               "RelativeToolTip": "ZMI-2025\\in.txt.out",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAAAIcAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-12-14T23:48:49.099Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "in.txt.log",
-              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.log",
-              "RelativeDocumentMoniker": "ZMI-2025\\in.txt.log",
-              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\in.txt.log",
-              "RelativeToolTip": "ZMI-2025\\in.txt.log",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-14T23:02:28.47Z",
+              "DocumentIndex": 6,
+              "Title": "Greibach.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Greibach.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.h",
+              "RelativeToolTip": "ZMI-2025\\Greibach.h",
+              "ViewState": "AgIAACoAAAAAAAAAAAAIwD4AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T12:18:04.783Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 7,
+              "Title": "Generation.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Generation.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.h",
+              "RelativeToolTip": "ZMI-2025\\Generation.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T12:26:23.216Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Greibach.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\Greibach.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Greibach.cpp",
+              "RelativeToolTip": "ZMI-2025\\Greibach.cpp",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAAAHwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T02:08:08.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MFST.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\MFST.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.cpp",
+              "RelativeToolTip": "ZMI-2025\\MFST.cpp",
+              "ViewState": "AgIAAPgAAAAAAAAAAAAmwP4AAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:44:44.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "LT.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\LT.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.cpp",
+              "RelativeToolTip": "ZMI-2025\\LT.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJQAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:44:39.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "LT.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\LT.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\LT.h",
+              "RelativeToolTip": "ZMI-2025\\LT.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:48:52.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "In.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\In.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.h",
+              "RelativeToolTip": "ZMI-2025\\In.h",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAswBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-14T10:50:22.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Log.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Log.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.h",
+              "RelativeToolTip": "ZMI-2025\\Log.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:48:55.161Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Lex.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Lex.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Lex.h",
+              "RelativeToolTip": "ZMI-2025\\Lex.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:48:56.446Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "IT.h",
               "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.h",
               "RelativeDocumentMoniker": "ZMI-2025\\IT.h",
@@ -131,28 +367,132 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "In.cpp",
-              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp",
-              "RelativeDocumentMoniker": "ZMI-2025\\In.cpp",
-              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp",
-              "RelativeToolTip": "ZMI-2025\\In.cpp",
-              "ViewState": "AgIAAEkAAAAAAAAAAAAvwF8AAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-14T21:45:50.963Z",
+              "DocumentIndex": 17,
+              "Title": "MFST.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\MFST.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\MFST.h",
+              "RelativeToolTip": "ZMI-2025\\MFST.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:48:50.614Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "In.h",
-              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.h",
-              "RelativeDocumentMoniker": "ZMI-2025\\In.h",
-              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.h",
-              "RelativeToolTip": "ZMI-2025\\In.h",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAmwDMAAAABAAAAAAAAAA==",
+              "DocumentIndex": 18,
+              "Title": "Parm.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Parm.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.h",
+              "RelativeToolTip": "ZMI-2025\\Parm.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-14T10:50:22.895Z",
+              "WhenOpened": "2025-12-15T08:48:49.559Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "IT.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\IT.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.cpp",
+              "RelativeToolTip": "ZMI-2025\\IT.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-11T19:21:26.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Sem.h",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.h",
+              "RelativeDocumentMoniker": "ZMI-2025\\Sem.h",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.h",
+              "RelativeToolTip": "ZMI-2025\\Sem.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T01:19:56.397Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Generation.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\Generation.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Generation.cpp",
+              "RelativeToolTip": "ZMI-2025\\Generation.cpp",
+              "ViewState": "AgIAAAUBAAAAAAAAAAAswBwBAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:43:51.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Sem.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\Sem.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Sem.cpp",
+              "RelativeToolTip": "ZMI-2025\\Sem.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:24:35.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ZMI-2025.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ZMI-2025.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\ZMI-2025.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\ZMI-2025.cpp",
+              "RelativeToolTip": "ZMI-2025\\ZMI-2025.cpp",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAcwGAAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:34:01.748Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Parm.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\Parm.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Parm.cpp",
+              "RelativeToolTip": "ZMI-2025\\Parm.cpp",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:44:56.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Log.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\Log.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\Log.cpp",
+              "RelativeToolTip": "ZMI-2025\\Log.cpp",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:44:33.128Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "FST.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\FST.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\FST.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\FST.cpp",
+              "RelativeToolTip": "ZMI-2025\\FST.cpp",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T00:43:46.874Z",
               "EditorCaption": ""
             },
             {
@@ -185,15 +525,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IT.cpp",
-              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.cpp",
-              "RelativeDocumentMoniker": "ZMI-2025\\IT.cpp",
-              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\IT.cpp",
-              "RelativeToolTip": "ZMI-2025\\IT.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAABAAAAAAAAAA==",
+              "DocumentIndex": 27,
+              "Title": "In.cpp",
+              "DocumentMoniker": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp",
+              "RelativeDocumentMoniker": "ZMI-2025\\In.cpp",
+              "ToolTip": "D:\\\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\\3_\u0441\u0435\u043C\\\u041A\u041F\u041E\\ZMI-2025\\ZMI-2025\\In.cpp",
+              "RelativeToolTip": "ZMI-2025\\In.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-11T19:21:26.517Z"
+              "WhenOpened": "2025-12-14T21:45:50.963Z",
+              "EditorCaption": ""
             }
           ]
         }

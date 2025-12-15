@@ -14,7 +14,7 @@ namespace In {
 // IN::P -  ‡‚˚˜ÍË
 // IN::S - œÓ·ÂÎ˚
 #define IN_CODE_TABLE {\
-/*         0      1      2       3     4($)    5(%)   6      7      8      9      A      B      C     D      E      F*/\
+/*         0      1      2       3     4    5   6      7      8      9      A      B      C     D      E      F*/\
 /*0*/	IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::S, '|',   IN::F, IN::F,	IN::F, IN::F, IN::F,\
 /*1*/	IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F,\
 /*2*/	IN::S,	IN::T, IN::P, 0,     IN::F,	0,     0,     IN::P, 0,	    0,     0,     0,     0,	    0,     0,     0,\
@@ -23,7 +23,7 @@ namespace In {
 /*5*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, 0,     0,	    0,     0,     IN::T,\
 /*6*/	0,      IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T,\
 /*7*/	IN::T,	IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, 0,     0,     0,     0,     IN::F,\
-/* --- –”—— »≈ ¡” ¬€ (1251) --- */                                                                                  \
+                                                                                 \
 /*8*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\
 /*9*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\
 /*A*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\

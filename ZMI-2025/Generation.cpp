@@ -82,7 +82,7 @@ namespace Gener {
 		int lastCaseValue = -1;
 		int assignmentTargetIdx = -1;
 
-		// !!! ФЛАГ ВОЗВРАТА !!!
+		// !!! ФЛАГ ДЛЯ RETURN !!!
 		bool isReturn = false;
 
 		for (int i = 0; i < tables.lextable.size; i++) {
@@ -147,7 +147,7 @@ namespace Gener {
 				currentBalance++; continue;
 			}
 
-			// 3. RETURN (ТОЛЬКО СТАВИМ ФЛАГ)
+			// 3. RETURN (СТАВИМ ФЛАГ, НЕ ГЕНЕРИРУЕМ КОД)
 			if (t.lexema == LEX_RETURN) {
 				isReturn = true;
 				continue;
@@ -222,7 +222,6 @@ namespace Gener {
 
 			// 7. ОПЕРАТОРЫ
 			if (t.lexema == LEX_OPERATOR) {
-				// Если это вывод (show <)
 				if (t.op == LT::OLESS) {
 					bool isString = false;
 					if (i > 0) {
@@ -238,32 +237,24 @@ namespace Gener {
 					out << "\tinvoke newline" << endl;
 				}
 				else {
-					// Арифметика и Сравнения
 					out << "\tpop ebx\n\tpop eax" << endl;
-
 					if (t.op == LT::OPLUS) out << "\tadd eax, ebx" << endl;
-					else if (t.op == LT::OMINUS) out << "\tsub eax, ebx" << endl;
-					else if (t.op == LT::OMUL) out << "\timul eax, ebx" << endl;
-					else if (t.op == LT::ODIV) out << "\tcdq\n\tidiv ebx" << endl;
-					else if (t.op == LT::OMOD) out << "\tcdq\n\tidiv ebx\n\tmov eax, edx" << endl;
+					if (t.op == LT::OMINUS) out << "\tsub eax, ebx" << endl;
+					if (t.op == LT::OMUL) out << "\timul eax, ebx" << endl;
+					if (t.op == LT::ODIV) out << "\tcdq\n\tidiv ebx" << endl;
+					if (t.op == LT::OMOD) out << "\tcdq\n\tidiv ebx\n\tmov eax, edx" << endl;
 
-					// Сравнения
-					else {
-						out << "\tcmp eax, ebx" << endl;
-						out << "\tmov eax, 0" << endl; // Обнуляем для set
+					if (t.op == LT::OEQ) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsete al" << endl; }
+					if (t.op == LT::ONE) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsetne al" << endl; }
+					if (t.op == LT::OMORE) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsetg al" << endl; }
+					if (t.op == LT::OGE) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsetge al" << endl; }
+					if (t.op == LT::OLE) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsetle al" << endl; }
+					if (t.op == LT::OLESS_CMP) { out << "\tcmp eax, ebx\n\tmov eax, 0\n\tsetl al" << endl; }
 
-						if (t.op == LT::OEQ) out << "\tsete al" << endl;
-						else if (t.op == LT::ONE) out << "\tsetne al" << endl;
-						else if (t.op == LT::OMORE) out << "\tsetg al" << endl;
-						else if (t.op == LT::OGE) out << "\tsetge al" << endl;
-						else if (t.op == LT::OLE) out << "\tsetle al" << endl;
-
-						// !!! НОВЫЙ ОПЕРАТОР СРАВНЕНИЯ !!!
-						else if (t.op == LT::OLESS_CMP) out << "\tsetl al" << endl;
-					}
 					out << "\tpush eax" << endl;
 				}
 			}
+
 			if (t.lexema == LEX_EQUAL) continue;
 
 			// 9. ТОЧКА С ЗАПЯТОЙ (Обработка концов инструкций)
@@ -276,7 +267,7 @@ namespace Gener {
 					else out << "\tmov " << GetID(l) << ", al" << endl;
 					assignmentTargetIdx = -1;
 				}
-				// Возврат из функции
+				// Возврат (если был флаг)
 				else if (isReturn) {
 					out << "\tpop eax" << endl;
 					out << "\tret" << endl;
@@ -291,6 +282,6 @@ namespace Gener {
 		}
 		out << "end main" << endl;
 		out.close();
-		cout << "[GENERATION] SUCCESS: ASM\\Asm.asm" << endl;
+		cout << "- Успешное генерирование файла: ASM\\Asm.asm" << endl;
 	}
 }

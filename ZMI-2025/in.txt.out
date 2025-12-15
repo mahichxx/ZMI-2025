@@ -1,305 +1,189 @@
 
 ----------------- Поток лексем ---------------------
-01 
-04 tfi(si){rl;}
-05 tfi(si,si){rl;}
-06 tfi(si){rl;}
-07 tfi(ti){rl;}
-08 tfi(ti){rl;}
-12 tfi(ti,ti){
-13 ti;
-14 i=(ivi)vl;
-15 ri;
-16 }
-18 m{
-19 si;
-20 ti;
+01 tfi(si){rl;}
+02 tfi(si,si){rl;}
+03 tfi(si){rl;}
+04 tfi(ti){rl;}
+05 tfi(ti){rl;}
+09 tfi(ti,ti){
+10 ti;
+11 i=(ivi)vl;
+12 ri;
+13 }
+15 m{
+16 si;
+17 ti;
+18 ti;
+19 ti;
+20 ci;
 21 ti;
 22 ti;
-23 ci;
+23 ti;
 24 ti;
-25 ti;
-26 ti;
-27 ti;
-33 i=l;
+26 i=l;
+27 i=l;
+28 ovi;
+30 i=l;
+31 ovl;
+32 ovi;
 34 i=l;
-35 ovi;
+35 ovl;
+36 ovi;
 38 i=l;
 39 ovl;
 40 ovi;
-43 i=l;
-44 ovl;
-45 ovi;
+42 i=l;
+43 ovl;
+44 ovi;
 48 i=l;
 49 ovl;
 50 ovi;
-53 i=l;
 54 ovl;
-55 ovi;
-58 i=l;
-59 ovl;
-60 ovi;
-64 ovl;
+56 i=lvl;
+57 ovl;
+58 ovi;
+60 i=lvl;
+61 ovl;
+62 ovi;
+64 i=i(l,l);
 65 ovl;
-67 i=lvl;
-68 ovl;
-69 ovi;
-71 i=lvl;
-72 ovl;
-73 ovi;
-76 i=i(l,l);
+66 ovi;
+68 i=i(l);
+69 ovl;
+70 ovi;
+74 ovl;
+76 i=i(l);
 77 ovl;
 78 ovi;
-81 i=i(l);
-82 ovl;
-83 ovi;
-87 ovl;
-88 ovl;
-91 i=i(l);
-92 ovl;
-93 ovi;
-96 i=i(l);
+80 i=i(l);
+81 ovl;
+82 ovi;
+86 ovl;
+88 i=lvl;
+89 ovl;
+90 ovi;
+92 i=lvl;
+93 ovl;
+94 ovi;
+96 i=lvl;
 97 ovl;
 98 ovi;
-103 ovl;
-104 ovl;
-106 i=lvl;
-107 ovl;
-108 ovi;
-110 i=lvl;
-111 ovl;
-112 ovi;
-114 i=lvl;
-115 ovl;
-116 ovi;
-118 i=lvl;
-119 ovl;
-120 ovi;
-122 i=lvl;
-123 ovl;
-124 ovi;
-126 i=lvl;
+100 i=lvl;
+101 ovl;
+102 ovi;
+104 i=lvl;
+105 ovl;
+106 ovi;
+108 i=lvl;
+109 ovl;
+110 ovi;
+114 ovl;
+115 i=i(l);
+116 ovl;
+117 ovi;
+119 h(i){
+120 al:{
+121 ovl;
+122 }
+123 al:{
+124 ovl;
+125 }
+126 d:{
 127 ovl;
-128 ovi;
-132 ovl;
-133 ovl;
-134 i=i(l);
-135 ovl;
-136 ovi;
-138 h(i){
-139 al:{
-140 ovl;
-141 }
-142 al:{
-143 ovl;
-144 }
-145 d:{
-146 ovl;
-147 }
-148 }
-150 ovl;
-151 ovl;
-152 }
-
-
------Таблица лексем после преобразования в ПОЛИЗ (Сырая)
-
------------------ Поток лексем ---------------------
-01 
-04 tfi(si){rl;}
-05 tfi(si,si){rl;}
-06 tfi(si){rl;}
-07 tfi(ti){rl;}
-08 tfi(ti){rl;}
-12 tfi(ti,ti){
-13 ti;
-14 i=iivlv;
-15 ri;
-16 }
-18 m{
-19 si;
-20 ti;
-21 ti;
-22 ti;
-23 ci;
-24 ti;
-25 ti;
-26 ti;
-27 ti;
-33 i=l;
-34 i=l;
-35 oiv;
-38 i=l;
-39 olv;
-40 oiv;
-43 i=l;
-44 olv;
-45 oiv;
-48 i=l;
-49 olv;
-50 oiv;
-53 i=l;
-54 olv;
-55 oiv;
-58 i=l;
-59 olv;
-60 oiv;
-64 olv;
-65 olv;
-67 i=llv;
-68 olv;
-69 oiv;
-71 i=llv;
-72 olv;
-73 oiv;
-76 i=ll@;
-77 olv;
-78 oiv;
-81 i=l@;
-82 olv;
-83 oiv;
-87 olv;
-88 olv;
-91 i=l@;
-92 olv;
-93 oiv;
-96 i=l@;
-97 olv;
-98 oiv;
-103 olv;
-104 olv;
-106 i=llv;
-107 olv;
-108 oiv;
-110 i=llv;
-111 olv;
-112 oiv;
-114 i=llv;
-115 olv;
-116 oiv;
-118 i=llv;
-119 olv;
-120 oiv;
-122 i=llv;
-123 olv;
-124 oiv;
-126 i=llv;
-127 olv;
-128 oiv;
-132 olv;
-133 olv;
-134 i=l@;
-135 olv;
-136 oiv;
-138 h(i){
-139 al:{
-140 olv;
-141 }
-142 al:{
-143 olv;
-144 }
-145 d:{
-146 olv;
-147 }
-148 }
-150 olv;
-151 olv;
-152 }
+128 }
+129 }
+130 ovl;
+131 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
 Номер строки | Выражение в ПОЛИЗ
 ------------------------------------------------------------------------------
-04           | strtoint strArg return 0 ;
-05           | stcmp sOne sTwo return 0 ;
-06           | strle txtArg return 0 ;
-07           | mabs nArg return 0 ;
-08           | rnd maxArg return 0 ;
-12           | calc a b 
-13           | calcres ;
-14           | calcres = a b + 2 * ;
-15           | return calcres ;
-16           | 18           | 19           | welcome ;
-20           | numDec ;
-21           | numHex ;
-22           | numBin ;
-23           | myChar ;
-24           | myBool ;
-25           | calcres ;
-26           | lenVal ;
-27           | rndVal ;
-33           | welcome = "------- 1. DATA TYPES TEST -------" ;
-34           | welcome = "------- 1. ТЕСТ ТИПОВ ДАННЫХ -------" ;
-35           | cout welcome < ;
-38           | numDec = 100 ;
-39           | cout "Decimal (100):" < ;
-40           | cout numDec < ;
-43           | numHex = 255 ;
-44           | cout "Hex (0xFF -> -1):" < ;
-45           | cout numHex < ;
-48           | numBin = 5 ;
-49           | cout "Binary (0b101):" < ;
-50           | cout numBin < ;
-53           | myChar = 'Z' ;
-54           | cout "Char (Z -> 90):" < ;
-55           | cout myChar < ;
-58           | myBool = 1 ;
-59           | cout "Bool (true -> 1):" < ;
-60           | cout myBool < ;
-64           | cout "------- 2. MATH & FUNCTIONS -------" < ;
-65           | cout "------- 2.МАТЕМАТИКА & ФУНКЦИИ -------" < ;
-67           | calcres = 100 3 / ;
-68           | cout "100 / 3 =" < ;
-69           | cout calcres < ;
-71           | calcres = 100 3 % ;
-72           | cout "100 % 3 =" < ;
-73           | cout calcres < ;
-76           | calcres = 10 5 CALL-858993460 ;
-77           | cout "calc(10, 5) -> (10+5) * 2 =" < ;
-78           | cout calcres < ;
-81           | calcres = -50 CALL-858993460 ;
-82           | cout "mabs(-50) =" < ;
-83           | cout calcres < ;
-87           | cout "------- 3. STRINGS (Cyrillic) -------" < ;
-88           | cout "------- 3. СТРОКИ (Кириллица) -------" < ;
-91           | lenVal = "Привет" CALL-858993460 ;
-92           | cout "Length of Privet (expect 6):" < ;
-93           | cout lenVal < ;
-96           | calcres = "42" CALL-858993460 ;
-97           | cout "String 42 to Byte:" < ;
-98           | cout calcres < ;
-103           | cout "------- 4. COMPARISON TEST -------" < ;
-104           | cout "------- 4. СРАВНИТЕЛЬНЫЙ ТЕСТ -------" < ;
-106           | calcres = 10 10 == ;
-107           | cout "10 == 10 (Expect 1):" < ;
-108           | cout calcres < ;
-110           | calcres = 10 5 != ;
-111           | cout "10 != 5 (Expect 1):" < ;
-112           | cout calcres < ;
-114           | calcres = 20 10 > ;
-115           | cout "20 > 10 (Expect 1):" < ;
-116           | cout calcres < ;
-118           | calcres = 5 10 < ;
-119           | cout "5 < 10 (Expect 1):" < ;
-120           | cout calcres < ;
-122           | calcres = 10 10 <= ;
-123           | cout "10 <= 10 (Expect 1):" < ;
-124           | cout calcres < ;
-126           | calcres = 5 10 >= ;
-127           | cout "5 >= 10 (Expect 0):" < ;
-128           | cout calcres < ;
-132           | cout "------- 5. LOGIC & RANDOM -------" < ;
-133           | cout "------- 5. ЛОГИКА & СЛУЧАЙНОСТЬ -------" < ;
-134           | rndVal = 2 CALL-858993460 ;
-135           | cout "Random (0 or 1):" < ;
-136           | cout rndVal < ;
-138           | rndVal 
-139           | 0 
-140           | cout "Case 0: Zero/Ноль" < ;
-141           | 142           | 1 
-143           | cout "Case 1: One/Один" < ;
-144           | 145           | 146           | cout "Default/По умолчанию" < ;
-147           | 148           | 150           | cout "=== TEST COMPLETE ===" < ;
-151           | cout "------- ТЕСТ ЗАВЕРШЕН -------" < ;
-152           | 
+01           | strtoint strArg ret 0 ;
+02           | stcmp sOne sTwo ret 0 ;
+03           | strle txtArg ret 0 ;
+04           | mabs nArg ret 0 ;
+05           | rnd maxArg ret 0 ;
+09           | calc a b 
+10           | calcres ;
+11           | calcres = a b + 2 * ;
+12           | ret calcres ;
+13           | 15           | 16           | welcome ;
+17           | numDec ;
+18           | numHex ;
+19           | numBin ;
+20           | myChar ;
+21           | myBool ;
+22           | res ;
+23           | lenVal ;
+24           | rndVal ;
+26           | welcome = "Типы данных" ;
+27           | welcome = "Строковый тип данных" ;
+28           | show welcome < ;
+30           | numDec = 100 ;
+31           | show "Decimal (100):" < ;
+32           | show numDec < ;
+34           | numHex = 255 ;
+35           | show "Hex (0xFF -> -1):" < ;
+36           | show numHex < ;
+38           | numBin = 5 ;
+39           | show "Binary (0b101):" < ;
+40           | show numBin < ;
+42           | myChar = 'Z' ;
+43           | show "Char (Z -> 90):" < ;
+44           | show myChar < ;
+48           | myBool = 1 ;
+49           | show "Bool (true -> 1):" < ;
+50           | show myBool < ;
+54           | show "Math | Математика" < ;
+56           | res = 100 3 / ;
+57           | show "100 / 3 =" < ;
+58           | show res < ;
+60           | res = 100 3 % ;
+61           | show "100 % 3 =" < ;
+62           | show res < ;
+64           | res = 10 5 @ ;
+65           | show "calc(10, 5) -> (10+5) * 2 =" < ;
+66           | show res < ;
+68           | res = -50 @ ;
+69           | show "mabs(-50) =" < ;
+70           | show res < ;
+74           | show "Strings | Строки " < ;
+76           | lenVal = "Привет" @ ;
+77           | show "Length of Privet (expect 6):" < ;
+78           | show lenVal < ;
+80           | res = "42" @ ;
+81           | show "String 42 to Byte:" < ;
+82           | show res < ;
+86           | show "Comparison | Cравнение " < ;
+88           | res = 10 10 == ;
+89           | show "10 == 10 (Expect 1):" < ;
+90           | show res < ;
+92           | res = 10 5 != ;
+93           | show "10 != 5 (Expect 1):" < ;
+94           | show res < ;
+96           | res = 20 10 > ;
+97           | show "20 > 10 (Expect 1):" < ;
+98           | show res < ;
+100           | res = 5 10 < ;
+101           | show "5 < 10 (Expect 1):" < ;
+102           | show res < ;
+104           | res = 10 10 <= ;
+105           | show "10 <= 10 (Expect 1):" < ;
+106           | show res < ;
+108           | res = 5 10 >= ;
+109           | show "5 >= 10 (Expect 0):" < ;
+110           | show res < ;
+114           | show "Conditional operator | Условный оператор" < ;
+115           | rndVal = 3 @ ;
+116           | show "Random (0 - 2):" < ;
+117           | show rndVal < ;
+119           | rndVal 
+120           | 0 
+121           | show "Case 0: Zero/Ноль" < ;
+122           | 123           | 1 
+124           | show "Case 1: One/Один" < ;
+125           | 126           | 127           | show "Default/По умолчанию" < ;
+128           | 129           | 130           | show "The end | Конец" < ;
+131           | 
 ------------------------------------------------------------------------------

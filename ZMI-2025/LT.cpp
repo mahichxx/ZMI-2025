@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "LT.h"
 #include "Error.h"
-#include "IT.h" // Здесь подключаем IT.h, чтобы видеть внутренности таблицы
+#include "IT.h" 
+#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -83,7 +85,7 @@ namespace LT
 		*fout << endl;
 	}
 
-	
+
 	void ShowPolishRaw(LexTable lextable, const IT::IdTable& idtable, std::ostream* fout)
 	{
 		*fout << "\n\n----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------\n";
@@ -113,7 +115,6 @@ namespace LT
 			case LEX_ID:
 				if (idx != LT_TI_NULLIDX) {
 					const IT::Entry& entry = idtable.table[idx];
-					// !!! ИСПРАВЛЕНИЕ: (char*) перед entry.id
 					*fout << (char*)entry.id << " ";
 				}
 				else *fout << "ID??? ";
@@ -124,7 +125,6 @@ namespace LT
 				if (idx != LT_TI_NULLIDX) {
 					const IT::Entry& entry = idtable.table[idx];
 					if (entry.iddatatype == IT::INT) *fout << entry.value.vint << " ";
-					// !!! ИСПРАВЛЕНИЕ: (char*) перед строкой
 					else if (entry.iddatatype == IT::STR) *fout << "\"" << (char*)entry.value.vstr.str << "\" ";
 					else if (entry.iddatatype == IT::CHR) *fout << "'" << entry.value.vchar << "' ";
 					else *fout << "LIT ";
@@ -136,7 +136,6 @@ namespace LT
 			case LEX_LOGOPERATOR:
 				if (idx != LT_TI_NULLIDX) {
 					const IT::Entry& entry = idtable.table[idx];
-					// !!! ИСПРАВЛЕНИЕ: (char*) перед entry.id
 					*fout << (char*)entry.id << " ";
 				}
 				else *fout << "OP ";
@@ -145,12 +144,14 @@ namespace LT
 
 			case LEX_EQUAL: *fout << "= "; expressionStarted = true; break;
 			case LEX_SEMICOLON: *fout << ";"; break;
-			case '@': *fout << "CALL" << lextable.table[i].priority << " "; expressionStarted = true; break;
-			case LEX_RETURN: *fout << "return "; expressionStarted = true; break;
-			case LEX_COUT: *fout << "cout "; expressionStarted = true; break;
 
-				// Добавил обработку IF/ELSE для красоты, если они попадут в таблицу (хотя в ПОЛИЗ их нет обычно)
-			case LEX_IF: *fout << "if "; expressionStarted = true; break;
+				// !!! ИЗМЕНЕНИЕ ЗДЕСЬ: Выводим просто @ вместо CALL !!!
+			case '@': *fout << "@ "; expressionStarted = true; break;
+
+			case LEX_RETURN: *fout << "ret "; expressionStarted = true; break;
+			case LEX_COUT: *fout << "show "; expressionStarted = true; break;
+
+			case LEX_IF: *fout << "check "; expressionStarted = true; break;
 			case LEX_ELSE: *fout << "else "; expressionStarted = true; break;
 
 			default: break;

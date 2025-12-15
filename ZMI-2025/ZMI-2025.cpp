@@ -11,141 +11,96 @@
 #include "Sem.h"
 #include "Generation.h"
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
 int wmain(int argc, wchar_t* argv[]) {
 	setlocale(LC_ALL, "rus");
 	Log::LOG log = Log::INITLOG;
+
 	try
 	{
-		// 1. Получение параметров
+		// 1. Параметры
 		Parm::PARM parm = Parm::getparm(argc, argv);
 		log = Log::getlog(parm.log);
-		log.errors_cout = 0;
+		log.errors_cout = 0; // Сбрасываем счетчик ошибок вывода
 
-		if (parm.more) Log::WriteLine(&cout, "Тест: ", "без ошибок ", "");
 		Log::WriteLog(log.stream);
-		if (parm.more) Log::WriteLog(&cout);
-
 		Log::WriteParm(log.stream, parm);
-		if (parm.more) Log::WriteParm(&cout, parm);
 
-		// 2. Ввод
+		// 2. Ввод (In)
 		In::IN in = In::getin(parm.in);
 		Log::WriteIn(log.stream, in);
-		if (parm.more) Log::WriteIn(&cout, in);
 
-		// 3. Лексический анализ
+		// 3. Лексический анализ (Lex)
+		// Если здесь будет ошибка (например, нет box), вылетит исключение и мы уйдем в catch
 		Lex::LEX lex = Lex::lexAnaliz(log, in);
-		cout << "-----Лексический анализ завершился\n\n";
 
-		// Вывод таблиц
+		// Вывод таблиц (для отладки)
 		fstream fout;
 		fout.open(parm.out, ios_base::out | ios_base::trunc);
-		if (!fout.is_open()) throw ERROR_THROW(110);
+		if (fout.is_open()) {
+			LT::showTable(lex.lextable, &fout);
+			IT::showITable(lex.idtable, log.stream);
+		}
 
-		LT::showTable(lex.lextable, &fout);
-		if (parm.more || parm.lt) LT::writeLexTable(&cout, lex.lextable);
-		IT::showITable(lex.idtable, log.stream);
-		if (parm.more || parm.it) IT::showITable(lex.idtable, &cout);
+		cout << "- Лексический анализ выполнен без ошибок\n\n";
 
-		// 4. Синтаксический анализ
+		// 4. Синтаксический анализ (MFST)
 		MFST::Mfst mfst(lex.lextable, GRB::getGreibach(), log);
-		mfst.log = log;
-		if (parm.more || parm.lenta) mfst.more = true;
+		if (parm.lenta) mfst.more = true;
 
-		// Запуск парсера
 		bool syntax_ok = mfst.start();
 		mfst.savededucation();
-
-		if (log.stream) {
-			*log.stream << "\n------------------Дерево разбора------------------\n";
-		}
 		mfst.printrules();
 
-		if (syntax_ok) {
-			cout << "\n-----Синтаксический анализ выполнен без ошибок\n\n";
+		if (!syntax_ok) {
+			cout << "\n- Синтаксический анализ обнаружил ошибку(и)\n";
+			Log::WriteLine(log.stream, "\n- Синтаксический анализ обнаружил ошибку(и)\n", "");
+			// Останавливаемся, не идем в семантику
+			return 0;
 		}
-		else {
-			cout << "-----Синтаксический анализ завершен (с предупреждениями, продолжаем...)\n\n";
+		cout << "\n- Синтаксический анализ выполнен без ошибок\n";
+
+		// 5. Семантический анализ (Sem)
+		if (!Sem::SemAnaliz(lex.lextable, lex.idtable, log)) {
+			cout << "\n- Семантический анализ обнаружил ошибку(и)\n";
+			Log::WriteLine(log.stream, "\n- Семантический анализ обнаружил ошибку(и)\n", "");
+			// Останавливаемся
+			return 0;
 		}
+		cout << "\n- Семантический анализ выполнен без ошибок\n";
 
-		// 5. Семантический анализ
-		if (Sem::SemAnaliz(lex.lextable, lex.idtable, log)) {
-			cout << "-----Семантический анализ выполнен без ошибок\n\n";
-		}
-		else {
-			Log::WriteLine(log.stream, "-----Семантический анализ обнаружил ошибку(и)\n", "");
-			cout << "-----Семантический анализ обнаружил ошибку(и)\n\n";
-
-			// !!! ЧИСТКА ПЕРЕД ВЫХОДОМ !!!
-			In::Delete(in);
-			LT::Delete(lex.lextable);
-			IT::Delete(lex.idtable);
-
-			Log::Close(log);
-			fout.close(); // Не забываем закрыть файл
+		// 6. Польская запись (PN)
+		if (!Polish::StartPolish(lex)) {
+			cout << "\n- Ошибка при построении Польской записи\n";
 			return 0;
 		}
 
-		// 6. Польская запись
-		bool polish_ok = Polish::StartPolish(lex);
-		if (!polish_ok)
-		{
-			Log::WriteLine(log.stream, "-----Ошибка при построении Польской записи\n", "");
-			cout << "-----Ошибка при построении Польской записи\n\n";
-
-			// !!! ЧИСТКА ПЕРЕД ВЫХОДОМ !!!
-			In::Delete(in);
-			LT::Delete(lex.lextable);
-			IT::Delete(lex.idtable);
-
-			Log::Close(log);
+		// Вывод ПОЛИЗ в файл .out
+		if (fout.is_open()) {
+			LT::ShowPolishRaw(lex.lextable, lex.idtable, &fout);
 			fout.close();
-			return 0;
 		}
-		else {
-			cout << "-----Преобразование выражений (ПОЛИЗ) завершено без ошибок\n\n";
-		}
+		cout << "\n- Преобразование выражений (ПОЛИЗ) завершено\n\n";
 
-		// Запись ПОЛИЗ
-		fout << "\n\n-----Таблица лексем после преобразования в ПОЛИЗ (Сырая)\n";
-		LT::showTable(lex.lextable, &fout);
-
-		LT::ShowPolishRaw(lex.lextable, lex.idtable, &fout);
-		if (parm.more || parm.Lout) {
-			LT::ShowPolishRaw(lex.lextable, lex.idtable, &cout);
-		}
-
-		// 7. Генерация кода
+		// 7. Генерация кода (Generation)
 		Gener::CodeGeneration(lex, parm, log);
 
-		// !!! ФИНАЛЬНАЯ ЧИСТКА (УСПЕШНОЕ ЗАВЕРШЕНИЕ) !!!
-		// Удаляем структуру ввода
+		// Чистка памяти
 		In::Delete(in);
-		// Удаляем таблицы, созданные в лексере
 		LT::Delete(lex.lextable);
 		IT::Delete(lex.idtable);
-
 		Log::Close(log);
-		fout.close();
 
-		if (log.errors_cout > 0) throw Error::geterror(0);
-
-		return 0;
+		cout << "\nКомпиляция завершилась\n";
 	}
-
 	catch (Error::ERROR e)
 	{
-		// В блоке catch переменная 'in' уже недоступна (она внутри try), 
-		// но память под неё утечет.
-		// В рамках курсового проекта при падении программы это допустимо.
-		// Чтобы исправить это, нужно выносить объявление 'In::IN in;' ДО блока try,
-		// но это усложнит код инициализации. Оставим так.
-
+		// Если вылетело исключение (например, Ошибка 301 "Нет box" из Лексера)
 		Log::WriteError(log, e);
-		cout << "\n-----Выполнение программы остановлено из-за ошибки\n\n";
-		return 0;
+		cout << "\n- Выполнение программы остановлено из-за ошибки\n";
 	}
+	return 0;
 }
