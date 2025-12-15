@@ -257,6 +257,9 @@ namespace Lex {
                     for (int k = 0; k < len; k++) {
                         if (word[i][k] == '\'') throw ERROR_THROW_IN(205, line, position + k);
                     }
+                    if (len == 2) {
+                        throw ERROR_THROW_IN(310, line, position);
+                    }
                     for(int k=0; k<len; k++) word[i][k] = word[i][k+1]; word[i][len-2] = '\0'; len -= 2; 
                     for(int k=0; k<lex.idtable.size; k++) if(lex.idtable.table[k].idtype == IT::L && lex.idtable.table[k].iddatatype == IT::STR && strcmp(lex.idtable.table[k].value.vstr.str, (char*)word[i]) == 0) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, k, line)); findSameID = true; break; } 
                     if(findSameID) { position += wordLen + 2; continue; } 
@@ -322,8 +325,21 @@ namespace Lex {
                     position+=wordLen; continue;
                 }}
                 
-                { FST::FST f(word[i], FST_TWOPOINT); if(FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_TWOPOINT, LT_TI_NULLIDX, line)); position+=wordLen; continue;}}
+                { FST::FST f(word[i], FST_TWOPOINT); if (FST::execute(f)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_TWOPOINT, LT_TI_NULLIDX, line)); position += wordLen; continue; } }
 
+                // !!! ПРОВЕРКА НА КИРИЛЛИЦУ (Ошибка 206) !!!
+                // Если слово не распознано и содержит символы с кодом < 0 (это русские буквы в char),
+                // то выдаем специфичную ошибку.
+                for (int k = 0; k < wordLen; k++) {
+                    // (unsigned char)word[i][k] > 127 означает, что это не стандартный ASCII
+                    if ((unsigned char)word[i][k] > 127) {
+                        throw ERROR_THROW_IN(206, line, position);
+                    }
+                }
+                if (word[i][0] == '\'') {
+                    throw ERROR_THROW_IN(207, line, position);
+                }
+                // Иначе стандартная ошибка 201
                 cout << "DEBUG: Ошибка 201. Слово: " << word[i] << endl;
                 throw ERROR_THROW_IN(201, line, position);
             }

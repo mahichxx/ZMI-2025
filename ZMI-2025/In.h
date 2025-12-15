@@ -8,22 +8,22 @@ namespace In {
 }
 
 // Таблица допустимых символов.
-// 0 - Разделитель/Спецсимвол
-// IN::T - Текст (Буквы/Цифры/Символы)
+// 0 - Разделитель/Спецсимвол (прерывает слово)
+// IN::T - Текст (накапливается в слово)
 // IN::F - Запрещен (Ошибка 111)
 // IN::P - Кавычки
 // IN::S - Пробелы
 #define IN_CODE_TABLE {\
-/*         0      1      2       3     4       5      6      7      8      9      A      B      C     D      E      F*/\
+/*         0      1      2       3     4($)    5(%)   6      7      8      9      A      B      C     D      E      F*/\
 /*0*/	IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::S, '|',   IN::F, IN::F,	IN::F, IN::F, IN::F,\
 /*1*/	IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F, IN::F,	IN::F, IN::F, IN::F,\
-/*2*/	IN::S,	IN::T, IN::P, 0,     0,	    0,     0,     IN::P, 0,	    0,     0,     0,     0,	    0,     0,     0,\
+/*2*/	IN::S,	IN::T, IN::P, 0,     IN::F,	0,     0,     IN::P, 0,	    0,     0,     0,     0,	    0,     0,     0,\
 /*3*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, 0,     0,     0,	    0,     0,     0,\
 /*4*/	0,	    IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T,\
 /*5*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, 0,     0,	    0,     0,     IN::T,\
 /*6*/	0,      IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T,\
 /*7*/	IN::T,	IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, 0,     0,     0,     0,     IN::F,\
-/* --- РАСШИРЕННАЯ ТАБЛИЦА ДЛЯ КИРИЛЛИЦЫ (CP1251) --- */                                                                    \
+/* --- РУССКИЕ БУКВЫ (1251) --- */                                                                                  \
 /*8*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\
 /*9*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\
 /*A*/	IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T, IN::T,	IN::T, IN::T, IN::T,\

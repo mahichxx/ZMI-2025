@@ -25,7 +25,8 @@ namespace Error {
 		ERROR_ENTRY(112, "Ошибка при создании файла протокола (-log)"),
 		ERROR_ENTRY(113, "Ошибка лексического анализа"),
 		ERROR_ENTRY(114, "Ошибка при создании выходного файла (-out)"),
-		ERROR_ENTRY_NODEF(115), ERROR_ENTRY_NODEF(116), ERROR_ENTRY_NODEF(117), ERROR_ENTRY_NODEF(118), ERROR_ENTRY_NODEF(119),
+		ERROR_ENTRY(115, "Ошибка: Незакрытый комментарий (отсутствует ']')"), ERROR_ENTRY(116, "Ошибка: Незакрытый строковый литерал (ожидалась кавычка перед переходом на новую строку)"), 
+		ERROR_ENTRY_NODEF(117), ERROR_ENTRY_NODEF(118), ERROR_ENTRY_NODEF(119),
 		ERROR_ENTRY_NODEF10(120), ERROR_ENTRY_NODEF10(130), ERROR_ENTRY_NODEF10(140), ERROR_ENTRY_NODEF10(150),
 		ERROR_ENTRY_NODEF10(160), ERROR_ENTRY_NODEF10(170), ERROR_ENTRY_NODEF10(180), ERROR_ENTRY_NODEF10(190),
 
@@ -33,11 +34,12 @@ namespace Error {
 		ERROR_ENTRY(200, "Лексический анализатор: Неинициализированная переменная"),
 		ERROR_ENTRY(201, "Лексический анализатор: Неверное имя идентификатора"),
 		ERROR_ENTRY(202, "Лексический анализатор: Превышен допустимый размер литерала"),
-		ERROR_ENTRY_NODEF(203),
+		ERROR_ENTRY(203, "Лексический анализатор: Превышен диапазон числового литерала (-128...127)"),
 		ERROR_ENTRY(204, "Лексический анализатор: Запрещенное имя идентификатора"),
 		ERROR_ENTRY(205, "Лексический анализатор: Запрещенный символ (') в строке"),
 
-		ERROR_ENTRY_NODEF(206), ERROR_ENTRY_NODEF(207), ERROR_ENTRY_NODEF(208), ERROR_ENTRY_NODEF(209),
+		ERROR_ENTRY(206, "Лексический анализатор: Использование кириллицы в идентификаторах запрещено"),ERROR_ENTRY(207, "Лексический анализатор: Неверный символьный литерал (ожидался формат 'c')"),
+		ERROR_ENTRY_NODEF(208), ERROR_ENTRY_NODEF(209),
 
 		ERROR_ENTRY_NODEF10(210), ERROR_ENTRY_NODEF10(220), ERROR_ENTRY_NODEF10(230),
 		ERROR_ENTRY_NODEF10(240), ERROR_ENTRY_NODEF10(250), ERROR_ENTRY_NODEF10(260),

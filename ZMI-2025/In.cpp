@@ -21,8 +21,8 @@ namespace In
 		for (int i = 0; i < IN_MAX_WORDS; i++)
 			in.word[i] = new unsigned char[256] {0};
 
-		int st = 0; // индекс слова
-		int cl = 0; // индекс символа в слове
+		int st = 0;
+		int cl = 0;
 
 		unsigned char* text = new unsigned char[IN_MAX_LEN_TEXT];
 		memset(text, 0, IN_MAX_LEN_TEXT);
@@ -36,50 +36,61 @@ namespace In
 		if (fileSize > IN_MAX_LEN_TEXT) throw ERROR_THROW(113);
 
 		unsigned char quoteChar = 0;
-		bool inComment = false; // Флаг: находимся ли мы внутри комментария [ ... ]
+
+		// !!! ИЗМЕНЕНИЕ: Вместо флага используем счетчик глубины !!!
+		int commentDepth = 0;
 
 		char c;
 		while (in.size < IN_MAX_LEN_TEXT && fin.get(c))
 		{
 			unsigned char x = (unsigned char)c;
 
-			// 1. Обработка начала комментария '['
-			// Если мы не в строке и не в комментарии
-			if (!inComment && quoteChar == 0 && x == '[') {
-				inComment = true;
+			// 1. Если встретили '[', увеличиваем глубину вложенности
+			if (quoteChar == 0 && x == '[') {
+				commentDepth++;
 				continue; // Пропускаем сам символ '['
 			}
 
-			// 2. Обработка конца комментария ']'
-			if (inComment && x == ']') {
-				inComment = false;
-				// Заменяем комментарий на пробел, чтобы слова не склеились
-				// Например: word[comment]word -> word word
-				if (in.word[st][0] != 0) {
-					in.word[st][cl] = 0; st++; cl = 0;
+			// 2. Если встретили ']', уменьшаем глубину
+			if (quoteChar == 0 && x == ']') {
+				if (commentDepth > 0) {
+					commentDepth--;
+					// Если мы вышли из самого верхнего комментария (глубина стала 0)
+					if (commentDepth == 0) {
+						// Разделяем слова пробелом, чтобы код не склеился
+						if (in.word[st][0] != 0) {
+							in.word[st][cl] = 0; st++; cl = 0;
+						}
+					}
+					continue; // Пропускаем сам символ ']'
 				}
-				continue; // Пропускаем символ ']'
+				// Если встретили ']' без открывающей '[', это ошибка или разделитель?
+				// В твоем языке это разделитель, пусть лексер или парсер разбирается, или игнорируем.
+				// Но здесь мы считаем это просто символом, если глубина 0.
 			}
 
-			// 3. Если мы внутри комментария — ИГНОРИРУЕМ ВСЁ
-			if (inComment) {
-				// Можно считать переносы строк внутри комментов, чтобы не сбивался счетчик строк
-				if (x == IN_CODE_ENDL) in.lines++;
+			// 3. Если глубина > 0, значит мы внутри комментария — ИГНОРИРУЕМ ВСЁ
+			if (commentDepth > 0) {
+				if (x == IN_CODE_ENDL) in.lines++; // Но строки считаем!
 				continue;
 			}
 
-			// --- Дальше стандартная логика (если не в комментарии) ---
+			// --- ДАЛЬШЕ ОБЫЧНАЯ ОБРАБОТКА КОДА (depth == 0) ---
+
+			if (in.code[x] == in.F) {
+				throw ERROR_THROW_IN(111, in.lines, col);
+			}
 
 			if (x == IN_CODE_ENDL)
 			{
-				in.lines++;
-				col = 0;
-				quoteChar = 0;
-				if (in.word[st][0] != 0) {
-					in.word[st][cl] = 0; st++; cl = 0;
+				// Если мы дошли до конца строки, а кавычка открыта
+				if (quoteChar != 0) {
+					throw ERROR_THROW_IN(116, in.lines, col);
 				}
-				in.word[st][cl++] = '|';
-				in.word[st][cl] = 0; st++; cl = 0;
+
+				in.lines++; col = 0; quoteChar = 0;
+				if (in.word[st][0] != 0) { in.word[st][cl] = 0; st++; cl = 0; }
+				in.word[st][cl++] = '|'; in.word[st][cl] = 0; st++; cl = 0;
 				text[in.size++] = x;
 				continue;
 			}
@@ -88,18 +99,13 @@ namespace In
 
 			int type = in.code[x];
 
-			if (type == in.F) {
-				throw ERROR_THROW_IN(111, in.lines, col);
-			}
-			else if (type == in.I) {
+			if (type == in.I) {
 				in.ignor++;
 			}
-			else if (type == in.P) { // Кавычки
+			else if (type == in.P) {
 				if (quoteChar == 0) {
 					quoteChar = x;
-					if (in.word[st][0] != 0) {
-						in.word[st][cl] = 0; st++; cl = 0;
-					}
+					if (in.word[st][0] != 0) { in.word[st][cl] = 0; st++; cl = 0; }
 					in.word[st][cl++] = x;
 				}
 				else {
@@ -114,18 +120,16 @@ namespace In
 				}
 				text[in.size++] = x; col++;
 			}
-			else if (type == in.S) { // Пробелы
+			else if (type == in.S) {
 				if (quoteChar != 0) {
 					if (cl < 255) in.word[st][cl++] = x;
 				}
 				else {
-					if (in.word[st][0] != 0) {
-						in.word[st][cl] = 0; st++; cl = 0;
-					}
+					if (in.word[st][0] != 0) { in.word[st][cl] = 0; st++; cl = 0; }
 				}
 				text[in.size++] = x; col++;
 			}
-			else { // Обычные символы
+			else {
 				if (quoteChar != 0) {
 					if (cl < 255) in.word[st][cl++] = x;
 				}
@@ -134,15 +138,17 @@ namespace In
 						if (cl < 255) in.word[st][cl++] = x;
 					}
 					else {
-						if (in.word[st][0] != 0) {
-							in.word[st][cl] = 0; st++; cl = 0;
-						}
-						in.word[st][cl++] = x;
-						in.word[st][cl] = 0; st++; cl = 0;
+						if (in.word[st][0] != 0) { in.word[st][cl] = 0; st++; cl = 0; }
+						in.word[st][cl++] = x; in.word[st][cl] = 0; st++; cl = 0;
 					}
 				}
 				text[in.size++] = x; col++;
 			}
+		}
+
+		// !!! ПРОВЕРКА НА НЕЗАКРЫТЫЙ КОММЕНТАРИЙ !!!
+		if (commentDepth > 0) {
+			throw ERROR_THROW(115);
 		}
 
 		text[in.size] = '\0';

@@ -1,64 +1,71 @@
 
 ----------------- Поток лексем ---------------------
 01 
-07 tfi(si){rl;}
-08 tfi(si,si){rl;}
-11 tfi(si){rl;}
-12 tfi(ti){rl;}
-13 tfi(ti){rl;}
-16 tfi(ti,ti){
-17 ti;
-18 i=(ivi)vl;
-19 ri;
-20 }
-23 m{
-25 si;
+04 tfi(si){rl;}
+05 tfi(si,si){rl;}
+06 tfi(si){rl;}
+07 tfi(ti){rl;}
+08 tfi(ti){rl;}
+12 tfi(ti,ti){
+13 ti;
+14 i=(ivi)vl;
+15 ri;
+16 }
+18 m{
+19 si;
+20 ti;
+21 ti;
+22 ti;
+23 ci;
+24 ti;
+25 ti;
 26 ti;
 27 ti;
-28 ti;
-29 ci;
-30 ti;
-31 ti;
-32 ti;
-33 ti;
+33 i=l;
+34 i=l;
+35 ovi;
 38 i=l;
-39 ovi;
-42 i=l;
-43 ovl;
-44 ovi;
-47 i=l;
-48 ovl;
-49 ovi;
-52 i=l;
-53 ovl;
-54 ovi;
-57 i=l;
-58 ovl;
-59 ovi;
-62 i=l;
-63 ovl;
-64 ovi;
-69 ovl;
-72 i=lvl;
-73 ovl;
-74 ovi;
-76 i=lvl;
+39 ovl;
+40 ovi;
+43 i=l;
+44 ovl;
+45 ovi;
+48 i=l;
+49 ovl;
+50 ovi;
+53 i=l;
+54 ovl;
+55 ovi;
+58 i=l;
+59 ovl;
+60 ovi;
+64 ovl;
+65 ovl;
+67 i=lvl;
+68 ovl;
+69 ovi;
+71 i=lvl;
+72 ovl;
+73 ovi;
+76 i=i(l,l);
 77 ovl;
 78 ovi;
-81 i=i(l,l);
+81 i=i(l);
 82 ovl;
 83 ovi;
-86 i=i(l);
 87 ovl;
-88 ovi;
-93 ovl;
+88 ovl;
+91 i=i(l);
+92 ovl;
+93 ovi;
 96 i=i(l);
 97 ovl;
 98 ovi;
-101 i=i(l);
-102 ovl;
-103 ovi;
-108 ovl;
+103 ovl;
+104 ovl;
+106 i=lvl;
+107 ovl;
+108 ovi;
 110 i=lvl;
 111 ovl;
 112 ovi;
@@ -74,90 +81,96 @@
 126 i=lvl;
 127 ovl;
 128 ovi;
-130 i=lvl;
-131 ovl;
-132 ovi;
-137 ovl;
-139 i=i(l);
+132 ovl;
+133 ovl;
+134 i=i(l);
+135 ovl;
+136 ovi;
+138 h(i){
+139 al:{
 140 ovl;
-141 ovi;
-143 h(i){
-144 al:{
-145 ovl;
-146 }
-147 al:{
-148 ovl;
-149 }
-150 d:{
+141 }
+142 al:{
+143 ovl;
+144 }
+145 d:{
+146 ovl;
+147 }
+148 }
+150 ovl;
 151 ovl;
 152 }
-153 }
-155 ovl;
-156 }
 
 
 -----Таблица лексем после преобразования в ПОЛИЗ (Сырая)
 
 ----------------- Поток лексем ---------------------
 01 
-07 tfi(si){rl;}
-08 tfi(si,si){rl;}
-11 tfi(si){rl;}
-12 tfi(ti){rl;}
-13 tfi(ti){rl;}
-16 tfi(ti,ti){
-17 ti;
-18 i=iivlv;
-19 ri;
-20 }
-23 m{
-25 si;
+04 tfi(si){rl;}
+05 tfi(si,si){rl;}
+06 tfi(si){rl;}
+07 tfi(ti){rl;}
+08 tfi(ti){rl;}
+12 tfi(ti,ti){
+13 ti;
+14 i=iivlv;
+15 ri;
+16 }
+18 m{
+19 si;
+20 ti;
+21 ti;
+22 ti;
+23 ci;
+24 ti;
+25 ti;
 26 ti;
 27 ti;
-28 ti;
-29 ci;
-30 ti;
-31 ti;
-32 ti;
-33 ti;
+33 i=l;
+34 i=l;
+35 oiv;
 38 i=l;
-39 oiv;
-42 i=l;
-43 olv;
-44 oiv;
-47 i=l;
-48 olv;
-49 oiv;
-52 i=l;
-53 olv;
-54 oiv;
-57 i=l;
-58 olv;
-59 oiv;
-62 i=l;
-63 olv;
-64 oiv;
-69 olv;
-72 i=llv;
-73 olv;
-74 oiv;
-76 i=llv;
+39 olv;
+40 oiv;
+43 i=l;
+44 olv;
+45 oiv;
+48 i=l;
+49 olv;
+50 oiv;
+53 i=l;
+54 olv;
+55 oiv;
+58 i=l;
+59 olv;
+60 oiv;
+64 olv;
+65 olv;
+67 i=llv;
+68 olv;
+69 oiv;
+71 i=llv;
+72 olv;
+73 oiv;
+76 i=ll@;
 77 olv;
 78 oiv;
-81 i=ll@;
+81 i=l@;
 82 olv;
 83 oiv;
-86 i=l@;
 87 olv;
-88 oiv;
-93 olv;
+88 olv;
+91 i=l@;
+92 olv;
+93 oiv;
 96 i=l@;
 97 olv;
 98 oiv;
-101 i=l@;
-102 olv;
-103 oiv;
-108 olv;
+103 olv;
+104 olv;
+106 i=llv;
+107 olv;
+108 oiv;
 110 i=llv;
 111 olv;
 112 oiv;
@@ -173,115 +186,120 @@
 126 i=llv;
 127 olv;
 128 oiv;
-130 i=llv;
-131 olv;
-132 oiv;
-137 olv;
-139 i=l@;
+132 olv;
+133 olv;
+134 i=l@;
+135 olv;
+136 oiv;
+138 h(i){
+139 al:{
 140 olv;
-141 oiv;
-143 h(i){
-144 al:{
-145 olv;
-146 }
-147 al:{
-148 olv;
-149 }
-150 d:{
+141 }
+142 al:{
+143 olv;
+144 }
+145 d:{
+146 olv;
+147 }
+148 }
+150 olv;
 151 olv;
 152 }
-153 }
-155 olv;
-156 }
 
 
 ----------------- Декодированная Польская запись (ПОЛИЗ) ---------------------
 Номер строки | Выражение в ПОЛИЗ
 ------------------------------------------------------------------------------
-07           | strtoint strArg return 0 ;
-08           | stcmp sOne sTwo return 0 ;
-11           | strle txtArg return 0 ;
-12           | mabs nArg return 0 ;
-13           | rnd maxArg return 0 ;
-16           | calc a b 
-17           | calcres ;
-18           | calcres = a b + 2 * ;
-19           | return calcres ;
-20           | 23           | 25           | welcome ;
-26           | numDec ;
-27           | numHex ;
-28           | numBin ;
-29           | myChar ;
-30           | myBool ;
-31           | calcres ;
-32           | lenVal ;
-33           | rndVal ;
-38           | welcome = "=== 1. DATA TYPES TEST ===" ;
-39           | cout welcome < ;
-42           | numDec = 100 ;
-43           | cout "Decimal (100):" < ;
-44           | cout numDec < ;
-47           | numHex = 255 ;
-48           | cout "Hex (0xFF -> -1):" < ;
-49           | cout numHex < ;
-52           | numBin = 5 ;
-53           | cout "Binary (0b101):" < ;
-54           | cout numBin < ;
-57           | myChar = 'Z' ;
-58           | cout "Char (Z -> 90):" < ;
-59           | cout myChar < ;
-62           | myBool = 1 ;
-63           | cout "Bool (true -> 1):" < ;
-64           | cout myBool < ;
-69           | cout "=== 2. MATH & FUNCTIONS ===" < ;
-72           | calcres = 100 3 / ;
-73           | cout "100 / 3 =" < ;
-74           | cout calcres < ;
-76           | calcres = 100 3 % ;
-77           | cout "100 % 3 =" < ;
+04           | strtoint strArg return 0 ;
+05           | stcmp sOne sTwo return 0 ;
+06           | strle txtArg return 0 ;
+07           | mabs nArg return 0 ;
+08           | rnd maxArg return 0 ;
+12           | calc a b 
+13           | calcres ;
+14           | calcres = a b + 2 * ;
+15           | return calcres ;
+16           | 18           | 19           | welcome ;
+20           | numDec ;
+21           | numHex ;
+22           | numBin ;
+23           | myChar ;
+24           | myBool ;
+25           | calcres ;
+26           | lenVal ;
+27           | rndVal ;
+33           | welcome = "------- 1. DATA TYPES TEST -------" ;
+34           | welcome = "------- 1. ТЕСТ ТИПОВ ДАННЫХ -------" ;
+35           | cout welcome < ;
+38           | numDec = 100 ;
+39           | cout "Decimal (100):" < ;
+40           | cout numDec < ;
+43           | numHex = 255 ;
+44           | cout "Hex (0xFF -> -1):" < ;
+45           | cout numHex < ;
+48           | numBin = 5 ;
+49           | cout "Binary (0b101):" < ;
+50           | cout numBin < ;
+53           | myChar = 'Z' ;
+54           | cout "Char (Z -> 90):" < ;
+55           | cout myChar < ;
+58           | myBool = 1 ;
+59           | cout "Bool (true -> 1):" < ;
+60           | cout myBool < ;
+64           | cout "------- 2. MATH & FUNCTIONS -------" < ;
+65           | cout "------- 2.МАТЕМАТИКА & ФУНКЦИИ -------" < ;
+67           | calcres = 100 3 / ;
+68           | cout "100 / 3 =" < ;
+69           | cout calcres < ;
+71           | calcres = 100 3 % ;
+72           | cout "100 % 3 =" < ;
+73           | cout calcres < ;
+76           | calcres = 10 5 CALL-858993460 ;
+77           | cout "calc(10, 5) -> (10+5) * 2 =" < ;
 78           | cout calcres < ;
-81           | calcres = 10 5 CALL-858993460 ;
-82           | cout "calc(10, 5) -> (10+5) * 2 =" < ;
+81           | calcres = -50 CALL-858993460 ;
+82           | cout "mabs(-50) =" < ;
 83           | cout calcres < ;
-86           | calcres = -50 CALL-858993460 ;
-87           | cout "mabs(-50) =" < ;
-88           | cout calcres < ;
-93           | cout "=== 3. STRINGS (Cyrillic) ===" < ;
-96           | lenVal = "Привет" CALL-858993460 ;
-97           | cout "Length of Privet (expect 6):" < ;
-98           | cout lenVal < ;
-101           | calcres = "42" CALL-858993460 ;
-102           | cout "String 42 to Byte:" < ;
-103           | cout calcres < ;
-108           | cout "=== 4. COMPARISON TEST ===" < ;
-110           | calcres = 10 10 == ;
-111           | cout "10 == 10 (Expect 1):" < ;
+87           | cout "------- 3. STRINGS (Cyrillic) -------" < ;
+88           | cout "------- 3. СТРОКИ (Кириллица) -------" < ;
+91           | lenVal = "Привет" CALL-858993460 ;
+92           | cout "Length of Privet (expect 6):" < ;
+93           | cout lenVal < ;
+96           | calcres = "42" CALL-858993460 ;
+97           | cout "String 42 to Byte:" < ;
+98           | cout calcres < ;
+103           | cout "------- 4. COMPARISON TEST -------" < ;
+104           | cout "------- 4. СРАВНИТЕЛЬНЫЙ ТЕСТ -------" < ;
+106           | calcres = 10 10 == ;
+107           | cout "10 == 10 (Expect 1):" < ;
+108           | cout calcres < ;
+110           | calcres = 10 5 != ;
+111           | cout "10 != 5 (Expect 1):" < ;
 112           | cout calcres < ;
-114           | calcres = 10 5 != ;
-115           | cout "10 != 5 (Expect 1):" < ;
+114           | calcres = 20 10 > ;
+115           | cout "20 > 10 (Expect 1):" < ;
 116           | cout calcres < ;
-118           | calcres = 20 10 > ;
-119           | cout "20 > 10 (Expect 1):" < ;
+118           | calcres = 5 10 < ;
+119           | cout "5 < 10 (Expect 1):" < ;
 120           | cout calcres < ;
-122           | calcres = 5 10 < ;
-123           | cout "5 < 10 (Expect 1):" < ;
+122           | calcres = 10 10 <= ;
+123           | cout "10 <= 10 (Expect 1):" < ;
 124           | cout calcres < ;
-126           | calcres = 10 10 <= ;
-127           | cout "10 <= 10 (Expect 1):" < ;
+126           | calcres = 5 10 >= ;
+127           | cout "5 >= 10 (Expect 0):" < ;
 128           | cout calcres < ;
-130           | calcres = 5 10 >= ;
-131           | cout "5 >= 10 (Expect 0):" < ;
-132           | cout calcres < ;
-137           | cout "=== 5. LOGIC & RANDOM ===" < ;
-139           | rndVal = 2 CALL-858993460 ;
-140           | cout "Random switch (0 or 1):" < ;
-141           | cout rndVal < ;
-143           | rndVal 
-144           | 0 
-145           | cout "Case 0: Zero generated" < ;
-146           | 147           | 1 
-148           | cout "Case 1: One generated" < ;
-149           | 150           | 151           | cout "Default: Should not happen" < ;
-152           | 153           | 155           | cout "=== TEST COMPLETE ===" < ;
-156           | 
+132           | cout "------- 5. LOGIC & RANDOM -------" < ;
+133           | cout "------- 5. ЛОГИКА & СЛУЧАЙНОСТЬ -------" < ;
+134           | rndVal = 2 CALL-858993460 ;
+135           | cout "Random (0 or 1):" < ;
+136           | cout rndVal < ;
+138           | rndVal 
+139           | 0 
+140           | cout "Case 0: Zero/Ноль" < ;
+141           | 142           | 1 
+143           | cout "Case 1: One/Один" < ;
+144           | 145           | 146           | cout "Default/По умолчанию" < ;
+147           | 148           | 150           | cout "=== TEST COMPLETE ===" < ;
+151           | cout "------- ТЕСТ ЗАВЕРШЕН -------" < ;
+152           | 
 ------------------------------------------------------------------------------

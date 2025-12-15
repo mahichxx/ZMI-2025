@@ -1,27 +1,21 @@
-[ =========================================== ]
-[   ИТОГОВЫЙ ТЕСТ КОМПИЛЯТОРА (ZMI-2025)      ]
-[   Полная демонстрация всех возможностей     ]
-[ =========================================== ]
+[   Итоговый пример ZMI-2025    ]
 
-[ 1. Объявление библиотечных функций ]
+[ Объявление библиотечных функций ]
 byte proc strtoint(text strArg) { ret 0; }
 byte proc stcmp(text sOne, text sTwo) { ret 0; }
-
-[ 2. Объявление новых функций ]
 byte proc strle(text txtArg) { ret 0; }
 byte proc mabs(byte nArg) { ret 0; }
 byte proc rnd(byte maxArg) { ret 0; }
 
-[ 3. Пользовательская функция ]
+[ Пользовательская функция ]
+
 byte proc calc(byte a, byte b) {
     byte res;
     res = (a + b) * 2;
     ret res;
 }
 
-[ Точка входа ]
 box {
-    [ -- Объявление переменных всех типов -- ]
     text welcome;
     byte numDec;
     byte numHex;
@@ -32,10 +26,12 @@ box {
     byte lenVal;
     byte rndVal;
 
-    [ --------------------------------------- ]
-    [ 1. ТИПЫ ДАННЫХ И ЛИТЕРАЛЫ               ]
-    [ --------------------------------------- ]
-    welcome = "=== 1. DATA TYPES TEST ===";
+   
+
+    [ 1. ТИПЫ ДАННЫХ И ЛИТЕРАЛЫ  ]
+
+    welcome = "------- 1. DATA TYPES TEST -------";
+    welcome = "------- 1. ТЕСТ ТИПОВ ДАННЫХ -------";
     show < welcome;
 
     [ Десятичный ]
@@ -43,17 +39,17 @@ box {
     show < "Decimal (100):";
     show < numDec;
 
-    [ Шестнадцатеричный: 0xFF = 255 -> -1 в byte ]
+    [ Шестнадцатеричный ]
     numHex = 0xFF;
     show < "Hex (0xFF -> -1):";
     show < numHex;
 
-    [ Двоичный: 0b101 = 5 ]
+    [ Двоичный  ]
     numBin = 0b101;
     show < "Binary (0b101):";
     show < numBin;
 
-    [ Символьный: хранит ASCII код ]
+    [ Символьный ]
     myChar = 'Z';
     show < "Char (Z -> 90):";
     show < myChar;
@@ -63,12 +59,11 @@ box {
     show < "Bool (true -> 1):";
     show < myBool;
 
-    [ --------------------------------------- ]
-    [ 2. АРИФМЕТИКА И ФУНКЦИИ                 ]
-    [ --------------------------------------- ]
-    show < "=== 2. MATH & FUNCTIONS ===";
-    
-    [ Деление и Остаток ]
+    [ 2. АРИФМЕТИКА И ФУНКЦИИ  ]
+
+    show < "------- 2. MATH & FUNCTIONS -------";
+    show < "------- 2.МАТЕМАТИКА & ФУНКЦИИ -------"; 
+
     res = 100 / 3;
     show < "100 / 3 =";
     show < res;
@@ -87,12 +82,12 @@ box {
     show < "mabs(-50) =";
     show < res;
 
-    [ --------------------------------------- ]
-    [ 3. РАБОТА СО СТРОКАМИ                   ]
-    [ --------------------------------------- ]
-    show < "=== 3. STRINGS (Cyrillic) ===";
+    [ 3. РАБОТА СО СТРОКАМИ ]
+ 
+    show < "------- 3. STRINGS (Cyrillic) -------";
+    show < "------- 3. СТРОКИ (Кириллица) -------";
     
-    [ Длина строки (Кириллица поддерживается) ]
+    [ Длина строки ]
     lenVal = strle("Привет");
     show < "Length of Privet (expect 6):";
     show < lenVal;
@@ -102,10 +97,11 @@ box {
     show < "String 42 to Byte:";
     show < res;
 
-    [ --------------------------------------- ]
+
     [ 4. ОПЕРАЦИИ СРАВНЕНИЯ (1=True, 0=False) ]
-    [ --------------------------------------- ]
-    show < "=== 4. COMPARISON TEST ===";
+
+    show < "------- 4. COMPARISON TEST -------";
+    show < "------- 4. СРАВНИТЕЛЬНЫЙ ТЕСТ -------";
 
     res = 10 == 10;
     show < "10 == 10 (Expect 1):";
@@ -131,26 +127,26 @@ box {
     show < "5 >= 10 (Expect 0):";
     show < res;
 
-    [ --------------------------------------- ]
-    [ 5. УСЛОВНЫЙ ОПЕРАТОР (CHECK/SWITCH)     ]
-    [ --------------------------------------- ]
-    show < "=== 5. LOGIC & RANDOM ===";
-    
+    [ 5. УСЛОВНЫЙ ОПЕРАТОР (CHECK/SWITCH) ]
+
+    show < "------- 5. LOGIC & RANDOM -------";
+    show < "------- 5. ЛОГИКА & СЛУЧАЙНОСТЬ -------";
     rndVal = rnd(2); [ Генерируем 0 или 1 ]
-    show < "Random switch (0 or 1):";
+    show < "Random (0 or 1):";
     show < rndVal;
 
     check(rndVal) {
         is 0: {
-            show < "Case 0: Zero generated";
+            show < "Case 0: Zero/Ноль";
         }
         is 1: {
-            show < "Case 1: One generated";
+            show < "Case 1: One/Один";
         }
         else: {
-            show < "Default: Should not happen";
+            show < "Default/По умолчанию";
         }
     }
 
     show < "=== TEST COMPLETE ===";
+    show < "------- ТЕСТ ЗАВЕРШЕН -------";
 }
