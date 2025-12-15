@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Log.h"	
 #include <time.h>
-#include <cstdarg> // Обязательно
+#include <cstdarg>
 
-#pragma warning(disable:4996) // Для time(), если не хочется менять на _s
+#pragma warning(disable:4996) 
 
 using namespace std;
 
@@ -24,16 +24,15 @@ namespace Log {
 		return log;
 	}
 
-	// ИСПРАВЛЕННЫЙ WriteLine (char)
 	void WriteLine(ostream* log, const char* c, ...) {
 		if (!log) return;
-		*log << c; // Пишем первый аргумент
+		*log << c; 
 
 		va_list args;
 		va_start(args, c);
 
 		const char* param = va_arg(args, const char*);
-		while (param != nullptr && param[0] != '\0') // Договоримся, что "" или NULL - конец
+		while (param != nullptr && param[0] != '\0') 
 		{
 			*log << param;
 			param = va_arg(args, const char*);
@@ -43,12 +42,11 @@ namespace Log {
 		*log << endl;
 	}
 
-	// ИСПРАВЛЕННЫЙ WriteLine (wchar_t)
 	void WriteLine(ostream* log, const wchar_t* c, ...)
 	{
 		if (!log) return;
 
-		char temp[1024]; // Увеличил буфер
+		char temp[1024]; 
 		wcstombs(temp, c, sizeof(temp));
 		*log << temp;
 
@@ -71,7 +69,6 @@ namespace Log {
 		time_t tmr;
 		time(&tmr);
 
-		// Безопасная версия localtime
 		tm tmf;
 		localtime_s(&tmf, &tmr);
 
@@ -106,7 +103,6 @@ namespace Log {
 		{
 			*log.stream << "\nОшибка " << error.id << ": " << error.message << " cтрока " << error.inext.line << " позиция " << error.inext.col << endl;
 		}
-		// throw error; // Убрал throw, логирование не должно прерывать, прерывает тот, кто вызвал
 	}
 
 	void WriteErrors(Log::LOG log, Error::ERROR error) {

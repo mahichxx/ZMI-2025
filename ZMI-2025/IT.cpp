@@ -10,7 +10,6 @@ using namespace std;
 namespace IT {
 
 	static void printRow(const Entry& entry, ostream* log) {
-		// Ограничиваем длину ID для вывода, чтобы не ехала таблица
 		char idBuf[16];
 		strncpy_s(idBuf, entry.id, 15);
 
@@ -22,7 +21,7 @@ namespace IT {
 		else if (entry.iddatatype == CHR)  *log << setw(10) << left << "char" << " | ";
 		else if (entry.iddatatype == BOOL) *log << setw(10) << left << "bool" << " | ";
 		else if (entry.iddatatype == VOI)  *log << setw(10) << left << "void" << " | ";
-		else *log << setw(10) << left << "unk" << " | "; // Вот тут мы увидим, исправился ли unk!
+		else *log << setw(10) << left << "unk" << " | "; 
 
 		*log << setw(16) << left << entry.idxfirstLE << " | ";
 
@@ -30,7 +29,6 @@ namespace IT {
 			if (entry.iddatatype == INT) { *log << entry.value.vint; }
 			else if (entry.iddatatype == CHR) { *log << "'" << entry.value.vchar << "'"; }
 			else if (entry.iddatatype == STR) {
-				// Обрезаем длинные строки
 				char strBuf[30];
 				if (entry.value.vstr.len > 25) {
 					strncpy_s(strBuf, (char*)entry.value.vstr.str, 25);

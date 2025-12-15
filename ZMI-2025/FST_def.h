@@ -1,11 +1,6 @@
 #pragma once
 #include <stddef.h>
 
-// =========================================================
-//                 “»œ€ ƒ¿ÕÕ€’
-// =========================================================
-
-// integer -> byte
 #define FST_INTEGER 5,	\
 	FST::NODE(1, FST::RELATION('b', 1)),\
 	FST::NODE(1, FST::RELATION('y', 2)),\
@@ -13,7 +8,6 @@
 	FST::NODE(1, FST::RELATION('e', 4)),\
 	FST::NODE()
 
-// string -> text
 #define FST_STRING 5,	\
 	FST::NODE(1, FST::RELATION('t', 1)),\
 	FST::NODE(1, FST::RELATION('e', 2)),\
@@ -21,7 +15,6 @@
 	FST::NODE(1, FST::RELATION('t', 4)),\
 	FST::NODE()
 
-// char (ÏÓÊÌÓ ËÒÔÓÎ¸ÁÓ‚‡Ú¸ Í‡Í sym ËÎË char)
 #define FST_TYPE_CHAR 5, \
 	FST::NODE(1, FST::RELATION('c', 1)),\
 	FST::NODE(1, FST::RELATION('h', 2)),\
@@ -29,7 +22,6 @@
 	FST::NODE(1, FST::RELATION('r', 4)),\
 	FST::NODE()
 
-// void
 #define FST_VOID 5,	\
 	FST::NODE(1, FST::RELATION('v', 1)),\
 	FST::NODE(1, FST::RELATION('o', 2)),\
@@ -37,18 +29,12 @@
 	FST::NODE(1, FST::RELATION('d', 4)),\
 	FST::NODE()
 
-// =========================================================
-//                  Àﬁ◊≈¬€≈ —ÀŒ¬¿
-// =========================================================
-
-// main -> box
 #define FST_MAIN 4,	\
 	FST::NODE(1, FST::RELATION('b', 1)),\
 	FST::NODE(1, FST::RELATION('o', 2)),\
 	FST::NODE(1, FST::RELATION('x', 3)),\
 	FST::NODE()
 
-// function -> proc
 #define FST_FUNCTION 5,	\
 	FST::NODE(1, FST::RELATION('p', 1)),\
 	FST::NODE(1, FST::RELATION('r', 2)),\
@@ -56,14 +42,12 @@
 	FST::NODE(1, FST::RELATION('c', 4)),\
 	FST::NODE()
 
-// return -> ret
 #define FST_RETURN 4,	\
 	FST::NODE(1, FST::RELATION('r', 1)),\
 	FST::NODE(1, FST::RELATION('e', 2)),\
 	FST::NODE(1, FST::RELATION('t', 3)),\
 	FST::NODE()
 
-// switch -> check
 #define FST_SWITCH 6, \
     FST::NODE(1, FST::RELATION('c', 1)), \
     FST::NODE(1, FST::RELATION('h', 2)), \
@@ -72,13 +56,11 @@
     FST::NODE(1, FST::RELATION('k', 5)), \
     FST::NODE()
 
-// case -> is
 #define FST_CASE 3, \
     FST::NODE(1, FST::RELATION('i', 1)), \
     FST::NODE(1, FST::RELATION('s', 2)), \
     FST::NODE()
 
-// default -> else
 #define FST_DEFAULT 5, \
     FST::NODE(1, FST::RELATION('e', 1)), \
     FST::NODE(1, FST::RELATION('l', 2)), \
@@ -86,7 +68,6 @@
     FST::NODE(1, FST::RELATION('e', 4)), \
     FST::NODE()
 
-// cout -> show
 #define FST_COUT 5, \
     FST::NODE(1, FST::RELATION('s', 1)), \
     FST::NODE(1, FST::RELATION('h', 2)), \
@@ -109,23 +90,17 @@
     FST::NODE(1, FST::RELATION('e', 5)), \
     FST::NODE()
 
-// if (ÓÒÚ‡‚ËÏ ‰Îˇ ÒÓ‚ÏÂÒÚËÏÓÒÚË)
 #define FST_IF 3, \
 	FST::NODE(1, FST::RELATION('i', 1)), \
 	FST::NODE(1, FST::RELATION('f', 2)), \
 	FST::NODE()
 
-// else (‰Îˇ if, ÒÓ‚Ô‡‰‡ÂÚ Ò default)
 #define FST_ELSE 5, \
 	FST::NODE(1, FST::RELATION('e', 1)), \
 	FST::NODE(1, FST::RELATION('l', 2)), \
 	FST::NODE(1, FST::RELATION('s', 3)), \
 	FST::NODE(1, FST::RELATION('e', 4)), \
 	FST::NODE()
-
-// =========================================================
-//                 À»“≈–¿À€
-// =========================================================
 
 #define FST_INTLIT 2,	\
 	FST::NODE(20,	\
@@ -174,7 +149,7 @@
         FST::RELATION('0', 2), FST::RELATION('1', 2), FST::RELATION('2', 2), FST::RELATION('3', 2), \
         FST::RELATION('4', 2), FST::RELATION('5', 2), FST::RELATION('6', 2), FST::RELATION('7', 2), FST::RELATION('8', 2), \
         FST::RELATION('9', 2), FST::RELATION(' ', 2), FST::RELATION('!', 2), FST::RELATION('?', 2), FST::RELATION('.', 2), \
-        /* ---  »–»ÀÀ»÷¿ (¿-ﬂ, ‡-ˇ, ®, ∏) --- */ \
+         \
         FST::RELATION('¿', 2), FST::RELATION('¡', 2), FST::RELATION('¬', 2), FST::RELATION('√', 2), FST::RELATION('ƒ', 2), \
         FST::RELATION('≈', 2), FST::RELATION('®', 2), FST::RELATION('∆', 2), FST::RELATION('«', 2), FST::RELATION('»', 2), \
         FST::RELATION('…', 2), FST::RELATION(' ', 2), FST::RELATION('À', 2), FST::RELATION('Ã', 2), FST::RELATION('Õ', 2), \
@@ -193,7 +168,6 @@
     FST::NODE(1, FST::RELATION('\'', 3)), \
     FST::NODE()
 
-// !!! —“–Œ » (STRING) — œŒƒƒ≈–∆ Œ… –”—— Œ√Œ !!!
 #define FST_STRLIT 3,	\
 	FST::NODE(1, FST::RELATION('"', 1)),\
 	FST::NODE(162,	\
@@ -222,7 +196,7 @@
     FST::RELATION('%', 1), FST::RELATION('@', 1), FST::RELATION('#', 1), FST::RELATION('$', 1), \
     FST::RELATION('^', 1), FST::RELATION('&', 1), FST::RELATION('|', 1), FST::RELATION('~', 1), \
     FST::RELATION('\'', 1), FST::RELATION('\\', 1), FST::RELATION('`', 1), \
-    /* ---  »–»ÀÀ»÷¿ ¬ —“–Œ ¿’ --- */ \
+     \
     FST::RELATION('¿', 1), FST::RELATION('¡', 1), FST::RELATION('¬', 1), FST::RELATION('√', 1), FST::RELATION('ƒ', 1), \
     FST::RELATION('≈', 1), FST::RELATION('®', 1), FST::RELATION('∆', 1), FST::RELATION('«', 1), FST::RELATION('»', 1), \
     FST::RELATION('…', 1), FST::RELATION(' ', 1), FST::RELATION('À', 1), FST::RELATION('Ã', 1), FST::RELATION('Õ', 1), \
@@ -239,10 +213,6 @@
     FST::RELATION('˝', 1), FST::RELATION('˛', 1), FST::RELATION('ˇ', 1) \
     ), \
 	FST::NODE()
-
-// =========================================================
-//                 »ƒ≈Õ“»‘» ¿“Œ–€
-// =========================================================
 
 #define FST_ID 3,	\
 	FST::NODE(104,	\
@@ -317,10 +287,6 @@
 	FST::RELATION('_', 1), FST::RELATION('_', 2)),\
 	FST::NODE()
 
-// =========================================================
-//                 Œœ≈–¿“Œ–€ » –¿«ƒ≈À»“≈À»
-// =========================================================
-
 #define FST_OPERATOR 2,	\
 	FST::NODE(9, FST::RELATION('+', 1), FST::RELATION('-', 1), FST::RELATION('*', 1), FST::RELATION('/', 1), \
                  FST::RELATION('%', 1), FST::RELATION('<', 1), FST::RELATION('>', 1), FST::RELATION('=', 1), FST::RELATION('!', 1)), \
@@ -362,7 +328,6 @@
 	FST::NODE(1, FST::RELATION(':', 1)),\
 	FST::NODE()
 
-// «‡„ÎÛ¯ÍË
 #define FST_LITERALSTRING_1 FST_STRLIT
 #define FST_PLUS FST_OPERATOR
 #define FST_MINUS FST_OPERATOR

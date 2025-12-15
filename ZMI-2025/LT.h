@@ -47,7 +47,6 @@
 
 #define TI_NULLIDX		0xffffffff
 
-// Предварительное объявление (чтобы не подключать IT.h и избежать циклов)
 namespace IT { struct IdTable; }
 
 namespace LT
@@ -85,6 +84,5 @@ namespace LT
 	void writeLexTable(std::ostream* stream, LT::LexTable& lextable);
 	void showTable(LexTable lextable, std::ostream* fout);
 
-	// !!! ВАЖНО: const IT::IdTable& (по ссылке) !!!
 	void ShowPolishRaw(LexTable lextable, const IT::IdTable& idtable, std::ostream* fout);
 };

@@ -2,15 +2,13 @@
 #include "Sem.h"
 #include "LT.h"
 #include "IT.h"
-#include <vector>     // !!! НУЖНО ДЛЯ ПОИСКА ДУБЛИКАТОВ
-#include <algorithm>  // !!! НУЖНО ДЛЯ std::find
+#include <vector>    
+#include <algorithm> 
 
-// Хелпер: числовой ли тип
 bool isNumeric(IT::IDDATATYPE t) {
 	return (t == IT::INT || t == IT::CHR);
 }
 
-// Хелпер: совместимы ли типы
 bool areTypesCompatible(IT::IDDATATYPE t1, IT::IDDATATYPE t2) {
 	if (t1 == t2) return true;
 	if (isNumeric(t1) && isNumeric(t2)) return true;
@@ -23,7 +21,6 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 
 	for (int i = 0; i < lextable.size; i++)
 	{
-		// 1. ИГНОРИРОВАНИЕ COUT
 		if (lextable.table[i].lexema == LEX_COUT) {
 			while (i < lextable.size && lextable.table[i].lexema != LEX_SEMICOLON) {
 				i++;
@@ -33,7 +30,7 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 
 		switch (lextable.table[i].lexema)
 		{
-		// 2. ПРИСВАИВАНИЕ
+
 		case LEX_EQUAL:
 		{
 			if (lextable.table[i].op == LT::operations::OEQ) break;
@@ -72,7 +69,6 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 			break;
 		}
 
-		// 3. ИДЕНТИФИКАТОРЫ
 		case LEX_ID:
 		{
 			if (lextable.table[i].idxTI == LT_TI_NULLIDX) break;
@@ -107,7 +103,6 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 			break;
 		}
 
-		// 4. ОПЕРАТОРЫ
 		case LEX_OPERATOR:
 		{
 			if (lextable.table[i].op == LT::OLESS || lextable.table[i].op == LT::OEQ || 
@@ -139,11 +134,10 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 			break;
 		}
 		
-		// 5. SWITCH (CHECK) - РАСШИРЕННАЯ ПРОВЕРКА
 		case LEX_SWITCH: {
 			bool hasDefault = false;
 			int defaultCount = 0;
-			std::vector<int> caseValues; // Список значений case для проверки дубликатов
+			std::vector<int> caseValues; 
 
 			int j = i + 1;
 			while (j < lextable.size && lextable.table[j].lexema != LEX_LEFTBRACE) j++;
@@ -154,27 +148,20 @@ bool Sem::SemAnaliz(LT::LexTable& lextable, IT::IdTable& idtable, Log::LOG& log)
 					if (lextable.table[j].lexema == LEX_LEFTBRACE) balance++;
 					else if (lextable.table[j].lexema == LEX_BRACELET) balance--;
 					
-					// Проверяем только верхний уровень switch (balance == 1)
 					if (balance == 1) {
-						// Проверка на несколько DEFAULT (ELSE)
 						if (lextable.table[j].lexema == LEX_DEFAULT) {
 							hasDefault = true;
 							defaultCount++;
 							if (defaultCount > 1) {
-								// Ошибка 321: Множественный default
 								Log::WriteErrors(log, Error::geterrorin(321, lextable.table[j].sn, 0));
 								sem_ok = false;
 							}
 						}
-						// Проверка на дубликаты CASE (IS)
 						else if (lextable.table[j].lexema == LEX_CASE) {
-							// Значение кейса идет следующим (j+1)
 							if (j + 1 < lextable.size && lextable.table[j + 1].lexema == LEX_LITERAL) {
 								int val = idtable.table[lextable.table[j + 1].idxTI].value.vint;
-								
-								// Ищем, было ли такое значение
+
 								if (std::find(caseValues.begin(), caseValues.end(), val) != caseValues.end()) {
-									// Ошибка 320: Дубликат case
 									Log::WriteErrors(log, Error::geterrorin(320, lextable.table[j].sn, 0));
 									sem_ok = false;
 								} else {

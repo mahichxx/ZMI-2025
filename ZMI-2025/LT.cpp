@@ -144,8 +144,6 @@ namespace LT
 
 			case LEX_EQUAL: *fout << "= "; expressionStarted = true; break;
 			case LEX_SEMICOLON: *fout << ";"; break;
-
-				// !!! ÈÇÌÅÍÅÍÈÅ ÇÄÅÑÜ: Âûâîäèì ïðîñòî @ âìåñòî CALL !!!
 			case '@': *fout << "@ "; expressionStarted = true; break;
 
 			case LEX_RETURN: *fout << "ret "; expressionStarted = true; break;

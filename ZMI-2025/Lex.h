@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Log.h"
 #include "In.h"
-#include "LT.h"  // <--- ВАЖНО: Подключаем Таблицу Лексем
-#include "IT.h"  // <--- ВАЖНО: Подключаем Таблицу Идентификаторов
+#include "LT.h" 
+#include "IT.h" 
 
 namespace Lex {
 

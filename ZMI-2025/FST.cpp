@@ -1,19 +1,13 @@
 #include "stdafx.h"
 #include "FST.h"
 #include <cstdarg>
-#include <algorithm> // Для std::copy
-
-// УБИРАЕМ "using namespace FST;" чтобы не было конфликта имен
-// Вместо этого весь код помещаем внутрь пространства имен
+#include <algorithm> 
 
 namespace FST {
-
-    // --- RELATION ---
     RELATION::RELATION(unsigned char c, short ns)
         : symbol(c), nnode(ns)
     {}
 
-    // --- NODE ---
     NODE::NODE()
         : n_relation(0), relations(nullptr)
     {}
@@ -32,7 +26,6 @@ namespace FST {
         va_end(args);
     }
 
-    // Конструктор копирования
     NODE::NODE(const NODE& other)
         : n_relation(other.n_relation)
     {
@@ -45,7 +38,6 @@ namespace FST {
         }
     }
 
-    // Оператор присваивания
     NODE& NODE::operator=(const NODE& other) {
         if (this == &other) return *this;
 
@@ -65,9 +57,7 @@ namespace FST {
     NODE::~NODE() {
         delete[] relations;
     }
-
-    // --- FST ---
-    // Здесь мы уже внутри namespace FST, поэтому пишем просто FST::FST (Структура::Конструктор)
+    
     FST::FST(unsigned char* s, short ns, NODE n, ...)
         : string(s), position(-1), nstates(ns)
     {
@@ -91,7 +81,6 @@ namespace FST {
         delete[] rstates;
     }
 
-    // Вспомогательная функция (внутри namespace, но не член класса)
     bool step(FST& fst, short*& rstates) {
         bool rc = false;
 
@@ -134,4 +123,4 @@ namespace FST {
         return rc ? (fst.rstates[fst.nstates - 1] == lstring) : rc;
     }
 
-} // Конец namespace FST
+} 

@@ -19,8 +19,6 @@ typedef my_stack_SHORT MFSTSTSTACK;
 #define MFST_DIAGN_MAXSIZE 2*ERROR_MAXSIZE_MESSAGE
 #define MFST_DIAGN_NUMBER 3
 
-// --- МАКРОСЫ ДЛЯ КОНСОЛИ (БЕЗОПАСНЫЕ ЗАГЛУШКИ) ---
-// ((void)0) - это "пустая команда", которая не ломает if/else
 #define MFST_TRACE_START_0_M	((void)0)
 #define MFST_TRACE_START_M		((void)0)
 #define MFST_TRACE1_M			((void)0)
@@ -31,7 +29,6 @@ typedef my_stack_SHORT MFSTSTSTACK;
 #define MFST_TRACE6_M(c, k)		((void)0)
 #define MFST_TRACE7_M			((void)0)
 
-// --- МАКРОСЫ ДЛЯ ЛОГА (ОСТАЮТСЯ КАК ЕСТЬ) ---
 #define MFST_TRACE_START_0	*log.stream << "\n------------------Синтаксический анализ------------------\n\n";
 #define MFST_TRACE_START	*log.stream << setw(5) << setfill(' ') << left << "Шаг" << ":"\
 							<< setw(30) << left << "Правило"\

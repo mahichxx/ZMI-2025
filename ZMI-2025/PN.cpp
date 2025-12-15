@@ -27,7 +27,6 @@ namespace Polish {
 		std::stack<LT::Entry> stack;
 		std::vector<LT::Entry> out;
 
-		// Стек для вложенных вызовов
 		std::stack<std::vector<std::vector<LT::Entry>>> funcArgsStack;
 		std::stack<int> funcIdStack;
 
@@ -52,10 +51,8 @@ namespace Polish {
 			switch (t.lexema) {
 			case LEX_ID:
 			case LEX_LITERAL:
-				// Начало вызова функции: ID + (
 				if (t.lexema == LEX_ID && i + 1 < lex.lextable.size && lex.lextable.table[i + 1].lexema == LEX_LEFTTHESIS) {
 					funcIdStack.push(t.idxTI);
-					// Новый уровень аргументов
 					std::vector<std::vector<LT::Entry>> args;
 					args.push_back(std::vector<LT::Entry>());
 					funcArgsStack.push(args);
@@ -85,7 +82,6 @@ namespace Polish {
 				}
 				if (!stack.empty()) stack.pop();
 
-				// Закрылась скобка функции
 				if (!funcIdStack.empty() && (stack.empty() || stack.top().lexema != LEX_LEFTTHESIS)) {
 					if (funcArgsStack.empty()) break;
 
@@ -94,8 +90,6 @@ namespace Polish {
 					int idIdx = funcIdStack.top();
 					funcIdStack.pop();
 					bool stillInFunc = !funcArgsStack.empty();
-
-					// !!! СЧИТАЕМ АРГУМЕНТЫ ДЛЯ КРАСИВОГО ЛОГА !!!
 					int argCount = 0;
 					for (auto& arg : args) {
 						if (!arg.empty()) argCount++;
@@ -111,7 +105,7 @@ namespace Polish {
 					callOp.lexema = '@';
 					callOp.sn = t.sn;
 					callOp.idxTI = idIdx;
-					callOp.priority = argCount; // !!! ЗАПИСЫВАЕМ КОЛ-ВО АРГУМЕНТОВ !!!
+					callOp.priority = argCount; 
 
 					if (stillInFunc && !funcArgsStack.empty() && !funcArgsStack.top().empty())
 						funcArgsStack.top().back().push_back(callOp);

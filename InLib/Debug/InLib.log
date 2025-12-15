@@ -1,3 +1,3 @@
 ﻿  lib.cpp
-D:\Программирование\3_сем\КПО\ZMI-2025\InLib\lib.cpp(72,24): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+D:\Программирование\3_сем\КПО\ZMI-2025\InLib\lib.cpp(63,24): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   InLib.vcxproj -> D:\Программирование\3_сем\КПО\ZMI-2025\Debug\InLib.lib

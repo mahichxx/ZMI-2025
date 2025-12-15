@@ -37,7 +37,6 @@ namespace In
 
 		unsigned char quoteChar = 0;
 
-		// !!! ИЗМЕНЕНИЕ: Вместо флага используем счетчик глубины !!!
 		int commentDepth = 0;
 
 		char c;
@@ -45,37 +44,28 @@ namespace In
 		{
 			unsigned char x = (unsigned char)c;
 
-			// 1. Если встретили '[', увеличиваем глубину вложенности
 			if (quoteChar == 0 && x == '[') {
 				commentDepth++;
-				continue; // Пропускаем сам символ '['
+				continue; 
 			}
 
-			// 2. Если встретили ']', уменьшаем глубину
 			if (quoteChar == 0 && x == ']') {
 				if (commentDepth > 0) {
 					commentDepth--;
-					// Если мы вышли из самого верхнего комментария (глубина стала 0)
 					if (commentDepth == 0) {
-						// Разделяем слова пробелом, чтобы код не склеился
+
 						if (in.word[st][0] != 0) {
 							in.word[st][cl] = 0; st++; cl = 0;
 						}
 					}
-					continue; // Пропускаем сам символ ']'
+					continue; 
 				}
-				// Если встретили ']' без открывающей '[', это ошибка или разделитель?
-				// В твоем языке это разделитель, пусть лексер или парсер разбирается, или игнорируем.
-				// Но здесь мы считаем это просто символом, если глубина 0.
 			}
 
-			// 3. Если глубина > 0, значит мы внутри комментария — ИГНОРИРУЕМ ВСЁ
 			if (commentDepth > 0) {
-				if (x == IN_CODE_ENDL) in.lines++; // Но строки считаем!
+				if (x == IN_CODE_ENDL) in.lines++; 
 				continue;
 			}
-
-			// --- ДАЛЬШЕ ОБЫЧНАЯ ОБРАБОТКА КОДА (depth == 0) ---
 
 			if (in.code[x] == in.F) {
 				throw ERROR_THROW_IN(111, in.lines, col);
@@ -83,7 +73,6 @@ namespace In
 
 			if (x == IN_CODE_ENDL)
 			{
-				// Если мы дошли до конца строки, а кавычка открыта
 				if (quoteChar != 0) {
 					throw ERROR_THROW_IN(116, in.lines, col);
 				}
@@ -146,7 +135,6 @@ namespace In
 			}
 		}
 
-		// !!! ПРОВЕРКА НА НЕЗАКРЫТЫЙ КОММЕНТАРИЙ !!!
 		if (commentDepth > 0) {
 			throw ERROR_THROW(115);
 		}

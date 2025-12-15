@@ -82,7 +82,6 @@ namespace Gener {
 		int lastCaseValue = -1;
 		int assignmentTargetIdx = -1;
 
-		// !!! ФЛАГ ДЛЯ RETURN !!!
 		bool isReturn = false;
 
 		for (int i = 0; i < tables.lextable.size; i++) {
@@ -103,7 +102,6 @@ namespace Gener {
 				}
 			}
 
-			// 1. ФУНКЦИЯ
 			if (t.lexema == LEX_FUNCTION) {
 				i++;
 				IT::Entry& func = tables.idtable.table[tables.lextable.table[i].idxTI];
@@ -137,7 +135,6 @@ namespace Gener {
 				currentBalance++; continue;
 			}
 
-			// 2. MAIN
 			if (t.lexema == LEX_MAIN) {
 				if (inProc) out << currentProcName << " ENDP\n";
 				currentProcName = "main";
@@ -147,13 +144,11 @@ namespace Gener {
 				currentBalance++; continue;
 			}
 
-			// 3. RETURN (СТАВИМ ФЛАГ, НЕ ГЕНЕРИРУЕМ КОД)
 			if (t.lexema == LEX_RETURN) {
 				isReturn = true;
 				continue;
 			}
 
-			// 4. SWITCH
 			if (t.lexema == LEX_SWITCH) {
 				SwitchCtx ctx; ctx.id = i; ctx.lastCaseVal = -1; ctx.braceBalance = currentBalance;
 				switches.push(ctx);
@@ -185,14 +180,12 @@ namespace Gener {
 				continue;
 			}
 
-			// 5. ОПЕРАНДЫ
 			if (t.lexema == LEX_LITERAL) {
 				IT::Entry& l = tables.idtable.table[t.idxTI];
 				if (l.iddatatype == IT::STR) out << "\tpush offset L" << t.idxTI << endl;
 				else out << "\tpush " << l.value.vint << endl;
 			}
 			else if (t.lexema == LEX_ID) {
-				// Пропуск объявлений
 				if (i > 0) {
 					char prevLex = tables.lextable.table[i - 1].lexema;
 					if (prevLex == LEX_INTEGER || prevLex == LEX_STRING || prevLex == LEX_CHAR || prevLex == LEX_VOID) {
@@ -213,14 +206,12 @@ namespace Gener {
 				}
 			}
 
-			// 6. ВЫЗОВ
 			if (t.lexema == '@') {
 				IT::Entry& func = tables.idtable.table[t.idxTI];
 				out << "\tcall " << GetID(func) << endl;
 				out << "\tpush eax" << endl;
 			}
 
-			// 7. ОПЕРАТОРЫ
 			if (t.lexema == LEX_OPERATOR) {
 				if (t.op == LT::OLESS) {
 					bool isString = false;
@@ -257,9 +248,7 @@ namespace Gener {
 
 			if (t.lexema == LEX_EQUAL) continue;
 
-			// 9. ТОЧКА С ЗАПЯТОЙ (Обработка концов инструкций)
 			if (t.lexema == LEX_SEMICOLON) {
-				// Присваивание
 				if (assignmentTargetIdx != -1) {
 					IT::Entry& l = tables.idtable.table[assignmentTargetIdx];
 					out << "\tpop eax" << endl;
@@ -267,7 +256,6 @@ namespace Gener {
 					else out << "\tmov " << GetID(l) << ", al" << endl;
 					assignmentTargetIdx = -1;
 				}
-				// Возврат (если был флаг)
 				else if (isReturn) {
 					out << "\tpop eax" << endl;
 					out << "\tret" << endl;

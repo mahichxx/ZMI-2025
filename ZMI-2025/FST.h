@@ -16,10 +16,9 @@ namespace FST {
         NODE();
         NODE(short n, RELATION rel, ...);
 
-        // Правило трех:
-        NODE(const NODE& other);             // Конструктор копирования
-        NODE& operator=(const NODE& other);  // Оператор присваивания
-        ~NODE();                             // Деструктор
+        NODE(const NODE& other);           
+        NODE& operator=(const NODE& other);  
+        ~NODE();                        
     };
 
     struct FST {
@@ -31,11 +30,10 @@ namespace FST {
 
         FST(unsigned char* s, short ns, NODE n, ...);
 
-        // FST тяжелый объект, запретим случайное копирование
         FST(const FST&) = delete;
         FST& operator=(const FST&) = delete;
 
-        ~FST(); // Обязательный деструктор
+        ~FST(); 
     };
 
     bool execute(FST& fst);

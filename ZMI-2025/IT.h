@@ -17,25 +17,22 @@ namespace IT
 	struct Entry
 	{
 		int			idxfirstLE;
-		char		id[ID_MAXSIZE]; // Исправлено на char
+		char		id[ID_MAXSIZE];
 		IDDATATYPE	iddatatype = NUL;
 		IDTYPE		idtype;
-		int			parm = 0;   // Кол-во параметров (для функций)
+		int			parm = 0;   
 
-		// 0 - DEC, 1 - HEX, 2 - BIN. Важно для твоего задания!
-		// Нужно, чтобы в ASM записать 0FFh или 1010b, если хочешь сохранить стиль,
-		// либо просто хранить значение и выводить dec.
 		int			numSys = 0;
 
 		union
 		{
-			int vint;      // Храним как int, но логически работаем как с int8
+			int vint;     
 			char vchar;
 			bool vbool;
 			struct
 			{
 				int len;
-				char str[TI_STR_MAXSIZE - 1]; // Исправлено на char
+				char str[TI_STR_MAXSIZE - 1]; 
 			} vstr;
 		} value;
 	};
@@ -50,7 +47,7 @@ namespace IT
 	IdTable Create(int size);
 	void Add(IdTable& idtable, Entry entry);
 	Entry GetEntry(IdTable& idtable, int n);
-	int IsId(IdTable& idtable, char id[ID_MAXSIZE]); // char
+	int IsId(IdTable& idtable, char id[ID_MAXSIZE]);
 	void Delete(IdTable& idtable);
-	void showITable(IdTable& table, std::ostream* log); // std::ostream для надежности
+	void showITable(IdTable& table, std::ostream* log); 
 };

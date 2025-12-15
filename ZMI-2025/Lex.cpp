@@ -93,7 +93,6 @@ namespace Lex {
                     continue;
                 }
 
-                // Сложные операторы
                 bool isComplex = false;
                 LT::operations complexOp = LT::operations::OEQ;
                 int priority = 0;
@@ -115,13 +114,11 @@ namespace Lex {
                     IT::Add(lex.idtable, entryIT); entryIT = bufentry; i++; position += 2; continue;
                 }
 
-                // --- ТИПЫ ДАННЫХ ---
                 { FST::FST fst(word[i], FST_INTEGER); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_INTEGER, LT_TI_NULLIDX, line)); currentType = IT::INT; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_TYPE_CHAR); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_CHAR, LT_TI_NULLIDX, line)); currentType = IT::CHR; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_STRING); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_STRING, LT_TI_NULLIDX, line)); currentType = IT::STR; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_VOID); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_VOID, LT_TI_NULLIDX, line)); currentType = IT::VOI; position += wordLen; continue; } }
 
-                // --- КЛЮЧЕВЫЕ СЛОВА ---
                 { FST::FST fst(word[i], FST_MAIN); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_MAIN, LT_TI_NULLIDX, line)); count_main++; findReturn = false; strcpy_s(pastRegionPrefix, RegionPrefix); RegionPrefix[0] = '\0'; buferRegionPrefix[0] = '\0'; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_FUNCTION); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_FUNCTION, LT_TI_NULLIDX, line)); entryIT.idtype = IT::F; findFunc = true; findParm = true; Parm_count_IT = 0; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_RETURN); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_RETURN, LT_TI_NULLIDX, line)); findReturn = true; position += wordLen; continue; } }
@@ -135,7 +132,6 @@ namespace Lex {
                 { FST::FST fst(word[i], FST_TRUE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::INT; entryIT.idtype = IT::L; entryIT.value.vint = 1; strcpy_s(entryIT.id, "true_lit"); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; } }
                 { FST::FST fst(word[i], FST_FALSE); if (FST::execute(fst)) { LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_LITERAL, indexID++, line)); entryIT.iddatatype = IT::INT; entryIT.idtype = IT::L; entryIT.value.vint = 0; strcpy_s(entryIT.id, "false_lit"); IT::Add(lex.idtable, entryIT); entryIT = bufentry; position += wordLen; continue; } }
 
-                // --- ИДЕНТИФИКАТОРЫ ---
                 FST::FST fstIdentif(word[i], FST_ID);
                 if (FST::execute(fstIdentif)) {
                     if (wordLen > ID_MAXSIZE) throw ERROR_THROW_IN(202, line, position);
@@ -154,7 +150,6 @@ namespace Lex {
                     }
 
                     if (idx != TI_NULLIDX) {
-                        // Проверка на повторное объявление (305)
                         if (lex.lextable.size > 0) {
                             unsigned char prev = lex.lextable.table[lex.lextable.size - 1].lexema;
                             if (prev == LEX_INTEGER || prev == LEX_STRING || prev == LEX_CHAR || prev == LEX_VOID) {
@@ -172,13 +167,6 @@ namespace Lex {
                         findFunc = false; position += wordLen; continue;
                     }
 
-                    // !!! ГЛАВНАЯ ПРОВЕРКА НА НЕОБЪЯВЛЕННУЮ ПЕРЕМЕННУЮ (304) !!!
-                    // Если мы здесь, значит ID не найден. Мы собираемся создать новый.
-                    // Разрешено создавать только если это:
-                    // 1. Параметр (findParm)
-                    // 2. Имя функции (findFunc)
-                    // 3. Объявление переменной (предыдущая лексема - ТИП)
-
                     bool canCreate = false;
                     if (findParm || findFunc) canCreate = true;
                     else {
@@ -191,11 +179,9 @@ namespace Lex {
                     }
 
                     if (!canCreate) {
-                        // Если это не объявление и не функция/параметр - ошибка 304!
                         throw ERROR_THROW_IN(304, line, position);
                     }
 
-                    // Если проверка пройдена, создаем
                     LT::Add(lex.lextable, LT::writeEntry(entryLT, LEX_ID, indexID++, line));
 
                     entryIT.iddatatype = currentType;
@@ -221,7 +207,6 @@ namespace Lex {
                     position += wordLen; continue;
                 }
 
-                // ... ЛИТЕРАЛЫ ...
                 FST::FST fstInt(word[i], FST_INTLIT);
                 if (FST::execute(fstInt)) {
                     int value = atoi((char*)word[i]);
