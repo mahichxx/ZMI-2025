@@ -63,7 +63,7 @@ box {
     show < "100 % 3 =";
     show < res;
 
-    res = calc(10, 5);
+    res = calc(10, 5); 
     show < "calc(10, 5) -> (10+5) * 2 =";
     show < res;
 

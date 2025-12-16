@@ -1,19 +1,2 @@
-﻿  Error.cpp
-  FST.cpp
-  Generation.cpp
-  Greibach.cpp
-  IT.cpp
-  In.cpp
-  LT.cpp
-  Lex.cpp
-D:\Программирование\3_сем\КПО\ZMI-2025\ZMI-2025\LT.h(65,15): warning C4838: Преобразование из "unsigned int" в "int" требует сужающего преобразования.
-  (компиляция исходного файла "Lex.cpp")
-  
-  Log.cpp
-  MFST.cpp
-  PN.cpp
-  Parm.cpp
-  Sem.cpp
-  ZMI-2025.cpp
-  Создание кода...
+﻿  Generation.cpp
   ZMI-2025.vcxproj -> D:\Программирование\3_сем\КПО\ZMI-2025\Debug\ZMI-2025.exe
